@@ -7,7 +7,7 @@ const floor = "#aaa";
 let pixelGrid = initArray();
 
 var canvasWidth = 800;
-var canvasHeight = 800;
+var canvasHeight = 600;
 
 function initArray() {
   let newArray = new Array(canvasWidth);
@@ -19,6 +19,9 @@ function initArray() {
   }
   return newArray;
 }
+
+
+
 
 function nextState() {
   let change = false;
@@ -70,6 +73,41 @@ function update(time = 0) {
   Engine.draw(newGrid);
   pixelGrid = newGrid;
   requestAnimationFrame(update);
+}
+
+
+const canvas = document.getElementById("game");
+canvas.addEventListener("mousedown", onMouseDown);
+canvas.addEventListener("mouseup", onMouseUp);
+canvas.addEventListener("mousemove", onMouseMove);
+let mouseX = 0, mouseY = 0;
+
+var intervalId;
+
+let brushSize = 5;
+const spawnSand = (x, y) => {
+  for(let i = Math.max(0, x - brushSize); i < Math.min(x +brushSize, canvasWidth); i++ ) {
+    for(let j = Math.max(0, y - brushSize); j < Math.min(y + brushSize, canvasHeight); j++) {
+      if(Math.random() > 0.8) {
+        pixelGrid[i][j] = sandPix;
+      }
+    }
+  }
+  pixelGrid[x][y] = sandPix;
+};
+
+function onMouseDown(event) {
+  spawnSand(event.clientX, event.clientY);
+  intervalId = setInterval(function () {spawnSand(mouseX, mouseY);}, 10);
+}
+
+function onMouseUp(event) {
+  clearInterval(intervalId);
+}
+
+function onMouseMove(event) {
+  mouseX = event.clientX;
+  mouseY = event.clientY;
 }
 
 update();
