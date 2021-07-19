@@ -40,7 +40,6 @@ function nextState() {
               pixelGrid[i][j + 2] === CellType.water
             ) {
               if (Math.random() > 0.93) {
-                console.log("water swap");
                 pixelGrid[i][j] = CellType.water;
                 pixelGrid[i][j + 1] = cell;
                 continue;
@@ -153,12 +152,17 @@ function update(time = 0) {
   requestAnimationFrame(update);
 }
 
+var intervalId;
 const canvas = document.getElementById("game");
 canvas.addEventListener("mousedown", onMouseDown);
-canvas.addEventListener("mouseup", onMouseUp);
+canvas.addEventListener("mouseup", function () {
+  isMouseDown = false;
+  clearInterval(intervalId);
+});
 canvas.addEventListener("mousemove", onMouseMove);
 canvas.addEventListener("mouseout", function () {
   isMouseDown = false;
+  clearInterval(intervalId);
 });
 
 let brushSize = 5;
@@ -184,17 +188,30 @@ const spawnSand = (x, y) => {
 };
 
 let isMouseDown = false;
-function onMouseDown(event) {
+function onMouseDown() {
   isMouseDown = true;
+  spawnSand(mouseX, mouseY);
+  intervalId = setInterval(
+    function () {
+      spawnSand(mouseX, mouseY);
+    },
+    brushType === CellType.floor ? 1 : 20
+  );
 }
 
-function onMouseUp() {
-  isMouseDown = false;
-}
+var mouseX = 0,
+  mouseY = 0;
+function onMouseMove(e) {
+  if (e.offsetX) {
+    mouseX = e.offsetX;
+    mouseY = e.offsetY;
+  } else if (e.layerX) {
+    mouseX = e.layerX;
+    mouseY = e.layerY;
+  }
 
-function onMouseMove(event) {
   if (isMouseDown) {
-    spawnSand(event.clientX, event.clientY);
+    spawnSand(mouseX, mouseY);
   }
 }
 
