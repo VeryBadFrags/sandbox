@@ -1,8 +1,5 @@
 import * as Engine from "./engine.js";
-import * as Cells from "./cells.js";
-
-const sandPix = "#c2b280";
-const floor = "#aaa";
+import * as CellType from "./celltype.js";
 
 var canvasWidth = 800;
 var canvasHeight = 600;
@@ -13,7 +10,7 @@ function initArray() {
   for (let i = 0; i < newArray.length; i++) {
     newArray[i] = new Array(canvasHeight);
     for (let j = 0; j < newArray[i].length; j++) {
-      newArray[i][j] = Cells.empty;
+      newArray[i][j] = CellType.empty;
     }
   }
   return newArray;
@@ -22,43 +19,67 @@ function initArray() {
 function nextState() {
   let change = false;
 
-  let newGrid = initArray();
-
   for (let i = 0; i < pixelGrid.length; i++) {
     for (let j = pixelGrid[i].length -1; j >= 0; j--) {
       let cell = pixelGrid[i][j];
 
-      if (cell === sandPix) {
+      if (cell === CellType.sandPix) {
         if (j < canvasHeight - 1) {
-          if (pixelGrid[i][j + 1] === Cells.empty) {
-            newGrid[i][j + 1] = cell;
+
+          if (pixelGrid[i][j + 1] === CellType.empty) {
+            pixelGrid[i][j] = CellType.empty;
+            pixelGrid[i][j + 1] = cell;
           } else {
             let coinToss = Math.random() > 0.5;
-            if (coinToss && i > 0 && pixelGrid[i - 1][j + 1] === Cells.empty) {
-                newGrid[i - 1][j + 1] = cell;
-            } else if (i < pixelGrid.length -1 && pixelGrid[i + 1][j + 1] === Cells.empty) {
-              newGrid[i + 1][j + 1] = cell;
+            if (coinToss && i > 0 && pixelGrid[i - 1][j + 1] === CellType.empty) {
+              pixelGrid[i][j] = CellType.empty;
+              pixelGrid[i - 1][j + 1] = cell;
+            } else if (i < pixelGrid.length -1 && pixelGrid[i + 1][j + 1] === CellType.empty) {
+              pixelGrid[i][j] = CellType.empty;
+              pixelGrid[i + 1][j + 1] = cell;
             } else {
               // Could not move
-              newGrid[i][j] = cell;
             }
           }
+
         } else {
           // Bottom of the screen
-          newGrid[i][j] = cell;
         }
-      } else if (cell === floor) {
-        newGrid[i][j] = cell;
+      } else if (cell === CellType.water) {
+        if (j < canvasHeight - 1 && pixelGrid[i][j + 1] === CellType.empty) {
+          // Move down
+          pixelGrid[i][j] = CellType.empty;
+          pixelGrid[i][j + 1] = cell;
+        } else if(Math.random() > 0.5 && i > 0 && pixelGrid[i - 1][j] === CellType.empty) {
+          pixelGrid[i][j] = CellType.empty;
+          pixelGrid[i - 1][j] = cell;
+        } else if(i < pixelGrid.length -1 && pixelGrid[i + 1][j] === CellType.empty) {
+          pixelGrid[i][j] = CellType.empty;
+          pixelGrid[i + 1][j] = cell;
+        } else {
+        }
+      } else if (cell === CellType.crystals) {
+        if (j < canvasHeight - 1 && pixelGrid[i][j + 1] === CellType.empty) {
+          pixelGrid[i][j] = CellType.empty;
+          pixelGrid[i][j + 1] = cell;
+        } else {
+        }
+      } else if (cell === CellType.floor) {
       }
 
     }
   }
 
-  if (Math.random() > 0.7) {
-    newGrid[400][0] = sandPix;
+  // Tap
+  if (Math.random() > 0.8) {
+    pixelGrid[400][0] = CellType.water;
   }
-
-  return newGrid;
+  if (Math.random() > 0.8) {
+    pixelGrid[399][0] = CellType.water;
+  }
+  if (Math.random() > 0.8) {
+    pixelGrid[401][0] = CellType.water;
+  }
 }
 
 let lastTime = 0;
@@ -66,10 +87,9 @@ function update(time = 0) {
   const deltaTime = time - lastTime;
   lastTime = time;
 
-  let newGrid = nextState();
+  nextState();
 
-  Engine.draw(newGrid);
-  pixelGrid = newGrid;
+  Engine.draw(pixelGrid);
   requestAnimationFrame(update);
 }
 
@@ -83,20 +103,21 @@ let mouseX = 0, mouseY = 0;
 var intervalId;
 
 let brushSize = 5;
+let brushType = CellType.sandPix;
 const spawnSand = (x, y) => {
   for(let i = Math.max(0, x - brushSize); i < Math.min(x +brushSize, canvasWidth); i++ ) {
     for(let j = Math.max(0, y - brushSize); j < Math.min(y + brushSize, canvasHeight); j++) {
-      if(Math.random() > 0.8) {
-        pixelGrid[i][j] = sandPix;
+      if(Math.random() > 0.9) {
+        pixelGrid[i][j] = brushType;
       }
     }
   }
-  pixelGrid[x][y] = sandPix;
+  pixelGrid[x][y] = brushType;
 };
 
 function onMouseDown(event) {
   spawnSand(event.clientX, event.clientY);
-  intervalId = setInterval(function () {spawnSand(mouseX, mouseY);}, 10);
+  intervalId = setInterval(function () {spawnSand(mouseX, mouseY);}, 20);
 }
 
 function onMouseUp(event) {
@@ -112,18 +133,15 @@ function init() {
   pixelGrid = initArray();
 
   for(let i = 350; i < 398; i++) {
-    console.log(pixelGrid.length);
-    pixelGrid[i][200] = floor;
+    pixelGrid[i][200] = CellType.floor;
   }
 
-  for(let i = 402; i < 450; i++) {
-    console.log(pixelGrid.length);
-    pixelGrid[i][200] = floor;
+  for(let i = 403; i < 450; i++) {
+    pixelGrid[i][200] = CellType.floor;
   }
 
   for(let i = 200; i < 800 - 200; i++) {
-    console.log(pixelGrid.length);
-    pixelGrid[i][300] = floor;
+    pixelGrid[i][300] = CellType.floor;
   }
 }
 
