@@ -26,25 +26,34 @@ function nextState() {
   for (let i = iStart; iEnd(i); leftToRight ? i++ : i--) {
     for (let j = pixelGrid[i].length - 1; j >= 0; j--) {
       let cell = pixelGrid[i][j];
+      if (cell === CellType.empty || cell === CellType.floor) {
+        continue;
+      }
 
-      // SAND
-      if (cell === CellType.sand) {
-        if (j < canvasHeight - 1) {
-          if (pixelGrid[i][j + 1] === CellType.empty) {
-            swapCells(CellType.empty, i, j, cell, i, j + 1, updated);
-          } else {
-            // Sink in water
-            if (
-              j < canvasHeight - 2 &&
-              pixelGrid[i][j + 1] === CellType.water &&
-              pixelGrid[i][j + 2] === CellType.water
-            ) {
-              if (Math.random() > 0.93) {
-                pixelGrid[i][j] = CellType.water;
-                pixelGrid[i][j + 1] = cell;
-                continue;
-              }
-            }
+      if (j === canvasHeight - 1) {
+        pixelGrid[i][j] = CellType.empty;
+        continue;
+      }
+
+      let cellBelow = pixelGrid[i][j + 1];
+      if (cell.state === "solid") {
+        if (cellBelow === CellType.empty) {
+          swapCells(i, j, i, j + 1, updated);
+        } else if (
+          j < canvasHeight - 2 &&
+          cellBelow.state === "liquid" &&
+          (!cell.granular || pixelGrid[i][j + 2].state === "liquid")
+        ) {
+          // Sink in liquids
+          if (
+            Math.random() <=
+            (cell.density - cellBelow.density) / cellBelow.density / 100
+          ) {
+            swapCells(i, j, i, j + 1, updated);
+          }
+        } else {
+          if (cell.granular) {
+            // Roll down
             let coinToss = Math.random() >= 0.5;
             if (coinToss) {
               if (i > 0 && pixelGrid[i - 1][j + 1] === CellType.empty) {
@@ -53,11 +62,10 @@ function nextState() {
                 pixelGrid[i - 1][j + 1] = cell;
               } else if (
                 i > 0 &&
-                pixelGrid[i - 1][j + 1] === CellType.water &&
+                pixelGrid[i - 1][j + 1].state === "liquid" &&
                 Math.random() > 0.95
               ) {
-                pixelGrid[i][j] = CellType.water;
-                pixelGrid[i - 1][j + 1] = cell;
+                swapCells(i, j, i - 1, j + 1, updated);
               }
             } else {
               // Bottom right
@@ -69,47 +77,60 @@ function nextState() {
                 pixelGrid[i + 1][j + 1] = cell;
               } else if (
                 i < pixelGrid.length - 1 &&
-                pixelGrid[i + 1][j + 1] === CellType.water &&
+                pixelGrid[i + 1][j + 1].state === "liquid" &&
                 Math.random() > 0.95
               ) {
-                pixelGrid[i][j] = CellType.water;
-                pixelGrid[i + 1][j + 1] = cell;
+                swapCells(i, j, i + 1, j + 1, updated);
               }
             }
           }
-        } else {
-          pixelGrid[i][j] = CellType.empty;
         }
-        // WATER
-      } else if (cell === CellType.water) {
-        if (j === canvasHeight - 1) {
-          pixelGrid[i][j] = CellType.empty;
-        } else if (pixelGrid[i][j + 1] === CellType.empty) {
+      // LIQUIDS
+      } else if (cell.state === "liquid") {
+        if (cellBelow === CellType.empty) {
           // Move down
-          pixelGrid[i][j] = CellType.empty;
-          pixelGrid[i][j + 1] = cell;
+          swapCells(i, j, i, j + 1, updated);
+        } else if (cellBelow !== cell && cellBelow.state === "liquid") {
+          if (
+            Math.random() <=
+            (cell.density - cellBelow.density) / cellBelow.density / 5
+          ) {
+            swapCells(i, j, i, j + 1, updated);
+          }
         } else {
+          // Move liquid around
           let coinToss = Math.random() >= 0.5;
           if (coinToss) {
-            if (i > 0 && pixelGrid[i - 1][j] === CellType.empty) {
+            if (i > 0 && (pixelGrid[i - 1][j] === CellType.empty || pixelGrid[i - 1][j] !== cell && pixelGrid[i - 1][j].state === "liquid")) {
               // Move left
-              pixelGrid[i][j] = CellType.empty;
-              pixelGrid[i - 1][j] = cell;
+              swapCells(i, j, i - 1, j, updated);
             }
           } else {
             if (
               i < pixelGrid.length - 1 &&
-              pixelGrid[i + 1][j] === CellType.empty
+              pixelGrid[i + 1][j].state !== "solid" && pixelGrid[i + 1][j] != cell
             ) {
               // Move right
-              pixelGrid[i][j] = CellType.empty;
-              pixelGrid[i + 1][j] = cell;
+              swapCells(i, j, i + 1, j, updated);
             }
           }
         }
       } else if (cell === CellType.crystals) {
-        if (j < canvasHeight - 1 && pixelGrid[i][j + 1] === CellType.empty) {
-          swapCells(CellType.empty, i, j, cell, i, j + 1, updated);
+        let lookUp = j;
+
+        if (
+          j < canvasHeight - 1 &&
+          (pixelGrid[i][j + 1] === CellType.empty ||
+            pixelGrid[i][j + 1] === CellType.water)
+        ) {
+          while (lookUp > 0) {
+            if (pixelGrid[i][lookUp - 1] === CellType.crystals) {
+              lookUp--;
+            } else {
+              break;
+            }
+          }
+          swapCells(i, lookUp, i, j + 1, updated);
         }
       } else if (cell === CellType.floor) {
         // Do nothing for floor
@@ -129,11 +150,13 @@ function nextState() {
   }
 }
 
-function swapCells(cellType1, x1, y1, cellType2, x2, y2, updatedArray) {
-  pixelGrid[x1][y1] = cellType1;
-  pixelGrid[x2][y2] = cellType2;
-  updatedArray[x1][y1] = cellType1;
-  updatedArray[x2][y2] = cellType2;
+function swapCells(x1, y1, x2, y2, updatedArray) {
+  let destinationCell = pixelGrid[x2][y2];
+  let originCell = pixelGrid[x1][y1];
+  pixelGrid[x1][y1] = destinationCell;
+  pixelGrid[x2][y2] = originCell;
+  updatedArray[x1][y1] = destinationCell;
+  updatedArray[x2][y2] = originCell;
 }
 
 const interval = 16.667;
