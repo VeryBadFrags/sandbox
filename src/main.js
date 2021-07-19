@@ -31,12 +31,38 @@ function nextState() {
       }
 
       if (j === canvasHeight - 1) {
-        pixelGrid[i][j] = CellType.empty;
+        destroyCell(i, j, updated);
         continue;
       }
 
       let cellBelow = pixelGrid[i][j + 1];
-      if (cell.state === "solid") {
+      if (cell.state === "fire") {
+        // FIRE
+
+        // Propagate
+        if(i > 0 && pixelGrid[i-1][j].flammable && Math.random() > 0.7) {
+          createCell(i-1, j, CellType.fire, updated);
+        }
+        if (i < canvasWidth - 1 && pixelGrid[i+1][j].flammable && Math.random() > 0.7) {
+          createCell(i+1, j, CellType.fire, updated);
+        }
+        if(pixelGrid[i][j+1].flammable && Math.random() > 0.9) {
+          createCell(i, j+1, CellType.fire, updated);
+        }
+
+        if ((i > 0 && pixelGrid[i-1][j] === CellType.water) || (i < canvasWidth -1 && pixelGrid[i+1][j] === CellType.water) || Math.random() <= cell.lifetime) {
+          destroyCell(i, j, updated);
+          continue;
+        } else if (j > 0 && Math.random() > 0.8 && (pixelGrid[i][j-1] === CellType.empty || pixelGrid[i][j-1].flammable)) {
+          createCell(
+            i,
+            j - 1,
+            Math.random() > 0.5 ? cell.nextCell : cell,
+            updated
+          );
+        }
+      } else if (cell.state === "solid") {
+        // SOLIDS
         if (cellBelow === CellType.empty) {
           swapCells(i, j, i, j + 1, updated);
         } else if (
@@ -85,8 +111,8 @@ function nextState() {
             }
           }
         }
-        // LIQUIDS
       } else if (cell.state === "liquid") {
+        // LIQUIDS
         if (cellBelow === CellType.empty) {
           // Move down
           swapCells(i, j, i, j + 1, updated);
@@ -97,7 +123,7 @@ function nextState() {
           ) {
             swapCells(i, j, i, j + 1, updated);
           }
-        } else if(cellBelow.state !== "solid") {
+        } else if (cellBelow.state !== "solid") {
           // Move liquid around
           let coinToss = Math.random() >= 0.5;
           if (coinToss) {
@@ -145,10 +171,10 @@ function nextState() {
   if (Math.random() > 0.7) {
     pixelGrid[canvasWidth / 2][0] = CellType.water;
   }
-  if (Math.random() > 0.7) {
+  if (Math.random() > 0.6) {
     pixelGrid[canvasWidth / 2 - 1][0] = CellType.water;
   }
-  if (Math.random() > 0.7) {
+  if (Math.random() > 0.6) {
     pixelGrid[canvasWidth / 2 + 1][0] = CellType.water;
   }
 }
@@ -160,6 +186,16 @@ function swapCells(x1, y1, x2, y2, updatedArray) {
   pixelGrid[x2][y2] = originCell;
   updatedArray[x1][y1] = destinationCell;
   updatedArray[x2][y2] = originCell;
+}
+
+function destroyCell(x, y, updatedArray) {
+  pixelGrid[x][y] = CellType.empty;
+  updatedArray[x][y] = CellType.empty;
+}
+
+function createCell(x, y, cellType, updatedArray) {
+  pixelGrid[x][y] = cellType;
+  updatedArray[x][y] = cellType;
 }
 
 const interval = 16.667;
@@ -276,11 +312,11 @@ function init() {
     pixelGrid[i][canvasHeight - 1] = CellType.floor;
   }
 
-  for (let j = 300; j >= 250; j--) {
+  for (let j = 300; j >= 280; j--) {
     pixelGrid[canvasWidth / 2 - 50][j] = CellType.floor;
   }
 
-  for (let j = 300; j >= 250; j--) {
+  for (let j = 300; j >= 280; j--) {
     pixelGrid[canvasWidth / 2 + 49][j] = CellType.floor;
   }
 }
