@@ -85,7 +85,7 @@ function nextState() {
             }
           }
         }
-      // LIQUIDS
+        // LIQUIDS
       } else if (cell.state === "liquid") {
         if (cellBelow === CellType.empty) {
           // Move down
@@ -101,14 +101,19 @@ function nextState() {
           // Move liquid around
           let coinToss = Math.random() >= 0.5;
           if (coinToss) {
-            if (i > 0 && (pixelGrid[i - 1][j] === CellType.empty || pixelGrid[i - 1][j] !== cell && pixelGrid[i - 1][j].state === "liquid")) {
+            if (
+              i > 0 &&
+              pixelGrid[i - 1][j] != cell &&
+              pixelGrid[i - 1][j].state !== "solid"
+            ) {
               // Move left
               swapCells(i, j, i - 1, j, updated);
             }
           } else {
             if (
               i < pixelGrid.length - 1 &&
-              pixelGrid[i + 1][j].state !== "solid" && pixelGrid[i + 1][j] != cell
+              pixelGrid[i + 1][j] != cell &&
+              pixelGrid[i + 1][j].state !== "solid"
             ) {
               // Move right
               swapCells(i, j, i + 1, j, updated);
@@ -132,8 +137,6 @@ function nextState() {
           }
           swapCells(i, lookUp, i, j + 1, updated);
         }
-      } else if (cell === CellType.floor) {
-        // Do nothing for floor
       }
     }
   }
