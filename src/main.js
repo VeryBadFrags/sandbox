@@ -239,28 +239,35 @@ canvas.addEventListener("mouseout", function () {
 });
 
 let brushSize = 4;
+let brushOpacity = 30;
 let brushType = CellType.sand;
 var requestDrawFull = false;
 const spawnSand = (x, y) => {
+  let actualBrushSize = brushSize -1;
   for (
-    let i = Math.max(0, x - brushSize);
-    i < Math.min(x + brushSize, canvasWidth);
+    let i = Math.max(0, x - actualBrushSize);
+    i < Math.min(x + actualBrushSize, canvasWidth);
     i++
   ) {
     for (
-      let j = Math.max(0, y - brushSize);
-      j < Math.min(y + brushSize, canvasHeight);
+      let j = Math.max(0, y - actualBrushSize);
+      j < Math.min(y + actualBrushSize, canvasHeight);
       j++
     ) {
-      let density = brushType == CellType.floor ? 1 : 0.1;
-      if (Math.random() <= density) {
+      if (Math.random() <= brushOpacity / 100) {
         pixelGrid[i][j] = brushType;
       }
     }
   }
-  pixelGrid[x][y] = brushType;
+  if(brushSize > 0) {
+    pixelGrid[x][y] = brushType;
+  }
   requestDrawFull = true;
 };
+
+let brushOpacitySlider = document.getElementById("brush-opacity");
+brushOpacitySlider.addEventListener("click", function (e) {brushOpacity = e.target.value;});
+brushOpacitySlider.value = brushOpacity;
 
 let isMouseDown = false;
 function onMouseDown() {

@@ -26,22 +26,22 @@
       </div>
     </div>
     <div>
-      <label>Brush type</label>
-      <select name="brush-type" id="brush-type">
-        <option value="sand" selected="selected">🏜️ Sand</option>
-        <option value="floor">🧱 Concrete</option>
-        <option value="wood">🪵 Wood</option>
-        <option value="water">🌊 Water</option>
-        <option value="oil">🛢️ Oil</option>
-        <option value="crystals">🪨 Minerals</option>
-        <option value="fire">🔥 Fire</option>
-      </select>
+      <label for="brush-type">Brush type</label>
+      <select name="brush-type" id="brush-type"></select>
     </div>
     <div>
-      <label>Brush size</label>
-      <input type="number" id="brush-size" min="0" value="5">
+      <label for="brush-size">Brush size</label>
+      <input type="number" id="brush-size" min="0" value="5" />
     </div>
-    <div></div>
+    <div class="slidecontainer">
+      <label for="brush-opacity">Brush opacity</label>
+      <input
+        type="range"
+        min="1" max="100" value="50"
+        class="slider"
+        id="brush-opacity"
+      />
+    </div>
 
     <script type="module" src="main.js"></script>
   </body>
