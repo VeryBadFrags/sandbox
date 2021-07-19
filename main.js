@@ -146,6 +146,8 @@ const canvas = document.getElementById("game");
 canvas.addEventListener("mousedown", onMouseDown);
 canvas.addEventListener("mouseup", onMouseUp);
 canvas.addEventListener("mousemove", onMouseMove);
+canvas.addEventListener("mouseout", function (event) {clearInterval(intervalId);});
+
 let mouseX = 0,
   mouseY = 0;
 
@@ -191,23 +193,23 @@ function onMouseMove(event) {
 function init() {
   pixelGrid = initArray();
 
-  for (let i = 350; i < 398; i++) {
+  for (let i = canvasWidth /2 - 50; i < canvasWidth / 2 - 2; i++) {
     pixelGrid[i][200] = CellType.floor;
   }
 
-  for (let i = 403; i < 450; i++) {
+  for (let i = canvasWidth / 2 + 3; i < canvasWidth /2 + 50; i++) {
     pixelGrid[i][200] = CellType.floor;
   }
 
-  for (let i = 200; i < 800 - 200; i++) {
+  for (let i = canvasWidth / 2 - 150; i < canvasWidth / 2 + 150; i++) {
     pixelGrid[i][300] = CellType.floor;
   }
 
-  for (let i = 0; i < 398; i++) {
+  for (let i = 0; i < canvasWidth / 2 - 5; i++) {
     pixelGrid[i][canvasHeight - 1] = CellType.floor;
   }
 
-  for (let i = 403; i < canvasWidth; i++) {
+  for (let i = canvasWidth / 2 + 5; i < canvasWidth; i++) {
     pixelGrid[i][canvasHeight - 1] = CellType.floor;
   }
 }
