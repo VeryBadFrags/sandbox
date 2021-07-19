@@ -5,18 +5,31 @@ console.log(canvas);
 
 const context = canvas.getContext("2d");
 
-export function draw(gameState) {
+export function drawFull(gameState) {
   // reset the grid
   //context.clearRect(0, 0, canvas.width, canvas.height);
   context.fillStyle = CellType.empty.color;
   context.fillRect(0, 0, canvas.width, canvas.height);
 
-  gameState.forEach((row, i) =>
-    row.forEach((cell, j) => {
+  for (let i = 0; i < gameState.length; i++) {
+    for (let j = 0; j < gameState[i].length; j++) {
+      let cell = gameState[i][j];
       if (cell !== CellType.empty) {
         context.fillStyle = cell.color;
         context.fillRect(i, j, 1, 1);
       }
-    })
-  );
+    }
+  }
+}
+
+export function drawPartial(gameState) {
+  for (let i = 0; i < gameState.length; i++) {
+    for (let j = 0; j < gameState[i].length; j++) {
+      let cell = gameState[i][j];
+      if (cell) {
+        context.fillStyle = cell.color;
+        context.fillRect(i, j, 1, 1);
+      }
+    }
+  }
 }
