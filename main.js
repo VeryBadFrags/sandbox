@@ -19,29 +19,38 @@ function initArray() {
 function nextState() {
   let change = false;
 
-  for (let i = 0; i < pixelGrid.length; i++) {
-    for (let j = pixelGrid[i].length -1; j >= 0; j--) {
+  let leftToRight = Math.random() >= 0.5;
+  let iStart = leftToRight ? 0 : pixelGrid.length -1;
+  let iEnd = (i) => leftToRight ? i < pixelGrid.length : i >= 0;
+
+  for (let i = iStart; iEnd(i); leftToRight ? i++ : i--) {
+    for (let j = pixelGrid[i].length - 1; j >= 0; j--) {
       let cell = pixelGrid[i][j];
 
       if (cell === CellType.sandPix) {
         if (j < canvasHeight - 1) {
-
           if (pixelGrid[i][j + 1] === CellType.empty) {
             pixelGrid[i][j] = CellType.empty;
             pixelGrid[i][j + 1] = cell;
           } else {
-            let coinToss = Math.random() > 0.5;
-            if (coinToss && i > 0 && pixelGrid[i - 1][j + 1] === CellType.empty) {
-              pixelGrid[i][j] = CellType.empty;
-              pixelGrid[i - 1][j + 1] = cell;
-            } else if (i < pixelGrid.length -1 && pixelGrid[i + 1][j + 1] === CellType.empty) {
-              pixelGrid[i][j] = CellType.empty;
-              pixelGrid[i + 1][j + 1] = cell;
+            let coinToss = Math.random() >= 0.5;
+            if (coinToss) {
+              if (i > 0 && pixelGrid[i - 1][j + 1] === CellType.empty) {
+                // Bottom left
+                pixelGrid[i][j] = CellType.empty;
+                pixelGrid[i - 1][j + 1] = cell;
+              }
             } else {
-              // Could not move
+              // Bottom right
+              if (
+                i < pixelGrid.length - 1 &&
+                pixelGrid[i + 1][j + 1] === CellType.empty
+              ) {
+                pixelGrid[i][j] = CellType.empty;
+                pixelGrid[i + 1][j + 1] = cell;
+              }
             }
           }
-
         } else {
           // Bottom of the screen
         }
@@ -50,34 +59,43 @@ function nextState() {
           // Move down
           pixelGrid[i][j] = CellType.empty;
           pixelGrid[i][j + 1] = cell;
-        } else if(Math.random() > 0.5 && i > 0 && pixelGrid[i - 1][j] === CellType.empty) {
-          pixelGrid[i][j] = CellType.empty;
-          pixelGrid[i - 1][j] = cell;
-        } else if(i < pixelGrid.length -1 && pixelGrid[i + 1][j] === CellType.empty) {
-          pixelGrid[i][j] = CellType.empty;
-          pixelGrid[i + 1][j] = cell;
         } else {
+          let coinToss = Math.random() >= 0.5;
+          if (coinToss) {
+            if (i > 0 && pixelGrid[i - 1][j] === CellType.empty) {
+              // Move left
+              pixelGrid[i][j] = CellType.empty;
+              pixelGrid[i - 1][j] = cell;
+            }
+          } else {
+            if (
+              i < pixelGrid.length - 1 &&
+              pixelGrid[i + 1][j] === CellType.empty
+            ) {
+              // Move right
+              pixelGrid[i][j] = CellType.empty;
+              pixelGrid[i + 1][j] = cell;
+            }
+          }
         }
       } else if (cell === CellType.crystals) {
         if (j < canvasHeight - 1 && pixelGrid[i][j + 1] === CellType.empty) {
           pixelGrid[i][j] = CellType.empty;
           pixelGrid[i][j + 1] = cell;
-        } else {
         }
       } else if (cell === CellType.floor) {
       }
-
     }
   }
 
   // Tap
-  if (Math.random() > 0.8) {
+  if (Math.random() > 0.7) {
     pixelGrid[400][0] = CellType.water;
   }
-  if (Math.random() > 0.8) {
+  if (Math.random() > 0.7) {
     pixelGrid[399][0] = CellType.water;
   }
-  if (Math.random() > 0.8) {
+  if (Math.random() > 0.7) {
     pixelGrid[401][0] = CellType.water;
   }
 }
@@ -93,21 +111,29 @@ function update(time = 0) {
   requestAnimationFrame(update);
 }
 
-
 const canvas = document.getElementById("game");
 canvas.addEventListener("mousedown", onMouseDown);
 canvas.addEventListener("mouseup", onMouseUp);
 canvas.addEventListener("mousemove", onMouseMove);
-let mouseX = 0, mouseY = 0;
+let mouseX = 0,
+  mouseY = 0;
 
 var intervalId;
 
 let brushSize = 5;
 let brushType = CellType.sandPix;
 const spawnSand = (x, y) => {
-  for(let i = Math.max(0, x - brushSize); i < Math.min(x +brushSize, canvasWidth); i++ ) {
-    for(let j = Math.max(0, y - brushSize); j < Math.min(y + brushSize, canvasHeight); j++) {
-      if(Math.random() > 0.9) {
+  for (
+    let i = Math.max(0, x - brushSize);
+    i < Math.min(x + brushSize, canvasWidth);
+    i++
+  ) {
+    for (
+      let j = Math.max(0, y - brushSize);
+      j < Math.min(y + brushSize, canvasHeight);
+      j++
+    ) {
+      if (Math.random() > 0.9) {
         pixelGrid[i][j] = brushType;
       }
     }
@@ -117,7 +143,9 @@ const spawnSand = (x, y) => {
 
 function onMouseDown(event) {
   spawnSand(event.clientX, event.clientY);
-  intervalId = setInterval(function () {spawnSand(mouseX, mouseY);}, 20);
+  intervalId = setInterval(function () {
+    spawnSand(mouseX, mouseY);
+  }, 20);
 }
 
 function onMouseUp(event) {
@@ -132,15 +160,15 @@ function onMouseMove(event) {
 function init() {
   pixelGrid = initArray();
 
-  for(let i = 350; i < 398; i++) {
+  for (let i = 350; i < 398; i++) {
     pixelGrid[i][200] = CellType.floor;
   }
 
-  for(let i = 403; i < 450; i++) {
+  for (let i = 403; i < 450; i++) {
     pixelGrid[i][200] = CellType.floor;
   }
 
-  for(let i = 200; i < 800 - 200; i++) {
+  for (let i = 200; i < 800 - 200; i++) {
     pixelGrid[i][300] = CellType.floor;
   }
 }
