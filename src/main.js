@@ -97,7 +97,7 @@ function nextState() {
           ) {
             swapCells(i, j, i, j + 1, updated);
           }
-        } else {
+        } else if(cellBelow.state !== "solid") {
           // Move liquid around
           let coinToss = Math.random() >= 0.5;
           if (coinToss) {
@@ -274,6 +274,14 @@ function init() {
 
   for (let i = canvasWidth / 2 + 5; i < canvasWidth; i++) {
     pixelGrid[i][canvasHeight - 1] = CellType.floor;
+  }
+
+  for (let j = 300; j >= 250; j--) {
+    pixelGrid[canvasWidth / 2 - 50][j] = CellType.floor;
+  }
+
+  for (let j = 300; j >= 250; j--) {
+    pixelGrid[canvasWidth / 2 + 49][j] = CellType.floor;
   }
 }
 
