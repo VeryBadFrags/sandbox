@@ -158,13 +158,8 @@ canvas.addEventListener("mousedown", onMouseDown);
 canvas.addEventListener("mouseup", onMouseUp);
 canvas.addEventListener("mousemove", onMouseMove);
 canvas.addEventListener("mouseout", function () {
-  clearInterval(intervalId);
+  isMouseDown = false;
 });
-
-let mouseX = 0,
-  mouseY = 0;
-
-var intervalId;
 
 let brushSize = 5;
 let brushType = CellType.sand;
@@ -188,23 +183,19 @@ const spawnSand = (x, y) => {
   pixelGrid[x][y] = brushType;
 };
 
+let isMouseDown = false;
 function onMouseDown(event) {
-  spawnSand(event.clientX, event.clientY);
-  intervalId = setInterval(
-    function () {
-      spawnSand(mouseX, mouseY);
-    },
-    brushType === CellType.floor ? 1 : 20
-  );
+  isMouseDown = true;
 }
 
 function onMouseUp() {
-  clearInterval(intervalId);
+  isMouseDown = false;
 }
 
 function onMouseMove(event) {
-  mouseX = event.clientX;
-  mouseY = event.clientY;
+  if (isMouseDown) {
+    spawnSand(event.clientX, event.clientY);
+  }
 }
 
 const brushTypeSelector = document.getElementById("brush-type");
