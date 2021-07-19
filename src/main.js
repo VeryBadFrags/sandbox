@@ -239,7 +239,7 @@ canvas.addEventListener("mouseout", function () {
 });
 
 let brushSize = 4;
-let brushOpacity = 30;
+let brushOpacity = 10;
 let brushType = CellType.sand;
 var requestDrawFull = false;
 const spawnSand = (x, y) => {
@@ -259,7 +259,7 @@ const spawnSand = (x, y) => {
       }
     }
   }
-  if(brushSize > 0) {
+  if(brushSize > 0 && x >= 0 && x < canvasWidth && y >=0 && y < canvasHeight) {
     pixelGrid[x][y] = brushType;
   }
   requestDrawFull = true;

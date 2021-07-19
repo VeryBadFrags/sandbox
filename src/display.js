@@ -1,8 +1,6 @@
 import * as CellType from "./celltype.js";
 
 const canvas = document.getElementById("game");
-console.log(canvas);
-
 const context = canvas.getContext("2d");
 
 export function drawFull(gameState) {
