@@ -74,26 +74,26 @@ function nextState() {
         if (
           i > 0 &&
           pixelGrid[i - 1][j].melt &&
-          Math.random() > cell.propagation
+          Math.random() > pixelGrid[i - 1][j].flammable
         ) {
           createCell(i - 1, j, pixelGrid[i - 1][j].melt, delta);
         }
         if (
           i < canvasWidth - 1 &&
           pixelGrid[i + 1][j].melt &&
-          Math.random() > cell.propagation
+          Math.random() > pixelGrid[i + 1][j].flammable
         ) {
           createCell(i + 1, j, pixelGrid[i + 1][j].melt, delta);
         }
         // DOWN
-        if (pixelGrid[i][j + 1].melt && Math.random() > cell.propagation) {
+        if (pixelGrid[i][j + 1].melt && Math.random() > pixelGrid[i][j + 1].flammable) {
           createCell(i, j + 1, pixelGrid[i][j + 1].melt, delta);
         }
         // UP
         if (
           j > 0 &&
           pixelGrid[i][j - 1].melt &&
-          Math.random() > cell.propagation * 1.1
+          Math.random() > pixelGrid[i][j - 1].flammable * 1.1
         ) {
           createCell(i, j - 1, pixelGrid[i][j - 1].melt, delta);
         }
@@ -187,11 +187,14 @@ function nextState() {
               createCell(i + 1, j - 1, CellType.ice, delta);
             }
           }
+
+          //Drip
           if(cellBelow === CellType.empty && Math.random() > 0.9992) {
             createCell(i, j+1, CellType.water, delta);
           }
-          if(Math.random() > 0.9994) {
-            createCell(i, j, CellType.water, delta);
+          //Melt
+          if(Math.random() > 0.9993) {
+            createCell(i, j, cell.melt, delta);
           }
         }
       } else if (cell.state === "solid") {

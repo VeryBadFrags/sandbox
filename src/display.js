@@ -1,7 +1,7 @@
 import * as CellType from "./celltype.js";
 
 const canvas = document.getElementById("game");
-const context = canvas.getContext("2d");
+const context = canvas.getContext("2d", { alpha: false });
 
 export function drawFull(gameState) {
   // reset the grid
