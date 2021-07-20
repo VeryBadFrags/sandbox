@@ -50,7 +50,8 @@ function nextState() {
         } else {
           // TODO investigate uneven distribution
           let coinFlip = Math.random() < 0.6;
-          if (coinFlip &&
+          if (
+            coinFlip &&
             j > 0 &&
             i > 0 &&
             pixelGrid[i - 1][j - 1] === CellType.empty &&
@@ -72,35 +73,39 @@ function nextState() {
         // Propagate
         if (
           i > 0 &&
-          pixelGrid[i - 1][j].flammable &&
+          pixelGrid[i - 1][j].melt &&
           Math.random() > cell.propagation
         ) {
-          createCell(i - 1, j, CellType.fire, delta);
+          createCell(i - 1, j, pixelGrid[i - 1][j].melt, delta);
         }
         if (
           i < canvasWidth - 1 &&
-          pixelGrid[i + 1][j].flammable &&
+          pixelGrid[i + 1][j].melt &&
           Math.random() > cell.propagation
         ) {
-          createCell(i + 1, j, CellType.fire, delta);
+          createCell(i + 1, j, pixelGrid[i + 1][j].melt, delta);
         }
         // DOWN
-        if (pixelGrid[i][j + 1].flammable && Math.random() > cell.propagation) {
-          createCell(i, j + 1, CellType.fire, delta);
+        if (pixelGrid[i][j + 1].melt && Math.random() > cell.propagation) {
+          createCell(i, j + 1, pixelGrid[i][j + 1].melt, delta);
         }
         // UP
         if (
           j > 0 &&
-          pixelGrid[i][j - 1].flammable &&
+          pixelGrid[i][j - 1].melt &&
           Math.random() > cell.propagation * 1.1
         ) {
-          createCell(i, j - 1, CellType.fire, delta);
+          createCell(i, j - 1, pixelGrid[i][j - 1].melt, delta);
         }
 
         // Extinguish
         if (
-          (i > 0 && pixelGrid[i - 1][j] === CellType.water) ||
-          (i < canvasWidth - 1 && pixelGrid[i + 1][j] === CellType.water) ||
+          (i > 0 &&
+            pixelGrid[i - 1][j] === CellType.water &&
+            Math.random() > 0.9) ||
+          (i < canvasWidth - 1 &&
+            pixelGrid[i + 1][j] === CellType.water &&
+            Math.random() > 0.9) ||
           (Math.random() > cell.lifetime &&
             !Utils.isFuelAround(i, j, pixelGrid))
         ) {
@@ -115,6 +120,7 @@ function nextState() {
           (pixelGrid[i][j - 1] === CellType.empty ||
             pixelGrid[i][j - 1].flammable)
         ) {
+          // TODO use melt
           // Evolve
           createCell(
             i,
@@ -163,6 +169,29 @@ function nextState() {
                 createCell(i - 1, j, CellType.plant, delta);
               }
               break;
+          }
+        } else if (cell === CellType.ice) {
+          if (j > 0 && pixelGrid[i][j-1] === CellType.water) {
+            if (
+              i > 0 &&
+              pixelGrid[i - 1][j - 1] === CellType.water  &&
+              Math.random() > cell.propagation
+            ) {
+              createCell(i - 1, j - 1, CellType.ice, delta);
+            }
+            if (
+              i < canvasWidth - 1 &&
+              pixelGrid[i + 1][j - 1] === CellType.water &&
+              Math.random() > cell.propagation
+            ) {
+              createCell(i + 1, j - 1, CellType.ice, delta);
+            }
+          }
+          if(cellBelow === CellType.empty && Math.random() > 0.9992) {
+            createCell(i, j+1, CellType.water, delta);
+          }
+          if(Math.random() > 0.9994) {
+            createCell(i, j, CellType.water, delta);
           }
         }
       } else if (cell.state === "solid") {
@@ -253,39 +282,27 @@ function nextState() {
   }
 
   // Tap
-  if (Math.random() > 0.7) {
-    pixelGrid[canvasWidth / 2][0] = CellType.water;
-  }
-  if (Math.random() > 0.9) {
-    pixelGrid[canvasWidth / 2 - 1][0] = CellType.water;
-  }
-  if (Math.random() > 0.9) {
-    createCell(canvasWidth / 2 + 1, 0, CellType.water, delta);
+  for (let i = -3; i <= 3; i++) {
+    if (Math.random() > 0.9) {
+      pixelGrid[canvasWidth / 2 + i][0] = CellType.sand;
+    }
   }
 
-  if (Math.random() > 0.8) {
-    createCell(
-      parseInt((2 * canvasWidth) / 3 + 50, 10),
-      0,
-      CellType.sand,
-      delta
-    );
+  for (let i = -3; i <= 3; i++) {
+    if (Math.random() > 0.9) {
+      createCell(
+        Math.floor((2 * canvasWidth) / 3) + i,
+        0,
+        CellType.water,
+        delta
+      );
+    }
   }
-  if (Math.random() > 0.9) {
-    createCell(
-      parseInt((2 * canvasWidth) / 3 + 49, 10),
-      0,
-      CellType.sand,
-      delta
-    );
-  }
-  if (Math.random() > 0.9) {
-    createCell(
-      parseInt((2 * canvasWidth) / 3 + 51, 10),
-      0,
-      CellType.sand,
-      delta
-    );
+
+  for (let i = -3; i <= 3; i++) {
+    if (Math.random() > 0.9) {
+      createCell(Math.floor(canvasWidth / 3) + i, 0, CellType.oil, delta);
+    }
   }
 
   return delta;
@@ -426,24 +443,16 @@ brushSizeSelector.value = brushSize;
 function init() {
   pixelGrid = initArray();
 
-  // for (let i = canvasWidth / 2 - 50; i < canvasWidth / 2 - 2; i++) {
-  //   pixelGrid[i][200] = CellType.floor;
-  // }
-
-  // for (let i = canvasWidth / 2 + 3; i < canvasWidth / 2 + 50; i++) {
-  //   pixelGrid[i][200] = CellType.floor;
-  // }
-
-  for (let i = canvasWidth / 2 - 50; i < canvasWidth / 2 + 50; i++) {
+  for (let i = canvasWidth / 2 - 25; i < canvasWidth / 2 + 24; i++) {
     pixelGrid[i][300] = CellType.floor;
   }
 
-  for (let j = 300; j >= 270; j--) {
-    pixelGrid[canvasWidth / 2 - 50][j] = CellType.floor;
+  for (let j = 300; j >= 285; j--) {
+    pixelGrid[canvasWidth / 2 - 25][j] = CellType.floor;
   }
 
-  for (let j = 300; j >= 270; j--) {
-    pixelGrid[canvasWidth / 2 + 49][j] = CellType.floor;
+  for (let j = 300; j >= 285; j--) {
+    pixelGrid[canvasWidth / 2 + 24][j] = CellType.floor;
   }
 
   Display.drawFull(pixelGrid);
