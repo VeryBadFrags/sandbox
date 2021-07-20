@@ -11,7 +11,7 @@ export const floor = {
 export const wood = {
   name: "🌳 Wood",
   color: "#6a4b34",
-  density: 0.8,
+  density: 20,
   state: "solid",
   flammable: true,
   static: true,
@@ -28,6 +28,15 @@ export const crystals = {
   color: "#ff80b6",
   density: 30,
   state: "solid",
+};
+export const plant = {
+  name: "🌿 Plant",
+  color: "#3bfe30",
+  state: "solid",
+  density: 10,
+  propagation: 0.4,
+  flammable: true,
+  static: true,
 };
 
 // LIQUIDS
@@ -50,7 +59,7 @@ export const smoke = {
   color: "#222",
   density: 0.1,
   state: "gas",
-  lifetime: 0.97,
+  lifetime: 0.98,
   nextCell: empty,
 };
 export const fire3 = {
@@ -58,21 +67,24 @@ export const fire3 = {
   density: 0.1,
   state: "fire",
   lifetime: 0.85,
+  propagation: 0.7,
   nextCell: smoke,
 };
 export const fire2 = {
   color: "#f40",
   density: 0.1,
   state: "fire",
-  lifetime: 0.90,
+  lifetime: 0.9,
+  propagation: 0.75,
   nextCell: fire3,
 };
 export const fire = {
-  name:"🔥 Fire",
+  name: "🔥 Fire",
   color: "#ff0000",
   density: 0.2,
   state: "fire",
   lifetime: 0.91,
+  propagation: 0.8,
   nextCell: fire2,
 };
 
@@ -84,6 +96,7 @@ export const CellsMap = {
   water: water,
   crystals: crystals,
   oil: oil,
+  plant: plant,
   fire: fire,
 };
 
