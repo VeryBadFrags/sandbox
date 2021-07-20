@@ -12,8 +12,8 @@ export const fire3 = {
   color: "#f80",
   density: 0.1,
   state: "fire",
-  lifetime: 0.86,
-  propagation: 0.75,
+  lifetime: 0.88,
+  propagation: 0.8,
   nextCell: smoke,
 };
 export const fire2 = {
@@ -30,7 +30,7 @@ export const fire = {
   density: 0.2,
   state: "fire",
   lifetime: 0.90,
-  propagation: 0.81,
+  propagation: 0.75,
   nextCell: fire2,
 };
 
