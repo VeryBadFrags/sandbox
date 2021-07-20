@@ -36,7 +36,17 @@ function nextState() {
       }
 
       let cellBelow = pixelGrid[i][j + 1];
-      if (cell.state === "fire") {
+      if (cell === CellType.smoke) {
+        if (Math.random() > cell.lifetime) {
+          destroyCell(i, j, delta);
+        } else if (
+          j > 0 &&
+          pixelGrid[i][j - 1] === CellType.empty &&
+          Math.random() > 0.7
+        ) {
+          swapCells(i, j, i, j - 1, delta);
+        }
+      } else if (cell.state === "fire") {
         // FIRE
 
         // Propagate
@@ -50,14 +60,15 @@ function nextState() {
         ) {
           createCell(i + 1, j, CellType.fire, delta);
         }
-        if (pixelGrid[i][j + 1].flammable && Math.random() > 0.9) {
+        if (pixelGrid[i][j + 1].flammable && Math.random() > 0.85) {
           createCell(i, j + 1, CellType.fire, delta);
         }
 
+        // Extinguish
         if (
           (i > 0 && pixelGrid[i - 1][j] === CellType.water) ||
           (i < canvasWidth - 1 && pixelGrid[i + 1][j] === CellType.water) ||
-          Math.random() <= cell.lifetime
+          Math.random() > cell.lifetime
         ) {
           destroyCell(i, j, delta);
           continue;
@@ -67,6 +78,7 @@ function nextState() {
           (pixelGrid[i][j - 1] === CellType.empty ||
             pixelGrid[i][j - 1].flammable)
         ) {
+          // Evolve
           createCell(
             i,
             j - 1,
@@ -172,14 +184,29 @@ function nextState() {
     createCell(canvasWidth / 2 + 1, 0, CellType.water, delta);
   }
 
-  if(Math.random() > 0.8) {
-    createCell(parseInt(2* canvasWidth / 3 + 50, 10), 0, CellType.sand, delta);
+  if (Math.random() > 0.8) {
+    createCell(
+      parseInt((2 * canvasWidth) / 3 + 50, 10),
+      0,
+      CellType.sand,
+      delta
+    );
   }
-  if(Math.random() > 0.9) {
-    createCell(parseInt(2* canvasWidth / 3 + 49, 10), 0, CellType.sand, delta);
+  if (Math.random() > 0.9) {
+    createCell(
+      parseInt((2 * canvasWidth) / 3 + 49, 10),
+      0,
+      CellType.sand,
+      delta
+    );
   }
-  if(Math.random() > 0.9) {
-    createCell(parseInt(2* canvasWidth / 3 + 51, 10), 0, CellType.sand, delta);
+  if (Math.random() > 0.9) {
+    createCell(
+      parseInt((2 * canvasWidth) / 3 + 51, 10),
+      0,
+      CellType.sand,
+      delta
+    );
   }
 
   return delta;
@@ -243,7 +270,7 @@ let brushOpacity = 10;
 let brushType = CellType.sand;
 var requestDrawFull = false;
 const spawnSand = (x, y) => {
-  let actualBrushSize = brushSize -1;
+  let actualBrushSize = brushSize - 1;
   for (
     let i = Math.max(0, x - actualBrushSize);
     i < Math.min(x + actualBrushSize, canvasWidth);
@@ -259,14 +286,22 @@ const spawnSand = (x, y) => {
       }
     }
   }
-  if(brushSize > 0 && x >= 0 && x < canvasWidth && y >=0 && y < canvasHeight) {
+  if (
+    brushSize > 0 &&
+    x >= 0 &&
+    x < canvasWidth &&
+    y >= 0 &&
+    y < canvasHeight
+  ) {
     pixelGrid[x][y] = brushType;
   }
   requestDrawFull = true;
 };
 
 let brushOpacitySlider = document.getElementById("brush-opacity");
-brushOpacitySlider.addEventListener("click", function (e) {brushOpacity = e.target.value;});
+brushOpacitySlider.addEventListener("click", function (e) {
+  brushOpacity = e.target.value;
+});
 brushOpacitySlider.value = brushOpacity;
 
 let isMouseDown = false;

@@ -46,18 +46,25 @@ export const oil = {
 };
 
 // FIRE
-export const fire3 = {
-  color: "#fb1",
+export const smoke = {
+  color: "#222",
   density: 0.1,
-  state: "fire",
-  lifetime: 0.2,
+  state: "gas",
+  lifetime: 0.97,
   nextCell: empty,
 };
-export const fire2 = {
+export const fire3 = {
   color: "#f80",
   density: 0.1,
   state: "fire",
-  lifetime: 0.1,
+  lifetime: 0.85,
+  nextCell: smoke,
+};
+export const fire2 = {
+  color: "#f40",
+  density: 0.1,
+  state: "fire",
+  lifetime: 0.90,
   nextCell: fire3,
 };
 export const fire = {
@@ -65,7 +72,7 @@ export const fire = {
   color: "#ff0000",
   density: 0.2,
   state: "fire",
-  lifetime: 0.09,
+  lifetime: 0.91,
   nextCell: fire2,
 };
 
