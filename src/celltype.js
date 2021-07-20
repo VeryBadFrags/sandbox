@@ -31,7 +31,7 @@ export const crystals = {
 };
 export const plant = {
   name: "🌿 Plant",
-  color: "#3bfe30",
+  color: "#2bfe20",
   state: "solid",
   density: 10,
   propagation: 0.4,

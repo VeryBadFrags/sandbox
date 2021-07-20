@@ -1,5 +1,6 @@
 import * as Display from "./display.js";
 import * as CellType from "./celltype.js";
+import * as Utils from "./utils.js";
 
 var canvasWidth = 800;
 var canvasHeight = 600;
@@ -66,15 +67,15 @@ function nextState() {
           createCell(i, j + 1, CellType.fire, delta);
         }
         // UP
-        if (j > 0 && pixelGrid[i][j - 1].flammable && Math.random() > cell.propagation * 1.4) {
-          createCell(i, j + 1, CellType.fire, delta);
+        if (j > 0 && pixelGrid[i][j - 1].flammable && Math.random() > cell.propagation * 1.1) {
+          createCell(i, j - 1, CellType.fire, delta);
         }
 
         // Extinguish
         if (
           (i > 0 && pixelGrid[i - 1][j] === CellType.water) ||
           (i < canvasWidth - 1 && pixelGrid[i + 1][j] === CellType.water) ||
-          Math.random() > cell.lifetime
+          (Math.random() > cell.lifetime && !Utils.isFuelAround(i,j,pixelGrid))
         ) {
           destroyCell(i, j, delta);
           continue;
