@@ -47,6 +47,24 @@ function nextState() {
           Math.random() > 0.7
         ) {
           swapCells(i, j, i, j - 1, delta);
+        } else {
+          // TODO investigate uneven distribution
+          let coinFlip = Math.random() < 0.6;
+          if (coinFlip &&
+            j > 0 &&
+            i > 0 &&
+            pixelGrid[i - 1][j - 1] === CellType.empty &&
+            Math.random() > 0.7
+          ) {
+            swapCells(i, j, i - 1, j - 1, delta);
+          } else if (
+            j > 0 &&
+            i < canvasWidth - 1 &&
+            pixelGrid[i + 1][j - 1] === CellType.empty &&
+            Math.random() > 0.7
+          ) {
+            swapCells(i, j, i + 1, j - 1, delta);
+          }
         }
       } else if (cell.state === "fire") {
         // FIRE
@@ -86,7 +104,7 @@ function nextState() {
           (Math.random() > cell.lifetime &&
             !Utils.isFuelAround(i, j, pixelGrid))
         ) {
-          if (cell === CellType.fire2 || cell === CellType.fire3) {
+          if (cell === CellType.fire3) {
             createCell(i, j, CellType.smoke, delta);
           } else {
             destroyCell(i, j, delta);

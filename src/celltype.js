@@ -88,7 +88,7 @@ export const fire2 = {
 };
 export const fire = {
   name: "🔥 Fire",
-  color: "#ff0000",
+  color: "#e00000",
   density: 0.2,
   state: "fire",
   lifetime: 0.91,
