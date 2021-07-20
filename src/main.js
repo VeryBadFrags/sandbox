@@ -52,7 +52,11 @@ function nextState() {
         // FIRE
 
         // Propagate
-        if (i > 0 && pixelGrid[i - 1][j].flammable && Math.random() > cell.propagation) {
+        if (
+          i > 0 &&
+          pixelGrid[i - 1][j].flammable &&
+          Math.random() > cell.propagation
+        ) {
           createCell(i - 1, j, CellType.fire, delta);
         }
         if (
@@ -67,7 +71,11 @@ function nextState() {
           createCell(i, j + 1, CellType.fire, delta);
         }
         // UP
-        if (j > 0 && pixelGrid[i][j - 1].flammable && Math.random() > cell.propagation * 1.1) {
+        if (
+          j > 0 &&
+          pixelGrid[i][j - 1].flammable &&
+          Math.random() > cell.propagation * 1.1
+        ) {
           createCell(i, j - 1, CellType.fire, delta);
         }
 
@@ -75,10 +83,14 @@ function nextState() {
         if (
           (i > 0 && pixelGrid[i - 1][j] === CellType.water) ||
           (i < canvasWidth - 1 && pixelGrid[i + 1][j] === CellType.water) ||
-          (Math.random() > cell.lifetime && !Utils.isFuelAround(i,j,pixelGrid))
+          (Math.random() > cell.lifetime &&
+            !Utils.isFuelAround(i, j, pixelGrid))
         ) {
-          destroyCell(i, j, delta);
-          continue;
+          if (cell === CellType.fire2 || cell === CellType.fire3) {
+            createCell(i, j, CellType.smoke, delta);
+          } else {
+            destroyCell(i, j, delta);
+          }
         } else if (
           j > 0 &&
           Math.random() > 0.8 &&
@@ -94,13 +106,45 @@ function nextState() {
           );
         }
       } else if (cell.static) {
-        if(cell === CellType.plant) {
+        if (cell === CellType.plant) {
           let direction = Math.floor(Math.random() * 4);
-          switch(direction) {
-            case 0: if(j > 0 && pixelGrid[i][j-1] === CellType.water && Math.random() > cell.propagation) {createCell(i, j-1, CellType.plant, delta)} break;
-            case 1: if(i < canvasWidth -1 && pixelGrid[i +1][j] === CellType.water && Math.random() > cell.propagation) {createCell(i+1, j, CellType.plant, delta)} break;
-            case 2: if(j < canvasHeight -1 && pixelGrid[i][j+1] === CellType.water && Math.random() > cell.propagation) {createCell(i, j+1, CellType.plant, delta)} break;
-            case 3: if(i > 0 && pixelGrid[i -1][j] === CellType.water && Math.random() > cell.propagation) {createCell(i-1, j, CellType.plant, delta)} break;
+          switch (direction) {
+            case 0:
+              if (
+                j > 0 &&
+                pixelGrid[i][j - 1] === CellType.water &&
+                Math.random() > cell.propagation
+              ) {
+                createCell(i, j - 1, CellType.plant, delta);
+              }
+              break;
+            case 1:
+              if (
+                i < canvasWidth - 1 &&
+                pixelGrid[i + 1][j] === CellType.water &&
+                Math.random() > cell.propagation
+              ) {
+                createCell(i + 1, j, CellType.plant, delta);
+              }
+              break;
+            case 2:
+              if (
+                j < canvasHeight - 1 &&
+                pixelGrid[i][j + 1] === CellType.water &&
+                Math.random() > cell.propagation
+              ) {
+                createCell(i, j + 1, CellType.plant, delta);
+              }
+              break;
+            case 3:
+              if (
+                i > 0 &&
+                pixelGrid[i - 1][j] === CellType.water &&
+                Math.random() > cell.propagation
+              ) {
+                createCell(i - 1, j, CellType.plant, delta);
+              }
+              break;
           }
         }
       } else if (cell.state === "solid") {

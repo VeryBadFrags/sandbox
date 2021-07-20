@@ -23,6 +23,14 @@ export const sand = {
   state: "solid",
   granular: true,
 };
+export const powder = {
+  name: "💣 Gunpowder",
+  color: "#444",
+  density: 3,
+  state: "solid",
+  granular: true,
+  flammable: true,
+};
 export const crystals = {
   name: "💎 Minerals",
   color: "#ff80b6",
@@ -94,9 +102,10 @@ export const CellsMap = {
   floor: floor,
   wood: wood,
   water: water,
-  crystals: crystals,
+  powder: powder,
   oil: oil,
   plant: plant,
+  crystals: crystals,
   fire: fire,
 };
 
