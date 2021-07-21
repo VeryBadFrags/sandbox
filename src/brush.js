@@ -20,12 +20,19 @@ export default class Brush {
   }
 
   increaseBrushSize(size) {
-    brushSize += size;
+    if (size > 0) {
+      brushSize += size + Math.floor(brushSize / 10);
+    } else {
+      let step = Math.floor(brushSize / 10)
+      brushSize += size - Math.floor((brushSize - step) / 10);
+    }
+    brushSize = Math.max(1, Math.min(300, brushSize));
     brushSizeSelector.value = brushSize;
   }
 
   increaseOpacity(size) {
     brushOpacity += size;
+    brushOpacity = Math.max(0, Math.min(100, brushOpacity));
     brushOpacitySlider.value = brushOpacity;
   }
 
