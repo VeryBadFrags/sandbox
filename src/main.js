@@ -377,6 +377,20 @@ function init() {
 
   mainBrush = new Brush(() => requestDrawFull = true);
   mainBrush.init();
+
+  document.addEventListener('keydown', (e) => {
+    if(CellType.CellsKeys[e.key]) {
+      mainBrush.setBrushType(CellType.CellsKeys[e.key]);
+    } else if (e.key === '+' || e.key === '=') {
+      mainBrush.increaseBrushSize(1);
+    } else if (e.key === '-' || e.key === '_') {
+      mainBrush.increaseBrushSize(-1);
+    } else if (e.key === '{' || e.key === '[') {
+      mainBrush.increaseOpacity(-10);
+    } else if (e.key === '}' || e.key === ']') {
+      mainBrush.increaseOpacity(10);
+    }
+  });
 }
 
 init();

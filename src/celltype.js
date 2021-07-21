@@ -1,4 +1,9 @@
-export const empty = { name: "✏️ Eraser", color: "#000", density: 0.5 };
+export const empty = {
+  name: "✏️ Eraser",
+  key: "e",
+  color: "#000",
+  density: 0.5,
+};
 
 // FIRE
 export const smoke = {
@@ -26,10 +31,11 @@ export const fire2 = {
 };
 export const fire = {
   name: "🔥 Fire",
+  key:"f",
   color: "#e00000",
   density: 0.2,
   state: "fire",
-  lifetime: 0.90,
+  lifetime: 0.9,
   propagation: 0.75,
   nextCell: fire2,
 };
@@ -37,6 +43,7 @@ export const fire = {
 // LIQUIDS
 export const water = {
   name: "🌊 Water",
+  key: "w",
   color: "#22f",
   density: 1,
   state: "liquid",
@@ -45,6 +52,7 @@ export const water = {
 
 export const oil = {
   name: "🛢️ Oil",
+  key: "o",
   color: "#963e48",
   density: 0.5,
   state: "liquid",
@@ -55,6 +63,7 @@ export const oil = {
 // SOLIDS
 export const floor = {
   name: "🧱 Concrete",
+  key: "c",
   color: "#aaa",
   density: 100,
   state: "solid",
@@ -62,6 +71,7 @@ export const floor = {
 };
 export const ice = {
   name: "🧊 Ice",
+  key: "i",
   color: "#00ffff",
   density: 0.9,
   state: "solid",
@@ -70,9 +80,10 @@ export const ice = {
   drip: 0.999,
   static: true,
   melt: water,
-}
+};
 export const wood = {
   name: "🌳 Wood",
+  key: "w",
   color: "#6a4b34",
   density: 20,
   state: "solid",
@@ -82,6 +93,7 @@ export const wood = {
 };
 export const sand = {
   name: "🏜️ Sand",
+  key: "s",
   color: "#c2b280",
   density: 9,
   state: "solid",
@@ -90,6 +102,7 @@ export const sand = {
 };
 export const powder = {
   name: "💣 Gunpowder",
+  key: "g",
   color: "#555",
   density: 4,
   state: "solid",
@@ -105,6 +118,7 @@ export const crystals = {
 };
 export const plant = {
   name: "🌿 Plant",
+  key:"p",
   color: "#2bfe20",
   state: "solid",
   density: 10,
@@ -115,27 +129,36 @@ export const plant = {
   static: true,
 };
 
-export const CellsMap = {
-  empty: empty,
-  sand: sand,
-  floor: floor,
-  wood: wood,
-  water: water,
-  ice: ice,
-  powder: powder,
-  oil: oil,
-  plant: plant,
-  crystals: crystals,
-  fire: fire,
-};
+export const CellsMap = [
+  empty,
+  sand,
+  floor,
+  wood,
+  water,
+  ice,
+  powder,
+  oil,
+  plant,
+  crystals,
+  fire,
+];
+
+export const CellsKeys = {};
+CellsMap.forEach((k) => {
+  if (k.key) {
+    CellsKeys[k.key] = k;
+  }
+});
 
 {
-  let select = document.getElementById("brush-type");
-  for (let cell in CellsMap) {
-    var opt = document.createElement("option");
-    opt.value = cell;
-    opt.innerHTML = CellsMap[cell].name;
-    select.appendChild(opt);
-  }
-  select.selected = CellsMap[2];
+  const brushTypeSelector = document.getElementById("brush-type");
+  CellsMap.forEach((cell) => {
+    let opt = document.createElement("option");
+    opt.value = cell.name;
+    opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
+    if (cell === sand) {
+      opt.selected = "selected";
+    }
+    brushTypeSelector.appendChild(opt);
+  });
 }

@@ -1,9 +1,32 @@
 import * as CellType from "./celltype.js";
 import * as Game from "./game.js";
 
+const brushTypeSelector = document.getElementById("brush-type");
+const brushSizeSelector = document.getElementById("brush-size");
+const brushOpacitySlider = document.getElementById("brush-opacity");
+
+let brushType = CellType.sand;
+let brushSize = 4;
+let brushOpacity = 10;
+
 export default class Brush {
   constructor(requestDrawFull) {
     this.requestDrawFull = requestDrawFull;
+  }
+
+  setBrushType(brush) {
+    brushType = brush;
+    brushTypeSelector.value = brush.name;
+  }
+
+  increaseBrushSize(size) {
+    brushSize += size;
+    brushSizeSelector.value = brushSize;
+  }
+
+  increaseOpacity(size) {
+    brushOpacity += size;
+    brushOpacitySlider.value = brushOpacity;
   }
 
   init() {
@@ -12,10 +35,6 @@ export default class Brush {
     const canvasHeight = canvas.height;
 
     let intervalId;
-
-    let brushSize = 4;
-    let brushOpacity = 10;
-    let brushType = CellType.sand;
 
     const spawnSand = (x, y) => {
       let actualBrushSize = brushSize - 1;
@@ -46,7 +65,6 @@ export default class Brush {
       this.requestDrawFull();
     };
 
-    let brushOpacitySlider = document.getElementById("brush-opacity");
     brushOpacitySlider.addEventListener("click", function (e) {
       brushOpacity = e.target.value;
     });
@@ -64,7 +82,8 @@ export default class Brush {
       );
     }
 
-    let prevMouseX = null, prevMouseY = null;
+    let prevMouseX = null,
+      prevMouseY = null;
     let mouseX = 0,
       mouseY = 0;
     function onMouseMove(e) {
@@ -86,14 +105,10 @@ export default class Brush {
       clearInterval(intervalId);
     }
 
-    const brushTypeSelector = document.getElementById("brush-type");
     brushTypeSelector.addEventListener("change", function (e) {
-      brushType =
-        CellType.CellsMap[e.target.options[e.target.selectedIndex].value];
+      brushType = CellType.CellsMap[e.target.selectedIndex];
     });
-    brushTypeSelector.value = "sand";
 
-    const brushSizeSelector = document.getElementById("brush-size");
     brushSizeSelector.addEventListener("change", function (e) {
       brushSize = parseInt(e.target.value, 10);
     });
