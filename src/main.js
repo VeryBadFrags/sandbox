@@ -174,7 +174,7 @@ function nextState() {
           if (
             j > 0 &&
             Utils.countNeighbors(i, j, pixelGrid, [CellType.water]) >= 2 &&
-            Utils.countNeighbors(i, j, pixelGrid, [CellType.ice]) <= 3
+            Utils.countNeighbors(i, j, pixelGrid, [CellType.ice]) <= 4
           ) {
             if (
               i > 0 &&
@@ -198,7 +198,7 @@ function nextState() {
           }
           //Melt
           if (
-            Math.random() > cell.lifetime ||
+            (Math.random() > cell.lifetime && Utils.countNeighbors(i,j,pixelGrid,[CellType.ice]) < 4) ||
             Utils.countNeighbors(i, j, pixelGrid, [
               CellType.fire,
               CellType.fire2,
