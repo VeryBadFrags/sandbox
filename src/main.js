@@ -62,12 +62,12 @@ function nextState() {
         // Propagate
         for (
           let a = Math.max(i - 1, 0);
-          a <= Math.min(i + 1, Game.pixelGrid.length -1);
+          a <= Math.min(i + 1, Game.pixelGrid.length - 1);
           a++
         ) {
           for (
             let b = j;
-            b <= Math.min(j + 1, Game.pixelGrid[a].length -1);
+            b <= Math.min(j + 1, Game.pixelGrid[a].length - 1);
             b++
           ) {
             if (a === i && b === j) {
@@ -92,8 +92,9 @@ function nextState() {
           (i < canvas.width - 1 &&
             Game.pixelGrid[i + 1][j] === CellType.water &&
             Math.random() > 0.9) ||
-          (j > 0 && Game.pixelGrid[i][j-1] === CellType.water) ||
-          Utils.countNeighbors(i,j,Game.pixelGrid,(test) => test.dousing) >= 2 ||
+          (j > 0 && Game.pixelGrid[i][j - 1] === CellType.water) ||
+          Utils.countNeighbors(i, j, Game.pixelGrid, (test) => test.dousing) >=
+            2 ||
           (Math.random() > cell.lifetime &&
             !Utils.isFuelAround(i, j, Game.pixelGrid))
         ) {
@@ -119,7 +120,7 @@ function nextState() {
         }
       } else if (cell.static) {
         if (cell === CellType.plant) {
-          if(Utils.countNeighbors(i,j,Game.pixelGrid,[CellType.ice])) {
+          if (Utils.countNeighbors(i, j, Game.pixelGrid, [CellType.ice])) {
             continue;
           }
           let direction = Math.floor(Math.random() * 4);
@@ -183,10 +184,12 @@ function nextState() {
             ) {
               createCell(i + 1, j - 1, CellType.ice, delta);
             }
-            if(Game.pixelGrid[i][j - 1] === CellType.water &&
-              Math.random() > cell.propagation) {
-                createCell(i, j - 1, CellType.ice, delta);
-              }
+            if (
+              Game.pixelGrid[i][j - 1] === CellType.water &&
+              Math.random() > cell.propagation
+            ) {
+              createCell(i, j - 1, CellType.ice, delta);
+            }
           }
 
           //Drip
@@ -195,7 +198,8 @@ function nextState() {
           }
           //Melt
           if (
-            (Math.random() > cell.lifetime && Utils.countNeighbors(i,j,Game.pixelGrid,[CellType.ice]) < 6) ||
+            (Math.random() > cell.lifetime &&
+              Utils.countNeighbors(i, j, Game.pixelGrid, [CellType.ice]) < 6) ||
             Utils.countNeighbors(i, j, Game.pixelGrid, [
               CellType.fire,
               CellType.fire2,
@@ -207,6 +211,23 @@ function nextState() {
         }
       } else if (cell.state === "solid") {
         // SOLIDS
+
+        // Salt
+        if (cell === CellType.salt) {
+          if (cellBelow === CellType.ice) {
+            createCell(i, j, CellType.water, delta);
+            createCell(i, j + 1, CellType.water, delta);
+          }
+          if(i > 0 && Game.pixelGrid[i-1][j+1] === CellType.ice) {
+            createCell(i, j, CellType.water, delta);
+            createCell(i -1, j + 1, CellType.water, delta);
+          }
+          if(i < canvas.width - 1 && Game.pixelGrid[i+1][j+1] === CellType.ice) {
+            createCell(i, j, CellType.water, delta);
+            createCell(i +1, j + 1, CellType.water, delta);
+          }
+        }
+
         if (cellBelow === CellType.empty) {
           swapCells(i, j, i, j + 1, delta);
         } else if (
@@ -375,19 +396,19 @@ function init() {
 
   Display.drawFull(Game.pixelGrid);
 
-  mainBrush = new Brush(() => requestDrawFull = true);
+  mainBrush = new Brush(() => (requestDrawFull = true));
   mainBrush.init();
 
-  document.addEventListener('keydown', (e) => {
-    if(CellType.CellsKeys[e.key]) {
+  document.addEventListener("keydown", (e) => {
+    if (CellType.CellsKeys[e.key]) {
       mainBrush.setBrushType(CellType.CellsKeys[e.key]);
-    } else if (e.key === '+' || e.key === '=') {
+    } else if (e.key === "+" || e.key === "=") {
       mainBrush.increaseBrushSize(1);
-    } else if (e.key === '-' || e.key === '_') {
+    } else if (e.key === "-" || e.key === "_") {
       mainBrush.increaseBrushSize(-1);
-    } else if (e.key === '{') {
+    } else if (e.key === "{") {
       mainBrush.increaseOpacity(-10);
-    } else if (e.key === '}') {
+    } else if (e.key === "}") {
       mainBrush.increaseOpacity(10);
     }
   });

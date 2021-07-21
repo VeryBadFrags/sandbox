@@ -72,7 +72,7 @@ export const floor = {
 export const ice = {
   name: "🧊 Ice",
   key: "i",
-  color: "#00ffff",
+  color: "#00eeee",
   density: 0.9,
   state: "solid",
   propagation: 0.996,
@@ -100,6 +100,14 @@ export const sand = {
   granular: true,
   dousing: true,
 };
+export const salt = {
+  name: "🧂 Salt",
+  key: "m",
+  color: "#eee",
+  state: "solid",
+  density: 10,
+  granular: true,
+}
 export const powder = {
   name: "💣 Gunpowder",
   key: "g",
@@ -136,6 +144,7 @@ export const CellsMap = [
   wood,
   water,
   ice,
+  salt,
   powder,
   oil,
   plant,
