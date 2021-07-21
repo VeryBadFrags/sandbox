@@ -1,49 +1,38 @@
 import * as Display from "./display.js";
 import * as CellType from "./celltype.js";
 import * as Utils from "./utils.js";
+import * as Game from "./game.js";
+import Brush from "./brush.js";
 
-var canvasWidth = 800;
-var canvasHeight = 600;
-var pixelGrid;
-
-function initArray(cell = CellType.empty) {
-  let newArray = new Array(canvasWidth);
-  for (let i = 0; i < newArray.length; i++) {
-    newArray[i] = new Array(canvasHeight);
-    for (let j = 0; j < newArray[i].length; j++) {
-      newArray[i][j] = cell;
-    }
-  }
-  return newArray;
-}
+const canvas = document.getElementById("game");
 
 function nextState() {
-  let delta = initArray(null);
+  let delta = Utils.initArray(canvas.width, canvas.height, null);
 
   let leftToRight = Math.random() >= 0.5;
-  let iStart = leftToRight ? 0 : pixelGrid.length - 1;
-  let iEnd = (i) => (leftToRight ? i < pixelGrid.length : i >= 0);
+  let iStart = leftToRight ? 0 : Game.pixelGrid.length - 1;
+  let iEnd = (i) => (leftToRight ? i < Game.pixelGrid.length : i >= 0);
 
   for (let i = iStart; iEnd(i); leftToRight ? i++ : i--) {
-    for (let j = pixelGrid[i].length - 1; j >= 0; j--) {
-      let cell = pixelGrid[i][j];
+    for (let j = Game.pixelGrid[i].length - 1; j >= 0; j--) {
+      let cell = Game.pixelGrid[i][j];
       if (cell === CellType.empty || cell === CellType.floor) {
         continue;
       }
 
-      if (j === canvasHeight - 1) {
+      if (j === canvas.height - 1) {
         destroyCell(i, j, delta);
         continue;
       }
 
-      let cellBelow = pixelGrid[i][j + 1];
+      let cellBelow = Game.pixelGrid[i][j + 1];
       if (cell === CellType.smoke) {
         // SMOKE
         if (Math.random() > cell.lifetime) {
           destroyCell(i, j, delta);
         } else if (
           j > 0 &&
-          pixelGrid[i][j - 1] === CellType.empty &&
+          Game.pixelGrid[i][j - 1] === CellType.empty &&
           Math.random() > 0.7
         ) {
           swapCells(i, j, i, j - 1, delta);
@@ -54,14 +43,14 @@ function nextState() {
             coinFlip &&
             j > 0 &&
             i > 0 &&
-            pixelGrid[i - 1][j - 1] === CellType.empty &&
+            Game.pixelGrid[i - 1][j - 1] === CellType.empty &&
             Math.random() > 0.7
           ) {
             swapCells(i, j, i - 1, j - 1, delta);
           } else if (
             j > 0 &&
-            i < canvasWidth - 1 &&
-            pixelGrid[i + 1][j - 1] === CellType.empty &&
+            i < canvas.width - 1 &&
+            Game.pixelGrid[i + 1][j - 1] === CellType.empty &&
             Math.random() > 0.7
           ) {
             swapCells(i, j, i + 1, j - 1, delta);
@@ -73,23 +62,23 @@ function nextState() {
         // Propagate
         for (
           let a = Math.max(i - 1, 0);
-          a <= Math.min(i + 1, pixelGrid.length);
+          a <= Math.min(i + 1, Game.pixelGrid.length -1);
           a++
         ) {
           for (
             let b = j;
-            b <= Math.min(j + 1, pixelGrid[a].length);
+            b <= Math.min(j + 1, Game.pixelGrid[a].length -1);
             b++
           ) {
             if (a === i && b === j) {
               continue;
             }
-            if (Math.random() > pixelGrid[a][b].flammable) {
+            if (Math.random() > Game.pixelGrid[a][b].flammable) {
               if (a === i || b === j) {
-                createCell(a, b, pixelGrid[a][b].melt, delta);
+                createCell(a, b, Game.pixelGrid[a][b].melt, delta);
               } else if (Math.random() > 0.5) {
                 // Corners
-                createCell(a, b, pixelGrid[a][b].melt, delta);
+                createCell(a, b, Game.pixelGrid[a][b].melt, delta);
               }
             }
           }
@@ -98,15 +87,15 @@ function nextState() {
         // Extinguish
         if (
           (i > 0 &&
-            pixelGrid[i - 1][j] === CellType.water &&
+            Game.pixelGrid[i - 1][j] === CellType.water &&
             Math.random() > 0.9) ||
-          (i < canvasWidth - 1 &&
-            pixelGrid[i + 1][j] === CellType.water &&
+          (i < canvas.width - 1 &&
+            Game.pixelGrid[i + 1][j] === CellType.water &&
             Math.random() > 0.9) ||
-          (j > 0 && pixelGrid[i][j-1] === CellType.water) ||
-          Utils.countNeighbors(i,j,pixelGrid,(test) => test.dousing) >= 2 ||
+          (j > 0 && Game.pixelGrid[i][j-1] === CellType.water) ||
+          Utils.countNeighbors(i,j,Game.pixelGrid,(test) => test.dousing) >= 2 ||
           (Math.random() > cell.lifetime &&
-            !Utils.isFuelAround(i, j, pixelGrid))
+            !Utils.isFuelAround(i, j, Game.pixelGrid))
         ) {
           if (cell === CellType.fire3) {
             createCell(i, j, CellType.smoke, delta);
@@ -116,8 +105,8 @@ function nextState() {
         } else if (
           j > 0 &&
           Math.random() > 0.8 &&
-          (pixelGrid[i][j - 1] === CellType.empty ||
-            pixelGrid[i][j - 1].flammable)
+          (Game.pixelGrid[i][j - 1] === CellType.empty ||
+            Game.pixelGrid[i][j - 1].flammable)
         ) {
           // TODO use melt
           // Evolve
@@ -130,7 +119,7 @@ function nextState() {
         }
       } else if (cell.static) {
         if (cell === CellType.plant) {
-          if(Utils.countNeighbors(i,j,pixelGrid,[CellType.ice])) {
+          if(Utils.countNeighbors(i,j,Game.pixelGrid,[CellType.ice])) {
             continue;
           }
           let direction = Math.floor(Math.random() * 4);
@@ -138,7 +127,7 @@ function nextState() {
             case 0:
               if (
                 j > 0 &&
-                pixelGrid[i][j - 1] === CellType.water &&
+                Game.pixelGrid[i][j - 1] === CellType.water &&
                 Math.random() > cell.propagation
               ) {
                 createCell(i, j - 1, CellType.plant, delta);
@@ -146,8 +135,8 @@ function nextState() {
               break;
             case 1:
               if (
-                i < canvasWidth - 1 &&
-                pixelGrid[i + 1][j] === CellType.water &&
+                i < canvas.width - 1 &&
+                Game.pixelGrid[i + 1][j] === CellType.water &&
                 Math.random() > cell.propagation
               ) {
                 createCell(i + 1, j, CellType.plant, delta);
@@ -155,8 +144,8 @@ function nextState() {
               break;
             case 2:
               if (
-                j < canvasHeight - 1 &&
-                pixelGrid[i][j + 1] === CellType.water &&
+                j < canvas.height - 1 &&
+                Game.pixelGrid[i][j + 1] === CellType.water &&
                 Math.random() > cell.propagation
               ) {
                 createCell(i, j + 1, CellType.plant, delta);
@@ -165,7 +154,7 @@ function nextState() {
             case 3:
               if (
                 i > 0 &&
-                pixelGrid[i - 1][j] === CellType.water &&
+                Game.pixelGrid[i - 1][j] === CellType.water &&
                 Math.random() > cell.propagation
               ) {
                 createCell(i - 1, j, CellType.plant, delta);
@@ -176,25 +165,25 @@ function nextState() {
           // Propagate
           if (
             j > 0 &&
-            Utils.countNeighbors(i, j, pixelGrid, [CellType.water]) >= 2 &&
-            Utils.countNeighbors(i, j, pixelGrid, [CellType.ice]) <= 4
+            Utils.countNeighbors(i, j, Game.pixelGrid, [CellType.water]) >= 2 &&
+            Utils.countNeighbors(i, j, Game.pixelGrid, [CellType.ice]) <= 4
           ) {
             // TODO replace with for loop
             if (
               i > 0 &&
-              pixelGrid[i - 1][j - 1] === CellType.water &&
+              Game.pixelGrid[i - 1][j - 1] === CellType.water &&
               Math.random() > cell.propagation
             ) {
               createCell(i - 1, j - 1, CellType.ice, delta);
             }
             if (
-              i < canvasWidth - 1 &&
-              pixelGrid[i + 1][j - 1] === CellType.water &&
+              i < canvas.width - 1 &&
+              Game.pixelGrid[i + 1][j - 1] === CellType.water &&
               Math.random() > cell.propagation
             ) {
               createCell(i + 1, j - 1, CellType.ice, delta);
             }
-            if(pixelGrid[i][j - 1] === CellType.water &&
+            if(Game.pixelGrid[i][j - 1] === CellType.water &&
               Math.random() > cell.propagation) {
                 createCell(i, j - 1, CellType.ice, delta);
               }
@@ -206,8 +195,8 @@ function nextState() {
           }
           //Melt
           if (
-            (Math.random() > cell.lifetime && Utils.countNeighbors(i,j,pixelGrid,[CellType.ice]) < 6) ||
-            Utils.countNeighbors(i, j, pixelGrid, [
+            (Math.random() > cell.lifetime && Utils.countNeighbors(i,j,Game.pixelGrid,[CellType.ice]) < 6) ||
+            Utils.countNeighbors(i, j, Game.pixelGrid, [
               CellType.fire,
               CellType.fire2,
               CellType.fire3,
@@ -221,9 +210,9 @@ function nextState() {
         if (cellBelow === CellType.empty) {
           swapCells(i, j, i, j + 1, delta);
         } else if (
-          j < canvasHeight - 2 &&
+          j < canvas.height - 2 &&
           cellBelow.state === "liquid" &&
-          (!cell.granular || pixelGrid[i][j + 2].state === "liquid")
+          (!cell.granular || Game.pixelGrid[i][j + 2].state === "liquid")
         ) {
           // Sink in liquids
           if (
@@ -237,12 +226,12 @@ function nextState() {
             // Roll down
             let coinToss = Math.random() >= 0.5;
             if (coinToss) {
-              if (i > 0 && pixelGrid[i - 1][j + 1] === CellType.empty) {
+              if (i > 0 && Game.pixelGrid[i - 1][j + 1] === CellType.empty) {
                 // Bottom left
                 swapCells(i, j, i - 1, j + 1, delta);
               } else if (
                 i > 0 &&
-                pixelGrid[i - 1][j + 1].state === "liquid" &&
+                Game.pixelGrid[i - 1][j + 1].state === "liquid" &&
                 Math.random() > 0.95
               ) {
                 swapCells(i, j, i - 1, j + 1, delta);
@@ -250,13 +239,13 @@ function nextState() {
             } else {
               // Bottom right
               if (
-                i < pixelGrid.length - 1 &&
-                pixelGrid[i + 1][j + 1] === CellType.empty
+                i < Game.pixelGrid.length - 1 &&
+                Game.pixelGrid[i + 1][j + 1] === CellType.empty
               ) {
                 swapCells(i, j, i + 1, j + 1, delta);
               } else if (
-                i < pixelGrid.length - 1 &&
-                pixelGrid[i + 1][j + 1].state === "liquid" &&
+                i < Game.pixelGrid.length - 1 &&
+                Game.pixelGrid[i + 1][j + 1].state === "liquid" &&
                 Math.random() > 0.95
               ) {
                 swapCells(i, j, i + 1, j + 1, delta);
@@ -282,17 +271,17 @@ function nextState() {
           if (coinToss) {
             if (
               i > 0 &&
-              pixelGrid[i - 1][j] != cell &&
-              pixelGrid[i - 1][j].state !== "solid"
+              Game.pixelGrid[i - 1][j] != cell &&
+              Game.pixelGrid[i - 1][j].state !== "solid"
             ) {
               // Move left
               swapCells(i, j, i - 1, j, delta);
             }
           } else {
             if (
-              i < pixelGrid.length - 1 &&
-              pixelGrid[i + 1][j] != cell &&
-              pixelGrid[i + 1][j].state !== "solid"
+              i < Game.pixelGrid.length - 1 &&
+              Game.pixelGrid[i + 1][j] != cell &&
+              Game.pixelGrid[i + 1][j].state !== "solid"
             ) {
               // Move right
               swapCells(i, j, i + 1, j, delta);
@@ -306,14 +295,14 @@ function nextState() {
   // Tap
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      pixelGrid[canvasWidth / 2 + i][0] = CellType.sand;
+      Game.pixelGrid[canvas.width / 2 + i][0] = CellType.sand;
     }
   }
 
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
       createCell(
-        Math.floor((3 * canvasWidth) / 4) + i,
+        Math.floor((3 * canvas.width) / 4) + i,
         0,
         CellType.water,
         delta
@@ -323,7 +312,7 @@ function nextState() {
 
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      createCell(Math.floor(canvasWidth / 4) + i, 0, CellType.oil, delta);
+      createCell(Math.floor(canvas.width / 4) + i, 0, CellType.oil, delta);
     }
   }
 
@@ -331,27 +320,29 @@ function nextState() {
 }
 
 function swapCells(x1, y1, x2, y2, updatedArray) {
-  let destinationCell = pixelGrid[x2][y2];
-  let originCell = pixelGrid[x1][y1];
-  pixelGrid[x1][y1] = destinationCell;
-  pixelGrid[x2][y2] = originCell;
+  let destinationCell = Game.pixelGrid[x2][y2];
+  let originCell = Game.pixelGrid[x1][y1];
+  Game.pixelGrid[x1][y1] = destinationCell;
+  Game.pixelGrid[x2][y2] = originCell;
   updatedArray[x1][y1] = destinationCell;
   updatedArray[x2][y2] = originCell;
 }
 
 function destroyCell(x, y, updatedArray) {
-  pixelGrid[x][y] = CellType.empty;
+  Game.pixelGrid[x][y] = CellType.empty;
   updatedArray[x][y] = CellType.empty;
 }
 
 function createCell(x, y, cellType, updatedArray) {
-  pixelGrid[x][y] = cellType;
+  Game.pixelGrid[x][y] = cellType;
   updatedArray[x][y] = cellType;
 }
 
 const interval = 16.667;
 let timer = 0;
 let lastTime = 0;
+let requestDrawFull = false;
+
 function update(time = 0) {
   const deltaTime = time - lastTime;
   lastTime = time;
@@ -360,7 +351,7 @@ function update(time = 0) {
   if (timer > interval) {
     let delta = nextState();
     if (requestDrawFull) {
-      Display.drawFull(pixelGrid);
+      Display.drawFull(Game.pixelGrid);
       requestDrawFull = false;
     } else {
       Display.drawPartial(delta);
@@ -370,112 +361,22 @@ function update(time = 0) {
   requestAnimationFrame(update);
 }
 
-var intervalId;
-const canvas = document.getElementById("game");
-canvas.addEventListener("mousedown", onMouseDown);
-canvas.addEventListener("mouseup", function () {
-  isMouseDown = false;
-  clearInterval(intervalId);
-});
-canvas.addEventListener("mousemove", onMouseMove);
-canvas.addEventListener("mouseout", function () {
-  isMouseDown = false;
-  clearInterval(intervalId);
-});
-
-let brushSize = 4;
-let brushOpacity = 10;
-let brushType = CellType.sand;
-var requestDrawFull = false;
-const spawnSand = (x, y) => {
-  let actualBrushSize = brushSize - 1;
-  for (
-    let i = Math.max(0, x - actualBrushSize);
-    i < Math.min(x + actualBrushSize, canvasWidth);
-    i++
-  ) {
-    for (
-      let j = Math.max(0, y - actualBrushSize);
-      j < Math.min(y + actualBrushSize, canvasHeight);
-      j++
-    ) {
-      if (Math.random() <= brushOpacity / 100) {
-        pixelGrid[i][j] = brushType;
-      }
-    }
-  }
-  if (
-    brushSize > 0 &&
-    x >= 0 &&
-    x < canvasWidth &&
-    y >= 0 &&
-    y < canvasHeight
-  ) {
-    pixelGrid[x][y] = brushType;
-  }
-  requestDrawFull = true;
-};
-
-let brushOpacitySlider = document.getElementById("brush-opacity");
-brushOpacitySlider.addEventListener("click", function (e) {
-  brushOpacity = e.target.value;
-});
-brushOpacitySlider.value = brushOpacity;
-
-let isMouseDown = false;
-function onMouseDown() {
-  isMouseDown = true;
-  spawnSand(mouseX, mouseY);
-  intervalId = setInterval(
-    function () {
-      spawnSand(mouseX, mouseY);
-    },
-    brushType === CellType.floor ? 1 : 20
-  );
-}
-
-var mouseX = 0,
-  mouseY = 0;
-function onMouseMove(e) {
-  let rect = canvas.getBoundingClientRect();
-  mouseX = Math.round(
-    ((e.clientX - rect.left) / (rect.right - rect.left)) * canvas.width
-  );
-  mouseY = Math.round(
-    ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height
-  );
-
-  if (isMouseDown) {
-    spawnSand(mouseX, mouseY);
-  }
-}
-
-const brushTypeSelector = document.getElementById("brush-type");
-brushTypeSelector.addEventListener("change", function (e) {
-  brushType = CellType.CellsMap[e.target.options[e.target.selectedIndex].value];
-});
-brushTypeSelector.value = "sand";
-
-const brushSizeSelector = document.getElementById("brush-size");
-brushSizeSelector.addEventListener("change", function (e) {
-  brushSize = parseInt(e.target.value, 10);
-});
-brushSizeSelector.value = brushSize;
-
+let mainBrush;
 function init() {
-  pixelGrid = initArray();
-
-  let halfScreen = Math.floor(canvasHeight / 2);
-  for (let i = canvasWidth / 2 - 25; i < canvasWidth / 2 + 24; i++) {
-    pixelGrid[i][halfScreen] = CellType.floor;
+  let halfScreen = Math.floor(canvas.height / 2);
+  for (let i = canvas.width / 2 - 25; i < canvas.width / 2 + 24; i++) {
+    Game.pixelGrid[i][halfScreen] = CellType.floor;
   }
 
   for (let j = halfScreen; j >= halfScreen - 15; j--) {
-    pixelGrid[canvasWidth / 2 - 25][j] = CellType.floor;
-    pixelGrid[canvasWidth / 2 + 24][j] = CellType.floor;
+    Game.pixelGrid[canvas.width / 2 - 25][j] = CellType.floor;
+    Game.pixelGrid[canvas.width / 2 + 24][j] = CellType.floor;
   }
 
-  Display.drawFull(pixelGrid);
+  Display.drawFull(Game.pixelGrid);
+
+  mainBrush = new Brush(() => requestDrawFull = true);
+  mainBrush.init();
 }
 
 init();

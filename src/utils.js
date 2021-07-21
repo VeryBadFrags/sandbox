@@ -1,12 +1,25 @@
+import * as CellType from "./celltype.js";
+
+export function initArray(width, height, cell = CellType.empty) {
+  let newArray = new Array(width);
+  for (let i = 0; i < newArray.length; i++) {
+    newArray[i] = new Array(height);
+    for (let j = 0; j < newArray[i].length; j++) {
+      newArray[i][j] = cell;
+    }
+  }
+  return newArray;
+}
+
 export function isFuelAround(x, y, pixelGrid) {
   for (
     let i = Math.max(x - 1, 0);
-    i <= Math.min(x + 1, pixelGrid.length);
+    i <= Math.min(x + 1, pixelGrid.length -1);
     i++
   ) {
     for (
       let j = Math.max(y - 1, 0);
-      j <= Math.min(y + 1, pixelGrid[x].length);
+      j <= Math.min(y + 1, pixelGrid[x].length -1);
       j++
     ) {
       if (i !== x || j !== y) {
@@ -21,12 +34,12 @@ export function countNeighbors(x, y, pixelGrid, cellTypes) {
   let count = 0;
   for (
     let i = Math.max(x - 1, 0);
-    i <= Math.min(x + 1, pixelGrid.length);
+    i <= Math.min(x + 1, pixelGrid.length -1);
     i++
   ) {
     for (
       let j = Math.max(y - 1, 0);
-      j <= Math.min(y + 1, pixelGrid[x].length);
+      j <= Math.min(y + 1, pixelGrid[x].length -1);
       j++
     ) {
       if (i !== x || j !== y) {
@@ -41,16 +54,16 @@ export function countNeighbors(x, y, pixelGrid, cellTypes) {
   return count;
 }
 
-function countNeighborType(x, y, pixelGrid, testNeighbor) {
+export function countNeighborType(x, y, pixelGrid, testNeighbor) {
   let count = 0;
   for (
     let i = Math.max(x - 1, 0);
-    i <= Math.min(x + 1, pixelGrid.length);
+    i <= Math.min(x + 1, pixelGrid.length -1);
     i++
   ) {
     for (
       let j = Math.max(y - 1, 0);
-      j <= Math.min(y + 1, pixelGrid[x].length);
+      j <= Math.min(y + 1, pixelGrid[x].length -1);
       j++
     ) {
       if (i !== x || j !== y) {

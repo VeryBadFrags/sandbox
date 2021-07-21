@@ -110,7 +110,7 @@ export const plant = {
   density: 10,
   propagation: 0.6,
   propTarget: water,
-  flammable: 0.8,
+  flammable: 0.81,
   melt: fire,
   static: true,
 };
