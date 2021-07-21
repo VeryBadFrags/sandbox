@@ -385,9 +385,9 @@ function init() {
       mainBrush.increaseBrushSize(1);
     } else if (e.key === '-' || e.key === '_') {
       mainBrush.increaseBrushSize(-1);
-    } else if (e.key === '{' || e.key === '[') {
+    } else if (e.key === '{') {
       mainBrush.increaseOpacity(-10);
-    } else if (e.key === '}' || e.key === ']') {
+    } else if (e.key === '}') {
       mainBrush.increaseOpacity(10);
     }
   });
