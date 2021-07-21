@@ -176,6 +176,7 @@ function nextState() {
             Utils.countNeighbors(i, j, pixelGrid, [CellType.water]) >= 2 &&
             Utils.countNeighbors(i, j, pixelGrid, [CellType.ice]) <= 4
           ) {
+            // TODO replace with for loop
             if (
               i > 0 &&
               pixelGrid[i - 1][j - 1] === CellType.water &&
@@ -190,6 +191,10 @@ function nextState() {
             ) {
               createCell(i + 1, j - 1, CellType.ice, delta);
             }
+            if(pixelGrid[i][j - 1] === CellType.water &&
+              Math.random() > cell.propagation) {
+                createCell(i, j - 1, CellType.ice, delta);
+              }
           }
 
           //Drip
@@ -198,7 +203,7 @@ function nextState() {
           }
           //Melt
           if (
-            (Math.random() > cell.lifetime && Utils.countNeighbors(i,j,pixelGrid,[CellType.ice]) < 4) ||
+            (Math.random() > cell.lifetime && Utils.countNeighbors(i,j,pixelGrid,[CellType.ice]) < 6) ||
             Utils.countNeighbors(i, j, pixelGrid, [
               CellType.fire,
               CellType.fire2,

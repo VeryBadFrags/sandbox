@@ -65,9 +65,9 @@ export const ice = {
   color: "#00ffff",
   density: 0.9,
   state: "solid",
-  propagation: 0.99,
+  propagation: 0.996,
   lifetime: 0.999,
-  drip: 0.9992,
+  drip: 0.999,
   static: true,
   melt: water,
 }
