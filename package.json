@@ -4,6 +4,9 @@
   "description": "",
   "main": "main.js",
   "scripts": {
+    "dev": "snowpack dev",
+    "build": "snowpack build",
+    "clean": "rm -rf build/",
     "test": "eslint src"
   },
   "repository": {
@@ -17,7 +20,11 @@
     "url": "https://github.com/VeryBadFrags/sandbox/issues"
   },
   "homepage": "https://github.com/VeryBadFrags/sandbox#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@snowpack/plugin-optimize": "^0.2.13",
+    "@snowpack/plugin-sass": "^1.4.0",
+    "snowpack": "^3.8.2"
+  },
   "devDependencies": {
     "eslint": "^7.31.0"
   }

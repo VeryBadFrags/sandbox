@@ -71,31 +71,28 @@ function nextState() {
         // FIRE
 
         // Propagate
-        if (
-          i > 0 &&
-          pixelGrid[i - 1][j].melt &&
-          Math.random() > pixelGrid[i - 1][j].flammable
+        for (
+          let a = Math.max(i - 1, 0);
+          a <= Math.min(i + 1, pixelGrid.length);
+          a++
         ) {
-          createCell(i - 1, j, pixelGrid[i - 1][j].melt, delta);
-        }
-        if (
-          i < canvasWidth - 1 &&
-          pixelGrid[i + 1][j].melt &&
-          Math.random() > pixelGrid[i + 1][j].flammable
-        ) {
-          createCell(i + 1, j, pixelGrid[i + 1][j].melt, delta);
-        }
-        // DOWN
-        if (pixelGrid[i][j + 1].melt && Math.random() > pixelGrid[i][j + 1].flammable) {
-          createCell(i, j + 1, pixelGrid[i][j + 1].melt, delta);
-        }
-        // UP
-        if (
-          j > 0 &&
-          pixelGrid[i][j - 1].melt &&
-          Math.random() > pixelGrid[i][j - 1].flammable * 1.1
-        ) {
-          createCell(i, j - 1, pixelGrid[i][j - 1].melt, delta);
+          for (
+            let b = j;
+            b <= Math.min(j + 1, pixelGrid[a].length);
+            b++
+          ) {
+            if (a === i && b === j) {
+              continue;
+            }
+            if (Math.random() > pixelGrid[a][b].flammable) {
+              if (a === i || b === j) {
+                createCell(a, b, pixelGrid[a][b].melt, delta);
+              } else if (Math.random() > 0.5) {
+                // Corners
+                createCell(a, b, pixelGrid[a][b].melt, delta);
+              }
+            }
+          }
         }
 
         // Extinguish
@@ -106,6 +103,8 @@ function nextState() {
           (i < canvasWidth - 1 &&
             pixelGrid[i + 1][j] === CellType.water &&
             Math.random() > 0.9) ||
+          (j > 0 && pixelGrid[i][j-1] === CellType.water) ||
+          Utils.countNeighbors(i,j,pixelGrid,(test) => test.dousing) >= 2 ||
           (Math.random() > cell.lifetime &&
             !Utils.isFuelAround(i, j, pixelGrid))
         ) {
@@ -171,10 +170,15 @@ function nextState() {
               break;
           }
         } else if (cell === CellType.ice) {
-          if (j > 0 && pixelGrid[i][j-1] === CellType.water) {
+          // Propagate
+          if (
+            j > 0 &&
+            Utils.countNeighbors(i, j, pixelGrid, [CellType.water]) >= 2 &&
+            Utils.countNeighbors(i, j, pixelGrid, [CellType.ice]) <= 3
+          ) {
             if (
               i > 0 &&
-              pixelGrid[i - 1][j - 1] === CellType.water  &&
+              pixelGrid[i - 1][j - 1] === CellType.water &&
               Math.random() > cell.propagation
             ) {
               createCell(i - 1, j - 1, CellType.ice, delta);
@@ -189,11 +193,18 @@ function nextState() {
           }
 
           //Drip
-          if(cellBelow === CellType.empty && Math.random() > 0.9992) {
-            createCell(i, j+1, CellType.water, delta);
+          if (cellBelow === CellType.empty && Math.random() > cell.drip) {
+            createCell(i, j + 1, CellType.water, delta);
           }
           //Melt
-          if(Math.random() > 0.9993) {
+          if (
+            Math.random() > cell.lifetime ||
+            Utils.countNeighbors(i, j, pixelGrid, [
+              CellType.fire,
+              CellType.fire2,
+              CellType.fire3,
+            ]) > 0
+          ) {
             createCell(i, j, cell.melt, delta);
           }
         }
@@ -294,7 +305,7 @@ function nextState() {
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
       createCell(
-        Math.floor((2 * canvasWidth) / 3) + i,
+        Math.floor((3 * canvasWidth) / 4) + i,
         0,
         CellType.water,
         delta
@@ -304,7 +315,7 @@ function nextState() {
 
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      createCell(Math.floor(canvasWidth / 3) + i, 0, CellType.oil, delta);
+      createCell(Math.floor(canvasWidth / 4) + i, 0, CellType.oil, delta);
     }
   }
 
@@ -418,13 +429,13 @@ function onMouseDown() {
 var mouseX = 0,
   mouseY = 0;
 function onMouseMove(e) {
-  if (e.offsetX) {
-    mouseX = e.offsetX;
-    mouseY = e.offsetY;
-  } else if (e.layerX) {
-    mouseX = e.layerX;
-    mouseY = e.layerY;
-  }
+  let rect = canvas.getBoundingClientRect();
+  mouseX = Math.round(
+    ((e.clientX - rect.left) / (rect.right - rect.left)) * canvas.width
+  );
+  mouseY = Math.round(
+    ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height
+  );
 
   if (isMouseDown) {
     spawnSand(mouseX, mouseY);
@@ -446,15 +457,13 @@ brushSizeSelector.value = brushSize;
 function init() {
   pixelGrid = initArray();
 
+  let halfScreen = Math.floor(canvasHeight / 2);
   for (let i = canvasWidth / 2 - 25; i < canvasWidth / 2 + 24; i++) {
-    pixelGrid[i][300] = CellType.floor;
+    pixelGrid[i][halfScreen] = CellType.floor;
   }
 
-  for (let j = 300; j >= 285; j--) {
+  for (let j = halfScreen; j >= halfScreen - 15; j--) {
     pixelGrid[canvasWidth / 2 - 25][j] = CellType.floor;
-  }
-
-  for (let j = 300; j >= 285; j--) {
     pixelGrid[canvasWidth / 2 + 24][j] = CellType.floor;
   }
 

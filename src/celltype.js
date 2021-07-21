@@ -40,7 +40,9 @@ export const water = {
   color: "#22f",
   density: 1,
   state: "liquid",
+  dousing: true,
 };
+
 export const oil = {
   name: "🛢️ Oil",
   color: "#963e48",
@@ -63,7 +65,9 @@ export const ice = {
   color: "#00ffff",
   density: 0.9,
   state: "solid",
-  propagation: 0.991,
+  propagation: 0.99,
+  lifetime: 0.999,
+  drip: 0.9992,
   static: true,
   melt: water,
 }
@@ -72,7 +76,7 @@ export const wood = {
   color: "#6a4b34",
   density: 20,
   state: "solid",
-  flammable: 0.93,
+  flammable: 0.99,
   melt: fire,
   static: true,
 };
@@ -82,6 +86,7 @@ export const sand = {
   density: 9,
   state: "solid",
   granular: true,
+  dousing: true,
 };
 export const powder = {
   name: "💣 Gunpowder",
@@ -89,7 +94,7 @@ export const powder = {
   density: 4,
   state: "solid",
   granular: true,
-  flammable: 0.7,
+  flammable: 0.5,
   melt: fire,
 };
 export const crystals = {
@@ -103,7 +108,7 @@ export const plant = {
   color: "#2bfe20",
   state: "solid",
   density: 10,
-  propagation: 0.4,
+  propagation: 0.6,
   propTarget: water,
   flammable: 0.8,
   melt: fire,
