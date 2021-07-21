@@ -130,6 +130,9 @@ function nextState() {
         }
       } else if (cell.static) {
         if (cell === CellType.plant) {
+          if(Utils.countNeighbors(i,j,pixelGrid,[CellType.ice])) {
+            continue;
+          }
           let direction = Math.floor(Math.random() * 4);
           switch (direction) {
             case 0:
