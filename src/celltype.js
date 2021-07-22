@@ -148,8 +148,8 @@ export const seed = {
   density: 5,
   granular: true,
   flammable: 0.99,
-  melt: fire3,
-  ash: soil,
+  melt: soil,
+  //ash: soil,
   state: states.solid,
 }
 export const plant = {
@@ -158,7 +158,7 @@ export const plant = {
   color: "#b5a51d",
   state: states.solid,
   density: 10,
-  propagation: 0.6,
+  propagation: 0.7,
   propTarget: water,
   spawn: seed,
   flammable: 0.81,
