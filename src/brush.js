@@ -117,7 +117,7 @@ export default class Brush {
       brushType = CellType.CellsMap[e.target.selectedIndex];
     });
 
-    brushSizeSelector.addEventListener("change", function (e) {
+    brushSizeSelector.addEventListener("input", function (e) {
       brushSize = parseInt(e.target.value, 10);
       brushSizeSlider.value = brushSize;
     });
