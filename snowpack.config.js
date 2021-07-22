@@ -14,6 +14,6 @@ module.exports = {
         sourceMap: false,
       },
     ],
-    // ["@snowpack/plugin-optimize", {}],
+    ["@snowpack/plugin-optimize", {}],
   ],
 };
