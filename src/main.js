@@ -386,7 +386,7 @@ let timer = 0;
 let lastTime = 0;
 let requestDrawFull = false;
 let skipFrames = false;
-let dynamicLights = true;
+let dynamicLights = false;
 
 let lightMap;
 function update(time = 0) {
