@@ -30,7 +30,7 @@ function nextState() {
       }
 
       let cellBelow = Game.pixelGrid[i][j + 1];
-      if (cell === CellType.smoke) {
+      if (cell.state === CellType.states.gas) {
         // SMOKE
         if (Math.random() > cell.lifetime) {
           destroyCell(i, j, delta);
@@ -39,6 +39,7 @@ function nextState() {
           Game.pixelGrid[i][j - 1] === CellType.empty &&
           Math.random() > 0.7
         ) {
+          // Go up
           swapCells(i, j, i, j - 1, delta);
         } else {
           // TODO investigate uneven distribution
@@ -60,7 +61,7 @@ function nextState() {
             swapCells(i, j, i + 1, j - 1, delta);
           }
         }
-      } else if (cell.state === "fire") {
+      } else if (cell.state === CellType.states.fire) {
         // FIRE
 
         // Propagate
@@ -73,12 +74,19 @@ function nextState() {
             if (a === i && b === j) {
               continue;
             }
-            if (Math.random() > Game.pixelGrid[a][b].flammable) {
+            let target = Game.pixelGrid[a][b];
+            if (Math.random() > target.flammable) {
               if (a === i || b === j) {
-                createCell(a, b, Game.pixelGrid[a][b].melt, delta);
+                createCell(a, b, target.melt, delta);
+                if(b + 1 < canvasHeight - 1 && target.ash && Game.pixelGrid[a][b+1] === CellType.empty) {
+                  createCell(a, b+1, target.ash, delta);
+                }
               } else if (Math.random() > 0.5) {
                 // Corners
-                createCell(a, b, Game.pixelGrid[a][b].melt, delta);
+                createCell(a, b, target.melt, delta);
+                if(b + 1 < canvasHeight - 1 && target.ash && Game.pixelGrid[a][b+1] === CellType.empty) {
+                  createCell(a, b+1, target.ash, delta);
+                }
               }
             }
           }
@@ -159,7 +167,7 @@ function nextState() {
             case 0:
               if (
                 j > 0 &&
-                Game.pixelGrid[i][j - 1] === CellType.water &&
+                (Game.pixelGrid[i][j - 1] === CellType.water || (Game.pixelGrid[i][j - 1] === CellType.soil && Utils.countNeighbors(i,j,Game.pixelGrid,CellType.plant) <= 3)) &&
                 Math.random() > cell.propagation
               ) {
                 createCell(i, j - 1, CellType.plant, delta);
@@ -186,7 +194,7 @@ function nextState() {
             case 3:
               if (
                 i > 0 &&
-                Game.pixelGrid[i - 1][j] === CellType.water &&
+              Game.pixelGrid[i - 1][j] === CellType.water &&
                 Math.random() > cell.propagation
               ) {
                 createCell(i - 1, j, CellType.plant, delta);
@@ -194,10 +202,9 @@ function nextState() {
               break;
           }
 
-          console.log("check plant spawn");
           // Spawn seed
           if (
-            cellBelow === CellType.empty && Math.random() > 0.9999 &&
+            cellBelow === CellType.empty && Math.random() > 0.999 &&
             Utils.countNeighbors(i, j, Game.pixelGrid, CellType.plant) > 5
           ) {
             createCell(i, j + 1, CellType.seed, delta);
@@ -254,14 +261,12 @@ function nextState() {
 
         // Seeds
         if(cell === CellType.seed) {
-          if(Utils.countNeighbors(i, j, Game.pixelGrid, CellType.soil) >= 3) {
+          if(Math.random() > 0.999 && Utils.countNeighbors(i, j, Game.pixelGrid, CellType.soil) >= 3) {
             createCell(i,j,CellType.plant,delta);
             continue;
           }
-        }
-
-        // Salt
-        if (cell === CellType.salt) {
+        } else if (cell === CellType.salt) {
+          // Salt
           if (cellBelow === CellType.ice) {
             createCell(i, j, CellType.water, delta);
             createCell(i, j + 1, CellType.water, delta);

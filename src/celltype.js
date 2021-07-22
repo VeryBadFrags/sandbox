@@ -88,6 +88,15 @@ export const ice = {
   static: true,
   melt: water,
 };
+export const soil = {
+  name: "🍂 Soil",
+  key: "l",
+  color: "#654321",
+  density: 20,
+  state: states.solid,
+  granular: true,
+  dousing: true,
+};
 export const wood = {
   name: "🌳 Wood",
   key: "d",
@@ -96,22 +105,14 @@ export const wood = {
   state: states.solid,
   flammable: 0.99,
   melt: fire,
+  ash: soil,
   static: true,
 };
 export const sand = {
   name: "🏜️ Sand",
   key: "s",
-  color: "#c2b280",
+  color: "#c2ff80",
   density: 9,
-  state: states.solid,
-  granular: true,
-  dousing: true,
-};
-export const soil = {
-  name: "🍂 Soil",
-  key: "l",
-  color: "#654321",
-  density: 20,
   state: states.solid,
   granular: true,
   dousing: true,
@@ -159,6 +160,7 @@ export const plant = {
   spawn: seed,
   flammable: 0.81,
   melt: fire,
+  ash: soil,
   static: true,
 };
 

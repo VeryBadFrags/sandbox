@@ -27,7 +27,7 @@ export default class Brush {
       let step = Math.floor(brushSize / 10)
       brushSize += size - Math.floor((brushSize - step) / 10);
     }
-    brushSize = Math.max(1, Math.min(128, brushSize));
+    brushSize = Math.max(1, Math.min(32, brushSize));
     brushSizeSelector.value = brushSize;
   }
 
