@@ -89,8 +89,8 @@ export default class Brush {
       );
     }
 
-    let prevMouseX = null,
-      prevMouseY = null;
+    // let prevMouseX = null,
+    //   prevMouseY = null;
     let mouseX = 0,
       mouseY = 0;
     function onMouseMove(e) {

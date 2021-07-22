@@ -1,20 +1,20 @@
 export const empty = {
   name: "✏️ Eraser",
   key: "e",
-  color: "#000",
+  color: "#000000",
   density: 0.5,
 };
 
 // FIRE
 export const smoke = {
-  color: "#333",
+  color: "#333333",
   density: 0.1,
   state: "gas",
   lifetime: 0.98,
   nextCell: empty,
 };
 export const fire3 = {
-  color: "#f80",
+  color: "#ff8800",
   density: 0.1,
   state: "fire",
   lifetime: 0.88,
@@ -22,7 +22,7 @@ export const fire3 = {
   nextCell: smoke,
 };
 export const fire2 = {
-  color: "#f40",
+  color: "#ff4400",
   density: 0.1,
   state: "fire",
   lifetime: 0.89,
@@ -44,7 +44,7 @@ export const fire = {
 export const water = {
   name: "🌊 Water",
   key: "w",
-  color: "#22f",
+  color: "#2222ff",
   density: 1,
   state: "liquid",
   dousing: true,
@@ -64,7 +64,7 @@ export const oil = {
 export const floor = {
   name: "🧱 Concrete",
   key: "c",
-  color: "#aaa",
+  color: "#aaaaaa",
   density: 100,
   state: "solid",
   static: true,
@@ -83,7 +83,7 @@ export const ice = {
 };
 export const wood = {
   name: "🌳 Wood",
-  key: "w",
+  key: "d",
   color: "#6a4b34",
   density: 20,
   state: "solid",
@@ -103,7 +103,7 @@ export const sand = {
 export const salt = {
   name: "🧂 Salt",
   key: "m",
-  color: "#eee",
+  color: "#eeeeee",
   state: "solid",
   density: 10,
   granular: true,
@@ -111,7 +111,7 @@ export const salt = {
 export const powder = {
   name: "💣 Gunpowder",
   key: "g",
-  color: "#555",
+  color: "#555555",
   density: 4,
   state: "solid",
   granular: true,

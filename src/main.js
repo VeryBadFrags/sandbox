@@ -363,6 +363,7 @@ const interval = 16.667;
 let timer = 0;
 let lastTime = 0;
 let requestDrawFull = false;
+let skipFrames = false;
 
 function update(time = 0) {
   const deltaTime = time - lastTime;
@@ -371,11 +372,14 @@ function update(time = 0) {
 
   if (timer > interval) {
     let delta = nextState();
-    if (requestDrawFull) {
-      Display.drawFull(Game.pixelGrid);
-      requestDrawFull = false;
-    } else {
-      Display.drawPartial(delta);
+    let lightMap = Utils.buildLightMap(Game.pixelGrid);
+    if(!skipFrames || timer <= 2*interval) {
+      if (requestDrawFull) {
+        Display.drawFull(Game.pixelGrid, lightMap);
+        requestDrawFull = false;
+      } else {
+        Display.drawPartial(delta, Game.pixelGrid, lightMap);
+      }
     }
     timer = timer % interval;
   }
