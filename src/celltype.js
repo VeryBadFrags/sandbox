@@ -122,7 +122,7 @@ export const powder = {
   density: 4,
   state: states.solid,
   granular: true,
-  flammable: 0.5,
+  flammable: 0.4,
   melt: fire,
 };
 export const crystals = {
