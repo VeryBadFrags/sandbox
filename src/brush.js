@@ -2,7 +2,7 @@ import * as CellType from "./celltype.js";
 import * as Game from "./game.js";
 
 const brushTypeSelector = document.getElementById("brush-type");
-const brushSizeSelector = document.getElementById("brush-size");
+const brushSizeInput = document.getElementById("brush-size");
 const brushSizeSlider = document.getElementById("brush-size-slider");
 const brushOpacitySlider = document.getElementById("brush-opacity");
 
@@ -28,7 +28,8 @@ export default class Brush {
       brushSize += size - Math.floor((brushSize - step) / 10);
     }
     brushSize = Math.max(1, Math.min(32, brushSize));
-    brushSizeSelector.value = brushSize;
+    brushSizeInput.value = brushSize;
+    brushSizeSlider.value = brushSize;
   }
 
   increaseOpacity(size) {
@@ -117,16 +118,16 @@ export default class Brush {
       brushType = CellType.CellsMap[e.target.selectedIndex];
     });
 
-    brushSizeSelector.addEventListener("input", function (e) {
+    brushSizeInput.addEventListener("input", function (e) {
       brushSize = parseInt(e.target.value, 10);
       brushSizeSlider.value = brushSize;
     });
     brushSizeSlider.addEventListener("input", function (e) {
       brushSize = parseInt(e.target.value, 10);
-      brushSizeSelector.value = brushSize;
+      brushSizeInput.value = brushSize;
     });
 
-    brushSizeSelector.value = brushSize;
+    brushSizeInput.value = brushSize;
     brushSizeSlider.value = brushSize;
 
     // Listeners

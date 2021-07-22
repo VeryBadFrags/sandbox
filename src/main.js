@@ -20,7 +20,7 @@ function nextState() {
   for (let i = iStart; iEnd(i); leftToRight ? i++ : i--) {
     for (let j = canvasHeight - 1; j >= 0; j--) {
       let cell = Game.pixelGrid[i][j];
-      if (cell === CellType.empty || cell === CellType.floor) {
+      if (cell.id === CellType.empty.id || cell.id === CellType.floor.id) {
         continue;
       }
 
@@ -106,7 +106,7 @@ function nextState() {
           (Math.random() > cell.lifetime &&
             !Utils.isFuelAround(i, j, Game.pixelGrid))
         ) {
-          if (cell === CellType.fire3) {
+          if (cell.id === CellType.fire3.id) {
             createCell(i, j, CellType.smoke, delta);
           } else {
             destroyCell(i, j, delta);
@@ -154,10 +154,10 @@ function nextState() {
             }
           }
         }
-        //} else if (pixelGrid[x][y].state === "liquid" && Math.random() > 0.99) {
+        //} else if (pixelGrid[x][y].state === CellType.states.liquid && Math.random() > 0.99) {
         //  lightMap[x][y] = lightMap[x][y] + 10;
       } else if (cell.static) {
-        if (cell === CellType.plant) {
+        if (cell.id === CellType.plant.id) {
           // Propagate
           if (Utils.countNeighbors(i, j, Game.pixelGrid, CellType.ice) >= 2) {
             continue;
@@ -204,12 +204,12 @@ function nextState() {
 
           // Spawn seed
           if (
-            cellBelow === CellType.empty && Math.random() > 0.999 &&
+            cellBelow.id === CellType.empty.id && Math.random() > 0.999 &&
             Utils.countNeighbors(i, j, Game.pixelGrid, CellType.plant) > 5
           ) {
             createCell(i, j + 1, CellType.seed, delta);
           }
-        } else if (cell === CellType.ice) {
+        } else if (cell.id === CellType.ice.id) {
           // Propagate
           if (
             j > 0 &&
@@ -240,7 +240,7 @@ function nextState() {
           }
 
           //Drip
-          if (cellBelow === CellType.empty && Math.random() > cell.drip) {
+          if (cellBelow .id === CellType.empty.id && Math.random() > cell.drip) {
             createCell(i, j + 1, CellType.water, delta);
           }
           //Melt
@@ -256,18 +256,18 @@ function nextState() {
             createCell(i, j, cell.melt, delta);
           }
         }
-      } else if (cell.state === "solid") {
+      } else if (cell.state === CellType.states.solid) {
         // SOLIDS
 
         // Seeds
-        if(cell === CellType.seed) {
+        if(cell.id === CellType.seed.id) {
           if(Math.random() > 0.999 && Utils.countNeighbors(i, j, Game.pixelGrid, CellType.soil) >= 3) {
             createCell(i,j,CellType.plant,delta);
             continue;
           }
-        } else if (cell === CellType.salt) {
+        } else if (cell.id === CellType.salt.id) {
           // Salt
-          if (cellBelow === CellType.ice) {
+          if (cellBelow.id === CellType.ice.id) {
             createCell(i, j, CellType.water, delta);
             createCell(i, j + 1, CellType.water, delta);
           }
@@ -284,12 +284,12 @@ function nextState() {
           }
         }
 
-        if (cellBelow === CellType.empty) {
+        if (cellBelow.id === CellType.empty.id) {
           swapCells(i, j, i, j + 1, delta);
         } else if (
           j < canvasHeight - 2 &&
-          cellBelow.state === "liquid" &&
-          (!cell.granular || Game.pixelGrid[i][j + 2].state === "liquid")
+          cellBelow.state === CellType.states.liquid &&
+          (!cell.granular || Game.pixelGrid[i][j + 2].state === CellType.states.liquid)
         ) {
           // Sink in liquids
           if (
@@ -308,7 +308,7 @@ function nextState() {
                 swapCells(i, j, i - 1, j + 1, delta);
               } else if (
                 i > 0 &&
-                Game.pixelGrid[i - 1][j + 1].state === "liquid" &&
+                Game.pixelGrid[i - 1][j + 1].state === CellType.states.liquid &&
                 Math.random() > 0.95
               ) {
                 swapCells(i, j, i - 1, j + 1, delta);
@@ -322,7 +322,7 @@ function nextState() {
                 swapCells(i, j, i + 1, j + 1, delta);
               } else if (
                 i < canvasWidth - 1 &&
-                Game.pixelGrid[i + 1][j + 1].state === "liquid" &&
+                Game.pixelGrid[i + 1][j + 1].state === CellType.states.liquid &&
                 Math.random() > 0.95
               ) {
                 swapCells(i, j, i + 1, j + 1, delta);
@@ -330,26 +330,26 @@ function nextState() {
             }
           }
         }
-      } else if (cell.state === "liquid") {
+      } else if (cell.state === CellType.states.liquid) {
         // LIQUIDS
-        if (cellBelow === CellType.empty) {
+        if (cellBelow.id === CellType.empty.id) {
           // Move down
           swapCells(i, j, i, j + 1, delta);
-        } else if (cellBelow !== cell && cellBelow.state === "liquid") {
+        } else if (cellBelow.id !== cell.id && cellBelow.state === CellType.states.liquid) {
           if (
             Math.random() <=
             (cell.density - cellBelow.density) / cellBelow.density / 5
           ) {
             swapCells(i, j, i, j + 1, delta);
           }
-        } else if (cellBelow.state !== "solid") {
+        } else if (cellBelow.state !== CellType.states.solid) {
           // Move liquid around
           let coinToss = Math.random() >= 0.5;
           if (coinToss) {
             if (
               i > 0 &&
               Game.pixelGrid[i - 1][j] != cell &&
-              Game.pixelGrid[i - 1][j].state !== "solid"
+              Game.pixelGrid[i - 1][j].state !== CellType.states.solid
             ) {
               // Move left
               swapCells(i, j, i - 1, j, delta);
@@ -358,7 +358,7 @@ function nextState() {
             if (
               i < canvasWidth - 1 &&
               Game.pixelGrid[i + 1][j] != cell &&
-              Game.pixelGrid[i + 1][j].state !== "solid"
+              Game.pixelGrid[i + 1][j].state !== CellType.states.solid
             ) {
               // Move right
               swapCells(i, j, i + 1, j, delta);

@@ -14,7 +14,7 @@ export function drawFull(gameState, lightMap) {
   for (let i = 0; i < gameState.length; i++) {
     for (let j = 0; j < gameHeight; j++) {
       let cell = gameState[i][j];
-      if (cell !== CellType.empty) {
+      if (cell.id !== CellType.empty.id) {
         context.fillStyle = getHexColor(cell, lightMap ? lightMap[i][j] : 0);
         context.fillRect(i, j, 1, 1);
       }
