@@ -107,6 +107,15 @@ export const sand = {
   granular: true,
   dousing: true,
 };
+export const soil = {
+  name: "🍂 Soil",
+  key: "l",
+  color: "#654321",
+  density: 20,
+  state: states.solid,
+  granular: true,
+  dousing: true,
+};
 export const salt = {
   name: "🧂 Salt",
   key: "m",
@@ -127,18 +136,27 @@ export const powder = {
 };
 export const crystals = {
   name: "💎 Crystals",
+  key: "y",
   color: "#ff80b6",
   density: 30,
   state: states.solid,
 };
+export const seed = {
+  name:"🌱 Seed",
+  color: "#b5651d",
+  density: 5,
+  granular: true,
+  state: states.solid,
+}
 export const plant = {
   name: "🌿 Plant",
   key:"p",
-  color: "#2bfe20",
+  color: "#b5a51d",
   state: states.solid,
   density: 10,
   propagation: 0.6,
   propTarget: water,
+  spawn: seed,
   flammable: 0.81,
   melt: fire,
   static: true,
@@ -155,6 +173,7 @@ export const CellsMap = [
   powder,
   oil,
   plant,
+  soil,
   crystals,
   fire,
 ];

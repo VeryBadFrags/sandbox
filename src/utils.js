@@ -1,7 +1,7 @@
 import * as CellType from "./celltype.js";
 
 export function wipeMatrix(matrix, value) {
-  if(matrix.length < 1 || matrix[0].length < 1) {
+  if (matrix.length < 1 || matrix[0].length < 1) {
     return null;
   }
   let width = matrix.length;
@@ -48,7 +48,7 @@ export function countNeighbors(x, y, pixelGrid, cellTypes) {
   for (
     let i = Math.max(x - 1, 0);
     i <= Math.min(x + 1, pixelGrid.length - 1);
-    i++
+  i++
   ) {
     for (
       let j = Math.max(y - 1, 0);
@@ -56,10 +56,8 @@ export function countNeighbors(x, y, pixelGrid, cellTypes) {
       j++
     ) {
       if (i !== x || j !== y) {
-        for (let a = 0; a < cellTypes.length; a++) {
-          if (pixelGrid[i][j] === cellTypes[a]) {
-            count++;
-          }
+        if (pixelGrid[i][j] === cellTypes) {
+          count++;
         }
       }
     }
@@ -67,7 +65,7 @@ export function countNeighbors(x, y, pixelGrid, cellTypes) {
   return count;
 }
 
-export function countNeighborType(x, y, pixelGrid, testNeighbor) {
+export function testNeighbors(x, y, pixelGrid, testNeighbor) {
   let count = 0;
   for (
     let i = Math.max(x - 1, 0);
