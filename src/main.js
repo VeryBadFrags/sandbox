@@ -386,7 +386,7 @@ let timer = 0;
 let lastTime = 0;
 let requestDrawFull = false;
 let skipFrames = false;
-let dynamicLights = false;
+let dynamicLights = true;
 
 let lightMap;
 function update(time = 0) {
@@ -405,7 +405,7 @@ function update(time = 0) {
         Display.drawFull(Game.pixelGrid, lightMap);
         requestDrawFull = false;
       } else {
-        Display.drawPartial(delta, Game.pixelGrid, lightMap);
+        Display.drawPartial(delta, Game.pixelGrid, lightMap, dynamicLights);
       }
     }
     timer = timer % interval;
@@ -452,9 +452,11 @@ function init() {
   });
 
 
-  document.getElementById("dynamic-lights").addEventListener("click", (e) => {
+  let lightsCheck = document.getElementById("dynamic-lights");
+  lightsCheck.addEventListener("click", (e) => {
     dynamicLights = e.target.checked;
   });
+  lightsCheck.checked = dynamicLights;
 }
 
 init();

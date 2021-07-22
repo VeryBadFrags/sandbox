@@ -3,6 +3,7 @@ import * as Game from "./game.js";
 
 const brushTypeSelector = document.getElementById("brush-type");
 const brushSizeSelector = document.getElementById("brush-size");
+const brushSizeSlider = document.getElementById("brush-size-slider");
 const brushOpacitySlider = document.getElementById("brush-opacity");
 
 let brushType = CellType.sand;
@@ -26,7 +27,7 @@ export default class Brush {
       let step = Math.floor(brushSize / 10)
       brushSize += size - Math.floor((brushSize - step) / 10);
     }
-    brushSize = Math.max(1, Math.min(302, brushSize));
+    brushSize = Math.max(1, Math.min(128, brushSize));
     brushSizeSelector.value = brushSize;
   }
 
@@ -118,8 +119,15 @@ export default class Brush {
 
     brushSizeSelector.addEventListener("change", function (e) {
       brushSize = parseInt(e.target.value, 10);
+      brushSizeSlider.value = brushSize;
     });
+    brushSizeSlider.addEventListener("input", function (e) {
+      brushSize = parseInt(e.target.value, 10);
+      brushSizeSelector.value = brushSize;
+    });
+
     brushSizeSelector.value = brushSize;
+    brushSizeSlider.value = brushSize;
 
     // Listeners
     canvas.addEventListener("mousedown", onMouseDown);
