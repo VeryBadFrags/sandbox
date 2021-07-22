@@ -1,3 +1,10 @@
+export const states = {
+  liquid: "liquid",
+  solid: "solid",
+  gas: "gas",
+  fire:"fire"
+}
+
 export const empty = {
   name: "✏️ Eraser",
   key: "e",
@@ -9,14 +16,14 @@ export const empty = {
 export const smoke = {
   color: "#333333",
   density: 0.1,
-  state: "gas",
+  state: states.gas,
   lifetime: 0.98,
   nextCell: empty,
 };
 export const fire3 = {
   color: "#ff8800",
   density: 0.1,
-  state: "fire",
+  state: states.fire,
   lifetime: 0.88,
   propagation: 0.8,
   nextCell: smoke,
@@ -24,7 +31,7 @@ export const fire3 = {
 export const fire2 = {
   color: "#ff4400",
   density: 0.1,
-  state: "fire",
+  state: states.fire,
   lifetime: 0.89,
   propagation: 0.77,
   nextCell: fire3,
@@ -34,7 +41,7 @@ export const fire = {
   key:"f",
   color: "#e00000",
   density: 0.2,
-  state: "fire",
+  state: states.fire,
   lifetime: 0.9,
   propagation: 0.75,
   nextCell: fire2,
@@ -46,7 +53,7 @@ export const water = {
   key: "w",
   color: "#2222ff",
   density: 1,
-  state: "liquid",
+  state: states.liquid,
   dousing: true,
 };
 
@@ -55,7 +62,7 @@ export const oil = {
   key: "o",
   color: "#963e48",
   density: 0.5,
-  state: "liquid",
+  state: states.liquid,
   flammable: 0.7,
   melt: fire,
 };
@@ -66,7 +73,7 @@ export const floor = {
   key: "c",
   color: "#aaaaaa",
   density: 100,
-  state: "solid",
+  state: states.solid,
   static: true,
 };
 export const ice = {
@@ -74,7 +81,7 @@ export const ice = {
   key: "i",
   color: "#00eeee",
   density: 0.9,
-  state: "solid",
+  state: states.solid,
   propagation: 0.996,
   lifetime: 0.999,
   drip: 0.999,
@@ -86,7 +93,7 @@ export const wood = {
   key: "d",
   color: "#6a4b34",
   density: 20,
-  state: "solid",
+  state: states.solid,
   flammable: 0.99,
   melt: fire,
   static: true,
@@ -96,7 +103,7 @@ export const sand = {
   key: "s",
   color: "#c2b280",
   density: 9,
-  state: "solid",
+  state: states.solid,
   granular: true,
   dousing: true,
 };
@@ -104,7 +111,7 @@ export const salt = {
   name: "🧂 Salt",
   key: "m",
   color: "#eeeeee",
-  state: "solid",
+  state: states.solid,
   density: 10,
   granular: true,
 }
@@ -113,7 +120,7 @@ export const powder = {
   key: "g",
   color: "#555555",
   density: 4,
-  state: "solid",
+  state: states.solid,
   granular: true,
   flammable: 0.5,
   melt: fire,
@@ -122,13 +129,13 @@ export const crystals = {
   name: "💎 Crystals",
   color: "#ff80b6",
   density: 30,
-  state: "solid",
+  state: states.solid,
 };
 export const plant = {
   name: "🌿 Plant",
   key:"p",
   color: "#2bfe20",
-  state: "solid",
+  state: states.solid,
   density: 10,
   propagation: 0.6,
   propTarget: water,

@@ -1,35 +1,23 @@
 import * as CellType from "./celltype.js";
 
-const lightDistance = 5;
-export function buildLightMap(pixelGrid) {
-  // TODO check pixelGrid[0]
-  let lightMap = initArray(pixelGrid.length, pixelGrid[0].length, 0);
-  for (let x = 0; x < pixelGrid.length; x++) {
-    for (let y = 0; y < pixelGrid[x].length; y++) {
-      if(pixelGrid[x][y].state === "fire") {
-        for(let i = Math.max(x-lightDistance, 0); i <= Math.min(x+5, pixelGrid.length -1); i++) {
-          for(let j = Math.max(y-lightDistance, 0); j <= Math.min(y+5, pixelGrid[i].length -1); j++) {
-            if((i !== x || j !== y) || pixelGrid[i][j].state !== "fire") {
-              let distance = Math.sqrt(Math.pow(Math.abs(i - x), 2) + Math.pow(Math.abs(j - y),2));
-              lightMap[i][j] = lightMap[i][j] + Math.max(0, lightDistance - distance);
-            }
-          }
-        }
-      } else if (pixelGrid[x][y].state === "ice" && Math.random() > 0.99) {
-        lightMap[x][y] = Math.max(0, lightMap[x][y] - 5);
-      }
-      //} else if (pixelGrid[x][y].state === "liquid" && Math.random() > 0.99) {
-      //  lightMap[x][y] = lightMap[x][y] + 10;
+export function wipeMatrix(matrix, value) {
+  if(matrix.length < 1 || matrix[0].length < 1) {
+    return null;
+  }
+  let width = matrix.length;
+  let height = matrix[0].length;
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < height; y++) {
+      matrix[x][y] = value;
     }
   }
-  return lightMap;
 }
 
 export function initArray(width, height, cell = CellType.empty) {
   let newArray = new Array(width);
-  for (let i = 0; i < newArray.length; i++) {
+  for (let i = 0; i < width; i++) {
     newArray[i] = new Array(height);
-    for (let j = 0; j < newArray[i].length; j++) {
+    for (let j = 0; j < height; j++) {
       newArray[i][j] = cell;
     }
   }

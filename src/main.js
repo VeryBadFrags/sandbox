@@ -4,23 +4,27 @@ import * as Utils from "./utils.js";
 import * as Game from "./game.js";
 import Brush from "./brush.js";
 
+let maxLightDistance = 6;
+let canvasWidth, canvasHeight;
+
 const canvas = document.getElementById("game");
 
+let delta;
 function nextState() {
-  let delta = Utils.initArray(canvas.width, canvas.height, null);
+  Utils.wipeMatrix(delta, null);
 
   let leftToRight = Math.random() >= 0.5;
-  let iStart = leftToRight ? 0 : Game.pixelGrid.length - 1;
-  let iEnd = (i) => (leftToRight ? i < Game.pixelGrid.length : i >= 0);
+  let iStart = leftToRight ? 0 : canvasWidth - 1;
+  let iEnd = (i) => (leftToRight ? i < canvasWidth : i >= 0);
 
   for (let i = iStart; iEnd(i); leftToRight ? i++ : i--) {
-    for (let j = Game.pixelGrid[i].length - 1; j >= 0; j--) {
+    for (let j = canvasHeight - 1; j >= 0; j--) {
       let cell = Game.pixelGrid[i][j];
       if (cell === CellType.empty || cell === CellType.floor) {
         continue;
       }
 
-      if (j === canvas.height - 1) {
+      if (j === canvasHeight - 1) {
         destroyCell(i, j, delta);
         continue;
       }
@@ -49,7 +53,7 @@ function nextState() {
             swapCells(i, j, i - 1, j - 1, delta);
           } else if (
             j > 0 &&
-            i < canvas.width - 1 &&
+            i < canvasWidth - 1 &&
             Game.pixelGrid[i + 1][j - 1] === CellType.empty &&
             Math.random() > 0.7
           ) {
@@ -62,12 +66,12 @@ function nextState() {
         // Propagate
         for (
           let a = Math.max(i - 1, 0);
-          a <= Math.min(i + 1, Game.pixelGrid.length - 1);
+          a <= Math.min(i + 1, canvasWidth - 1);
           a++
         ) {
           for (
             let b = j;
-            b <= Math.min(j + 1, Game.pixelGrid[a].length - 1);
+            b <= Math.min(j + 1, canvasHeight - 1);
             b++
           ) {
             if (a === i && b === j) {
@@ -89,7 +93,7 @@ function nextState() {
           (i > 0 &&
             Game.pixelGrid[i - 1][j] === CellType.water &&
             Math.random() > 0.9) ||
-          (i < canvas.width - 1 &&
+          (i < canvasWidth - 1 &&
             Game.pixelGrid[i + 1][j] === CellType.water &&
             Math.random() > 0.9) ||
           (j > 0 && Game.pixelGrid[i][j - 1] === CellType.water) ||
@@ -118,6 +122,24 @@ function nextState() {
             delta
           );
         }
+
+
+        // Lightmap
+        if(dynamicLights) {
+          if(Game.pixelGrid[i][j].state === CellType.states.fire) {
+            for(let a = Math.max(i-maxLightDistance, 0); a <= Math.min(i+maxLightDistance, canvasWidth -1); a++) {
+              for(let b = Math.max(j-maxLightDistance, 0); b <= Math.min(j+maxLightDistance, canvasHeight -1); b++) {
+                if((a !== i || b !== j) && Game.pixelGrid[a][b].state !== CellType.states.fire) {
+                  let distance = Math.sqrt(Math.pow(Math.abs(a - i), 2) + Math.pow(Math.abs(b - j),2));
+                  lightMap[a][b] = lightMap[a][b] + Math.max(0, maxLightDistance - distance);
+                }
+              }
+            }
+          }
+        }
+        //} else if (pixelGrid[x][y].state === "liquid" && Math.random() > 0.99) {
+        //  lightMap[x][y] = lightMap[x][y] + 10;
+
       } else if (cell.static) {
         if (cell === CellType.plant) {
           if (Utils.countNeighbors(i, j, Game.pixelGrid, [CellType.ice])) {
@@ -136,7 +158,7 @@ function nextState() {
               break;
             case 1:
               if (
-                i < canvas.width - 1 &&
+                i < canvasWidth - 1 &&
                 Game.pixelGrid[i + 1][j] === CellType.water &&
                 Math.random() > cell.propagation
               ) {
@@ -145,7 +167,7 @@ function nextState() {
               break;
             case 2:
               if (
-                j < canvas.height - 1 &&
+                j < canvasHeight - 1 &&
                 Game.pixelGrid[i][j + 1] === CellType.water &&
                 Math.random() > cell.propagation
               ) {
@@ -178,7 +200,7 @@ function nextState() {
               createCell(i - 1, j - 1, CellType.ice, delta);
             }
             if (
-              i < canvas.width - 1 &&
+              i < canvasWidth - 1 &&
               Game.pixelGrid[i + 1][j - 1] === CellType.water &&
               Math.random() > cell.propagation
             ) {
@@ -222,7 +244,7 @@ function nextState() {
             createCell(i, j, CellType.water, delta);
             createCell(i -1, j + 1, CellType.water, delta);
           }
-          if(i < canvas.width - 1 && Game.pixelGrid[i+1][j+1] === CellType.ice) {
+          if(i < canvasWidth - 1 && Game.pixelGrid[i+1][j+1] === CellType.ice) {
             createCell(i, j, CellType.water, delta);
             createCell(i +1, j + 1, CellType.water, delta);
           }
@@ -231,7 +253,7 @@ function nextState() {
         if (cellBelow === CellType.empty) {
           swapCells(i, j, i, j + 1, delta);
         } else if (
-          j < canvas.height - 2 &&
+          j < canvasHeight - 2 &&
           cellBelow.state === "liquid" &&
           (!cell.granular || Game.pixelGrid[i][j + 2].state === "liquid")
         ) {
@@ -260,12 +282,12 @@ function nextState() {
             } else {
               // Bottom right
               if (
-                i < Game.pixelGrid.length - 1 &&
+                i < canvasWidth - 1 &&
                 Game.pixelGrid[i + 1][j + 1] === CellType.empty
               ) {
                 swapCells(i, j, i + 1, j + 1, delta);
               } else if (
-                i < Game.pixelGrid.length - 1 &&
+                i < canvasWidth - 1 &&
                 Game.pixelGrid[i + 1][j + 1].state === "liquid" &&
                 Math.random() > 0.95
               ) {
@@ -300,7 +322,7 @@ function nextState() {
             }
           } else {
             if (
-              i < Game.pixelGrid.length - 1 &&
+              i < canvasWidth - 1 &&
               Game.pixelGrid[i + 1][j] != cell &&
               Game.pixelGrid[i + 1][j].state !== "solid"
             ) {
@@ -316,14 +338,14 @@ function nextState() {
   // Tap
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      Game.pixelGrid[canvas.width / 2 + i][0] = CellType.sand;
+      Game.pixelGrid[Math.floor(canvasWidth / 2) + i][0] = CellType.sand;
     }
   }
 
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
       createCell(
-        Math.floor((3 * canvas.width) / 4) + i,
+        Math.floor((3 * canvasWidth) / 4) + i,
         0,
         CellType.water,
         delta
@@ -333,7 +355,7 @@ function nextState() {
 
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      createCell(Math.floor(canvas.width / 4) + i, 0, CellType.oil, delta);
+      createCell(Math.floor(canvasWidth / 4) + i, 0, CellType.oil, delta);
     }
   }
 
@@ -364,15 +386,20 @@ let timer = 0;
 let lastTime = 0;
 let requestDrawFull = false;
 let skipFrames = false;
+let dynamicLights = false;
 
+let lightMap;
 function update(time = 0) {
   const deltaTime = time - lastTime;
   lastTime = time;
   timer += deltaTime;
 
   if (timer > interval) {
-    let delta = nextState();
-    let lightMap = Utils.buildLightMap(Game.pixelGrid);
+    if(dynamicLights) {
+      Utils.wipeMatrix(lightMap, 0);
+    }
+    nextState();
+
     if(!skipFrames || timer <= 2*interval) {
       if (requestDrawFull) {
         Display.drawFull(Game.pixelGrid, lightMap);
@@ -388,14 +415,21 @@ function update(time = 0) {
 
 let mainBrush;
 function init() {
-  let halfScreen = Math.floor(canvas.height / 2);
-  for (let i = canvas.width / 2 - 25; i < canvas.width / 2 + 24; i++) {
+
+  canvasWidth = canvas.width;
+  canvasHeight = canvas.height;
+
+  delta = Utils.initArray(canvasWidth, canvasHeight, null);
+  lightMap = Utils.initArray(canvasWidth, canvasHeight, 0);
+
+  let halfScreen = Math.floor(canvasHeight / 2);
+  for (let i = canvasWidth / 2 - 25; i < canvasWidth / 2 + 24; i++) {
     Game.pixelGrid[i][halfScreen] = CellType.floor;
   }
 
   for (let j = halfScreen; j >= halfScreen - 15; j--) {
-    Game.pixelGrid[canvas.width / 2 - 25][j] = CellType.floor;
-    Game.pixelGrid[canvas.width / 2 + 24][j] = CellType.floor;
+    Game.pixelGrid[canvasWidth / 2 - 25][j] = CellType.floor;
+    Game.pixelGrid[canvasWidth / 2 + 24][j] = CellType.floor;
   }
 
   Display.drawFull(Game.pixelGrid);
@@ -415,6 +449,11 @@ function init() {
     } else if (e.key === "}") {
       mainBrush.increaseOpacity(10);
     }
+  });
+
+
+  document.getElementById("dynamic-lights").addEventListener("click", (e) => {
+    dynamicLights = e.target.checked;
   });
 }
 

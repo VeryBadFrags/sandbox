@@ -28,8 +28,8 @@ export function drawPartial(gameState, pixelGrid, lightMap) {
       if (cell) {
         context.fillStyle = getHexColor(cell, lightMap ? lightMap[i][j] : 0);
         context.fillRect(i, j, 1, 1);
-      } else if(lightMap[i][j] > 0) {
-        cell = pixelGrid[i][j]
+      } else if(lightMap && lightMap[i][j] > 0) {
+        cell = pixelGrid[i][j];
         context.fillStyle = getHexColor(cell, lightMap ? lightMap[i][j] : 0);
         context.fillRect(i, j, 1, 1);
       }
