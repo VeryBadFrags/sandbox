@@ -144,6 +144,7 @@ export const crystals = {
 };
 export const seed = {
   name:"🌱 Seed",
+  key: "z",
   color: "#b5651d",
   density: 5,
   granular: true,
@@ -155,7 +156,7 @@ export const seed = {
 export const plant = {
   name: "🌿 Plant",
   key:"p",
-  color: "#b5a51d",
+  color: "#00bf00",
   state: states.solid,
   density: 10,
   propagation: 0.7,
