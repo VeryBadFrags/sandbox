@@ -176,7 +176,7 @@ function nextState() {
             case 1:
               if (
                 i < canvasWidth - 1 &&
-                Game.pixelGrid[i + 1][j] === CellType.water &&
+                (Game.pixelGrid[i + 1][j] === CellType.water || (Game.pixelGrid[i+1][j] === CellType.soil && Utils.countNeighbors(i,j,Game.pixelGrid,CellType.plant) <= 2)) &&
                 Math.random() > cell.propagation
               ) {
                 createCell(i + 1, j, CellType.plant, delta);
@@ -194,7 +194,7 @@ function nextState() {
             case 3:
               if (
                 i > 0 &&
-              Game.pixelGrid[i - 1][j] === CellType.water &&
+                (Game.pixelGrid[i - 1][j] === CellType.water || (Game.pixelGrid[i-1][j] === CellType.soil && Utils.countNeighbors(i,j,Game.pixelGrid,CellType.plant) <= 2)) &&
                 Math.random() > cell.propagation
               ) {
                 createCell(i - 1, j, CellType.plant, delta);

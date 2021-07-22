@@ -24,7 +24,7 @@ export const fire3 = {
   color: "#ff8800",
   density: 0.1,
   state: states.fire,
-  lifetime: 0.88,
+  lifetime: 0.885,
   propagation: 0.8,
   nextCell: smoke,
 };
@@ -91,16 +91,16 @@ export const ice = {
 export const soil = {
   name: "🍂 Soil",
   key: "l",
-  color: "#654321",
+  color: "#322110",
   density: 20,
   state: states.solid,
   granular: true,
-  dousing: true,
+  dousing: false,
 };
 export const wood = {
   name: "🌳 Wood",
   key: "d",
-  color: "#6a4b34",
+  color: "#654321",
   density: 20,
   state: states.solid,
   flammable: 0.99,
@@ -147,6 +147,9 @@ export const seed = {
   color: "#b5651d",
   density: 5,
   granular: true,
+  flammable: 0.99,
+  melt: fire3,
+  ash: soil,
   state: states.solid,
 }
 export const plant = {
@@ -176,6 +179,7 @@ export const CellsMap = [
   oil,
   plant,
   soil,
+  seed,
   crystals,
   fire,
 ];
