@@ -28,7 +28,7 @@
         </div>
 
         <div class="p-3">
-          <div class="mb-2">
+          <div class="mb-3">
             <label for="brush-type" class="form-label">🖌️ Brush type</label>
             <select
               class="form-select form-select"
@@ -36,7 +36,7 @@
               id="brush-type"
             ></select>
           </div>
-          <div class="mb-2">
+          <div class="mb-3">
             <label for="brush-size" class="form-label">⭕ Size</label> <small>( + - )</small>
             <div class="row">
               <div class="col-12 col-md-8">
@@ -60,7 +60,7 @@
             </div>
           </div>
           </div>
-          <div class="mb-2">
+          <div class="mb-3">
             <label for="brush-opacity" class="form-label">☁️ Opacity</label> <small>( { } )</small>
             <input
               type="range"
@@ -71,11 +71,14 @@
               id="brush-opacity"
             />
           </div>
-          <div class="form-check mb-2">
+          <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" value="" id="dynamic-lights">
             <label class="form-check-label" for="dynamic-lights">
               Dynamic lights
             </label>
+          </div>
+          <div>
+            <button class="btn btn-outline-secondary" type="button" id="play-pause" aria-describedby="Play & Pause">⏯️</button>
           </div>
         </div>
       </div>

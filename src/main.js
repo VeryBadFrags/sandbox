@@ -423,12 +423,13 @@ let skipFrames = false;
 let dynamicLights = false;
 
 let lightMap;
+let play = true;
 function update(time = 0) {
   const deltaTime = time - lastTime;
   lastTime = time;
   timer += deltaTime;
 
-  if (timer > interval) {
+  if (timer > interval && play) {
     if (dynamicLights) {
       Utils.wipeMatrix(lightMap, 0);
     }
@@ -482,6 +483,10 @@ function init() {
     } else if (e.key === "}") {
       mainBrush.increaseOpacity(10);
     }
+  });
+
+  document.getElementById("play-pause").addEventListener("click", (e) => {
+    play = !play;
   });
 
   let lightsCheck = document.getElementById("dynamic-lights");
