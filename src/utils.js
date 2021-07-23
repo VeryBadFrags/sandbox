@@ -48,7 +48,7 @@ export function countNeighbors(x, y, pixelGrid, cellTypes) {
   for (
     let i = Math.max(x - 1, 0);
     i <= Math.min(x + 1, pixelGrid.length - 1);
-  i++
+    i++
   ) {
     for (
       let j = Math.max(y - 1, 0);
@@ -172,4 +172,50 @@ export function hslToHex(h, s, l) {
       .padStart(2, "0"); // convert to Hex and prefix "0" if needed
   };
   return `#${f(0)}${f(8)}${f(4)}`;
+}
+
+export function getDistance(a1, b1, a2, b2) {
+  return Math.sqrt(
+    Math.pow(Math.abs(a2 - a1), 2) + Math.pow(Math.abs(b2 - b1), 2)
+  );
+}
+
+export function createIntermediatePoints(a1, b1, a2, b2) {
+  let points = [];
+  let aDistance = Math.abs(a2 - a1);
+  let bDistance = Math.abs(b2 - b1);
+  if (aDistance > bDistance) {
+    let leftToRight = a1 < a2;
+    for (
+      let i = leftToRight ? a1 + 1 : a1 - 1;
+      leftToRight ? i < a2 : i > a2;
+      leftToRight ? i++ : i--
+    ) {
+      let progress = (i - Math.min(a1, a2)) / aDistance;
+      let j;
+      if (leftToRight) {
+        j = Math.round((b2 - b1) * progress + b1);
+      } else {
+        j = Math.round((b1 - b2) * progress + b2);
+      }
+      points.push([i, j]);
+    }
+  } else {
+    let upToDown = b1 < b2;
+    for (
+      let j = upToDown ? b1 + 1 : b1 - 1;
+      upToDown ? j < b2 : j > b2;
+      upToDown ? j++ : j--
+    ) {
+      let progress = (j - Math.min(b1,b2)) / bDistance;
+      let i;
+      if (upToDown) {
+        i = Math.round((a2 - a1) * progress + a1);
+      } else {
+        i = Math.round((a1 - a2) * progress + a2);
+      }
+      points.push([i, j]);
+    }
+  }
+  return points;
 }

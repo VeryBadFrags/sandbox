@@ -144,9 +144,7 @@ function nextState() {
                   (a !== i || b !== j) &&
                   Game.pixelGrid[a][b].state !== CellType.states.fire
                 ) {
-                  let distance = Math.sqrt(
-                    Math.pow(Math.abs(a - i), 2) + Math.pow(Math.abs(b - j), 2)
-                  );
+                  let distance = Utils.getDistance(a,b,i,j);
                   lightMap[a][b] =
                     lightMap[a][b] + Math.max(0, maxLightDistance - distance);
                 }
@@ -485,7 +483,7 @@ function init() {
     }
   });
 
-  document.getElementById("play-pause").addEventListener("click", (e) => {
+  document.getElementById("play-pause").addEventListener("click", () => {
     play = !play;
   });
 

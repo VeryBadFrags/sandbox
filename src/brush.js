@@ -1,5 +1,6 @@
 import * as CellType from "./celltype.js";
 import * as Game from "./game.js";
+import * as Utils from "./utils.js";
 
 const brushTypeSelector = document.getElementById("brush-type");
 const brushSizeInput = document.getElementById("brush-size");
@@ -24,7 +25,7 @@ export default class Brush {
     if (size > 0) {
       brushSize += size + Math.floor(brushSize / 10);
     } else {
-      let step = Math.floor(brushSize / 10)
+      let step = Math.floor(brushSize / 10);
       brushSize += size - Math.floor((brushSize - step) / 10);
     }
     brushSize = Math.max(1, Math.min(32, brushSize));
@@ -91,12 +92,12 @@ export default class Brush {
       );
     }
 
-    // let prevMouseX = null,
-    //   prevMouseY = null;
-    let mouseX = 0,
+    let prevMouseX = 0,
+      prevMouseY = 0,
+      mouseX = 0,
       mouseY = 0;
+    const rect = canvas.getBoundingClientRect();
     function onMouseMove(e) {
-      let rect = canvas.getBoundingClientRect();
       mouseX = Math.round(
         ((e.clientX - rect.left) / (rect.right - rect.left)) * canvas.width
       );
@@ -105,8 +106,16 @@ export default class Brush {
       );
 
       if (isMouseDown) {
+        if (Utils.getDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
+          let interpolated = Utils.createIntermediatePoints(mouseX,mouseY,prevMouseX,prevMouseY);
+
+          interpolated.forEach(point => spawnSand(point[0], point[1]));
+        }
         spawnSand(mouseX, mouseY);
       }
+
+      prevMouseX = mouseX;
+      prevMouseY = mouseY;
     }
 
     function mouseOff() {
