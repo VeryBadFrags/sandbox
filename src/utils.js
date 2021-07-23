@@ -187,8 +187,8 @@ export function createIntermediatePoints(a1, b1, a2, b2) {
   if (aDistance > bDistance) {
     let leftToRight = a1 < a2;
     for (
-      let i = leftToRight ? a1 + 1 : a1 - 1;
-      leftToRight ? i < a2 : i > a2;
+      let i = a1;
+      leftToRight ? i <= a2 : i >= a2;
       leftToRight ? i++ : i--
     ) {
       let progress = (i - Math.min(a1, a2)) / aDistance;
