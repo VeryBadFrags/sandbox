@@ -78,14 +78,22 @@ function nextState() {
             if (Math.random() > target.flammable) {
               if (a === i || b === j) {
                 createCell(a, b, target.melt, delta);
-                if(b + 1 < canvasHeight - 1 && target.ash && Game.pixelGrid[a][b+1] === CellType.empty) {
-                  createCell(a, b+1, target.ash, delta);
+                if (
+                  b + 1 < canvasHeight - 1 &&
+                  target.ash &&
+                  Game.pixelGrid[a][b + 1] === CellType.empty
+                ) {
+                  createCell(a, b + 1, target.ash, delta);
                 }
               } else if (Math.random() > 0.5) {
                 // Corners
                 createCell(a, b, target.melt, delta);
-                if(b + 1 < canvasHeight - 1 && target.ash && Game.pixelGrid[a][b+1] === CellType.empty) {
-                  createCell(a, b+1, target.ash, delta);
+                if (
+                  b + 1 < canvasHeight - 1 &&
+                  target.ash &&
+                  Game.pixelGrid[a][b + 1] === CellType.empty
+                ) {
+                  createCell(a, b + 1, target.ash, delta);
                 }
               }
             }
@@ -144,7 +152,7 @@ function nextState() {
                   (a !== i || b !== j) &&
                   Game.pixelGrid[a][b].state !== CellType.states.fire
                 ) {
-                  let distance = Utils.getDistance(a,b,i,j);
+                  let distance = Utils.getDistance(a, b, i, j);
                   lightMap[a][b] =
                     lightMap[a][b] + Math.max(0, maxLightDistance - distance);
                 }
@@ -165,7 +173,14 @@ function nextState() {
             case 0:
               if (
                 j > 0 &&
-                (Game.pixelGrid[i][j - 1] === CellType.water || (Game.pixelGrid[i][j - 1] === CellType.soil && Utils.countNeighbors(i,j,Game.pixelGrid,CellType.plant) <= 3)) &&
+                (Game.pixelGrid[i][j - 1] === CellType.water ||
+                  (Game.pixelGrid[i][j - 1] === CellType.soil &&
+                    Utils.countNeighbors(
+                      i,
+                      j,
+                      Game.pixelGrid,
+                      CellType.plant
+                    ) <= 3)) &&
                 Math.random() > cell.propagation
               ) {
                 createCell(i, j - 1, CellType.plant, delta);
@@ -174,7 +189,14 @@ function nextState() {
             case 1:
               if (
                 i < canvasWidth - 1 &&
-                (Game.pixelGrid[i + 1][j] === CellType.water || (Game.pixelGrid[i+1][j] === CellType.soil && Utils.countNeighbors(i,j,Game.pixelGrid,CellType.plant) <= 2)) &&
+                (Game.pixelGrid[i + 1][j] === CellType.water ||
+                  (Game.pixelGrid[i + 1][j] === CellType.soil &&
+                    Utils.countNeighbors(
+                      i,
+                      j,
+                      Game.pixelGrid,
+                      CellType.plant
+                    ) <= 2)) &&
                 Math.random() > cell.propagation
               ) {
                 createCell(i + 1, j, CellType.plant, delta);
@@ -192,7 +214,14 @@ function nextState() {
             case 3:
               if (
                 i > 0 &&
-                (Game.pixelGrid[i - 1][j] === CellType.water || (Game.pixelGrid[i-1][j] === CellType.soil && Utils.countNeighbors(i,j,Game.pixelGrid,CellType.plant) <= 2)) &&
+                (Game.pixelGrid[i - 1][j] === CellType.water ||
+                  (Game.pixelGrid[i - 1][j] === CellType.soil &&
+                    Utils.countNeighbors(
+                      i,
+                      j,
+                      Game.pixelGrid,
+                      CellType.plant
+                    ) <= 2)) &&
                 Math.random() > cell.propagation
               ) {
                 createCell(i - 1, j, CellType.plant, delta);
@@ -202,7 +231,8 @@ function nextState() {
 
           // Spawn seed
           if (
-            cellBelow.id === CellType.empty.id && Math.random() > 0.999 &&
+            cellBelow.id === CellType.empty.id &&
+            Math.random() > 0.999 &&
             Utils.countNeighbors(i, j, Game.pixelGrid, CellType.plant) > 5
           ) {
             createCell(i, j + 1, CellType.seed, delta);
@@ -238,18 +268,16 @@ function nextState() {
           }
 
           //Drip
-          if (cellBelow .id === CellType.empty.id && Math.random() > cell.drip) {
+          if (cellBelow.id === CellType.empty.id && Math.random() > cell.drip) {
             createCell(i, j + 1, CellType.water, delta);
           }
           //Melt
           if (
             (Math.random() > cell.lifetime &&
               Utils.countNeighbors(i, j, Game.pixelGrid, CellType.ice) < 6) ||
-            Utils.testNeighbors(i, j, Game.pixelGrid, (c) => [
-              CellType.fire,
-              CellType.fire2,
-              CellType.fire3,
-            ].includes(c)) > 0
+            Utils.testNeighbors(i, j, Game.pixelGrid, (c) =>
+              [CellType.fire, CellType.fire2, CellType.fire3].includes(c)
+            ) > 0
           ) {
             createCell(i, j, cell.melt, delta);
           }
@@ -258,9 +286,12 @@ function nextState() {
         // SOLIDS
 
         // Seeds
-        if(cell.id === CellType.seed.id) {
-          if(Math.random() > 0.999 && Utils.countNeighbors(i, j, Game.pixelGrid, CellType.soil) >= 3) {
-            createCell(i,j,CellType.plant,delta);
+        if (cell.id === CellType.seed.id) {
+          if (
+            Math.random() > 0.999 &&
+            Utils.countNeighbors(i, j, Game.pixelGrid, CellType.soil) >= 3
+          ) {
+            createCell(i, j, CellType.plant, delta);
             continue;
           }
         } else if (cell.id === CellType.salt.id) {
@@ -287,7 +318,8 @@ function nextState() {
         } else if (
           j < canvasHeight - 2 &&
           cellBelow.state === CellType.states.liquid &&
-          (!cell.granular || Game.pixelGrid[i][j + 2].state === CellType.states.liquid)
+          (!cell.granular ||
+            Game.pixelGrid[i][j + 2].state === CellType.states.liquid)
         ) {
           // Sink in liquids
           if (
@@ -333,7 +365,10 @@ function nextState() {
         if (cellBelow.id === CellType.empty.id) {
           // Move down
           swapCells(i, j, i, j + 1, delta);
-        } else if (cellBelow.id !== cell.id && cellBelow.state === CellType.states.liquid) {
+        } else if (
+          cellBelow.id !== cell.id &&
+          cellBelow.state === CellType.states.liquid
+        ) {
           if (
             Math.random() <=
             (cell.density - cellBelow.density) / cellBelow.density / 5
@@ -427,11 +462,13 @@ function update(time = 0) {
   lastTime = time;
   timer += deltaTime;
 
-  if (timer > interval && play) {
-    if (dynamicLights) {
-      Utils.wipeMatrix(lightMap, 0);
+  if (timer > interval) {
+    if (play) {
+      if (dynamicLights) {
+        Utils.wipeMatrix(lightMap, 0);
+      }
+      nextState();
     }
-    nextState();
 
     if (!skipFrames || timer <= 2 * interval) {
       if (requestDrawFull) {
