@@ -506,6 +506,17 @@ function init() {
   mainBrush = new Brush(() => (requestDrawFull = true));
   mainBrush.init();
 
+  let togglePlay = () => {
+    play = !play;
+    if(play) {
+      playPauseButton.classList.add("btn-outline-primary");
+      playPauseButton.classList.remove("btn-outline-danger");
+    } else {
+      playPauseButton.classList.remove("btn-outline-primary");
+      playPauseButton.classList.add("btn-outline-danger");
+    }
+  }
+
   document.addEventListener("keydown", (e) => {
     if (CellType.CellsKeys[e.key]) {
       mainBrush.setBrushType(CellType.CellsKeys[e.key]);
@@ -517,20 +528,13 @@ function init() {
       mainBrush.increaseOpacity(-10);
     } else if (e.key === "}") {
       mainBrush.increaseOpacity(10);
+    } else if (e.key === ' ') {
+      togglePlay();
     }
   });
 
   const playPauseButton = document.getElementById("play-pause")
-  playPauseButton.addEventListener("click", () => {
-    play = !play;
-    if(play) {
-      playPauseButton.classList.add("btn-outline-primary");
-      playPauseButton.classList.remove("btn-outline-danger");
-    } else {
-      playPauseButton.classList.remove("btn-outline-primary");
-      playPauseButton.classList.add("btn-outline-danger");
-    }
-  });
+  playPauseButton.addEventListener("click", togglePlay);
 
   let lightsCheck = document.getElementById("dynamic-lights");
   lightsCheck.addEventListener("click", (e) => {
