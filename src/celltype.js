@@ -164,7 +164,7 @@ export const seed = {
   color: "#b5651d",
   density: 5,
   granular: true,
-  flammable: 0.99,
+  flammable: 0.95,
   melt: soil,
   //ash: soil,
   state: states.solid,
