@@ -520,8 +520,16 @@ function init() {
     }
   });
 
-  document.getElementById("play-pause").addEventListener("click", () => {
+  const playPauseButton = document.getElementById("play-pause")
+  playPauseButton.addEventListener("click", () => {
     play = !play;
+    if(play) {
+      playPauseButton.classList.add("btn-outline-primary");
+      playPauseButton.classList.remove("btn-outline-danger");
+    } else {
+      playPauseButton.classList.remove("btn-outline-primary");
+      playPauseButton.classList.add("btn-outline-danger");
+    }
   });
 
   let lightsCheck = document.getElementById("dynamic-lights");
