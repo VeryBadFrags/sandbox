@@ -119,6 +119,17 @@ export const wood = {
   ash: soil,
   static: true,
 };
+export const coal = {
+  id: 18,
+  name: "♨️ Coal",
+  key: "a",
+  color: "#222",
+  density: 30,
+  state: states.solid,
+  flammable: 0.99999,
+  melt: fire,
+  granular: true,
+};
 export const sand = {
   id:1,
   name: "🏜️ Sand",
@@ -195,6 +206,7 @@ export const CellsMap = [
   salt,
   powder,
   oil,
+  coal,
   plant,
   soil,
   seed,

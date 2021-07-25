@@ -70,6 +70,7 @@ export default class Brush {
         y >= 0 &&
         y < canvasHeight
       ) {
+        // TODO update Delta and do not request fulld draw
         Game.pixelGrid[x][y] = brushType;
       }
       this.requestDrawFull();
