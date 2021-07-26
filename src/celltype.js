@@ -122,11 +122,11 @@ export const wood = {
 export const coal = {
   id: 18,
   name: "♨️ Coal",
-  key: "a",
+  key: "h",
   color: "#222",
   density: 30,
   state: states.solid,
-  flammable: 0.99999,
+  flammable: 0.9999,
   melt: fire,
   granular: true,
 };
