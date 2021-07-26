@@ -1,6 +1,3 @@
-$linkColorDark: complement(#03A9F4);
-$transparentBlack: rgba(black, 0.3);
-
 * {
   margin: 0;
   padding: 0;
@@ -8,32 +5,11 @@ $transparentBlack: rgba(black, 0.3);
 }
 
 body {
-  background-color: #212121;
-  color: #fafafa;
   font-family: sans-serif;
   text-align: center;
-}
-
-a {
-  color: $linkColorDark;
-  text-shadow: 1px 1px 2px $transparentBlack;
 }
 
 .container {
   margin: 0px;
   font-size: 1.2em;
-}
-
-.footer {
-  padding: 2rem;
-}
-
-.canvasWrapper {
-  //height: 85vh;
-  margin-bottom: 1em;
-}
-
-#game {
-    //border: solid 0.1em #eceff1;
-    //width: 95vw;
 }
