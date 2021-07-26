@@ -19,13 +19,6 @@ a {
   text-shadow: 1px 1px 2px $transparentBlack;
 }
 
-.flex {
-  align-items: flex-start;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 .container {
   margin: 0px;
   font-size: 1.2em;
@@ -41,6 +34,6 @@ a {
 }
 
 #game {
-    border: solid 0.1em #eceff1;
+    //border: solid 0.1em #eceff1;
     //width: 95vw;
 }
