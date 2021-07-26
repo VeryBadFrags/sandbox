@@ -59,6 +59,7 @@ export default class Brush {
           j++
         ) {
           if (Math.random() <= brushOpacity / 100) {
+            Game.delta[i][j] = brushType;
             Game.pixelGrid[i][j] = brushType;
           }
         }
@@ -70,10 +71,10 @@ export default class Brush {
         y >= 0 &&
         y < canvasHeight
       ) {
-        // TODO update Delta and do not request fulld draw
+        Game.delta[x][y] = brushType;
         Game.pixelGrid[x][y] = brushType;
       }
-      this.requestDrawFull();
+      // this.requestDrawFull();
     };
 
     brushOpacitySlider.addEventListener("click", function (e) {

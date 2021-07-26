@@ -22,11 +22,11 @@ export function drawFull(gameState, lightMap) {
   }
 }
 
-export function drawPartial(gameState, pixelGrid, lightMap, dynamicLight) {
-  let gameHeight = gameState[0].length;
-  for (let i = 0; i < gameState.length; i++) {
+export function drawPartial(deltaBoard, fullBoard, lightMap, dynamicLight) {
+  let gameHeight = deltaBoard[0].length;
+  for (let i = 0; i < deltaBoard.length; i++) {
     for (let j = 0; j < gameHeight; j++) {
-      let cell = gameState[i][j];
+      let cell = deltaBoard[i][j];
       if (cell) {
         if (dynamicLight) {
           context.fillStyle = getHexColor(cell, lightMap ? lightMap[i][j] : 0);
@@ -35,7 +35,7 @@ export function drawPartial(gameState, pixelGrid, lightMap, dynamicLight) {
         }
         context.fillRect(i, j, 1, 1);
       } else if (dynamicLight && lightMap && lightMap[i][j] > 0) {
-        cell = pixelGrid[i][j];
+        cell = fullBoard[i][j];
         context.fillStyle = getHexColor(cell, lightMap[i][j]);
         context.fillRect(i, j, 1, 1);
       }
