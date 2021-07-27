@@ -7,8 +7,9 @@ export function wipeMatrix(matrix, value) {
   let width = matrix.length;
   let height = matrix[0].length;
   for (let x = 0; x < width; x++) {
+    let column = matrix[x];
     for (let y = 0; y < height; y++) {
-      matrix[x][y] = value;
+      column[y] = value;
     }
   }
 }
@@ -30,13 +31,14 @@ export function isFuelAround(x, y, pixelGrid) {
     i <= Math.min(x + 1, pixelGrid.length - 1);
     i++
   ) {
+    let column = pixelGrid[i];
     for (
       let j = Math.max(y - 1, 0);
-      j <= Math.min(y + 1, pixelGrid[x].length - 1);
+      j <= Math.min(y + 1, column.length - 1);
       j++
     ) {
       if (i !== x || j !== y) {
-        if (pixelGrid[i][j].flammable) return true;
+        if (column[j].flammable) return true;
       }
     }
   }
@@ -50,13 +52,14 @@ export function countNeighbors(x, y, pixelGrid, cellTypes) {
     i <= Math.min(x + 1, pixelGrid.length - 1);
     i++
   ) {
+    let column = pixelGrid[i];
     for (
       let j = Math.max(y - 1, 0);
-      j <= Math.min(y + 1, pixelGrid[x].length - 1);
+      j <= Math.min(y + 1, column.length - 1);
       j++
     ) {
       if (i !== x || j !== y) {
-        if (pixelGrid[i][j] === cellTypes) {
+        if (column[j] === cellTypes) {
           count++;
         }
       }
@@ -72,13 +75,14 @@ export function testNeighbors(x, y, pixelGrid, testNeighbor) {
     i <= Math.min(x + 1, pixelGrid.length - 1);
     i++
   ) {
+    let column = pixelGrid[i];
     for (
       let j = Math.max(y - 1, 0);
-      j <= Math.min(y + 1, pixelGrid[x].length - 1);
+      j <= Math.min(y + 1, column.length - 1);
       j++
     ) {
       if (i !== x || j !== y) {
-        if (testNeighbor(pixelGrid[i][j])) {
+        if (testNeighbor(column[j])) {
           count++;
         }
       }

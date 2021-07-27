@@ -7,13 +7,15 @@ export const delta = Utils.initArray(canvas.width, canvas.height, null);
 
 let maxLightDistance = 6;
 
-export function processSolid(cell, i, j, canvasWidth, canvasHeight) {
+export function processSolid(i, j, canvasWidth, canvasHeight) {
+  let column = pixelGrid[i];
+  let cell = column[j];
   if (cell.static) {
     processStatic(cell, i, j, canvasWidth, canvasHeight);
     return;
   }
 
-  let cellBelow = pixelGrid[i][j + 1];
+  let cellBelow = column[j + 1];
 
   switch (cell.id) {
     case CellType.seed.id:
@@ -191,8 +193,10 @@ function processStatic(cell, i, j, canvasWidth, canvasHeight) {
   }
 }
 
-export function processLiquid(cell, i, j, canvasWidth) {
-  let cellBelow = pixelGrid[i][j + 1];
+export function processLiquid(i, j, canvasWidth) {
+  let column = pixelGrid[i];
+  let cell = column[j];
+  let cellBelow = column[j + 1];
   // LIQUIDS
   if (cellBelow.id === CellType.empty.id) {
     // Move down
@@ -233,7 +237,6 @@ export function processLiquid(cell, i, j, canvasWidth) {
 }
 
 export function processFire(
-  cell,
   i,
   j,
   canvasWidth,
@@ -241,7 +244,8 @@ export function processFire(
   lightMap,
   dynamicLights
 ) {
-  // FIRE
+  let column = pixelGrid[i];
+  let cell = column[j];
 
   // Propagate
   let a = Math.floor(Math.random() * 3) - 1;
@@ -270,8 +274,8 @@ export function processFire(
   } else if (
     j > 0 &&
     Math.random() > 0.8 &&
-    pixelGrid[i][j - 1].id === CellType.empty.id
-    // || pixelGrid[i][j - 1].flammable
+    column[j - 1].id === CellType.empty.id
+    // || column[j - 1].flammable
   ) {
     // TODO use melt
     // Evolve
@@ -280,7 +284,7 @@ export function processFire(
 
   // Lightmap
   if (dynamicLights) {
-    if (pixelGrid[i][j].state === CellType.states.fire) {
+    if (column[j].state === CellType.states.fire) {
       for (
         let a = Math.max(i - maxLightDistance, 0);
         a <= Math.min(i + maxLightDistance, canvasWidth - 1);
@@ -307,13 +311,15 @@ export function processFire(
   //  lightMap[x][y] = lightMap[x][y] + 10;
 }
 
-export function processGas(cell, i, j, canvasWidth) {
+export function processGas(i, j, canvasWidth) {
+  let column = pixelGrid[i];
+  let cell = column[j];
   // SMOKE
   if (Math.random() > cell.lifetime) {
     destroyCell(i, j);
   } else if (
     j > 0 &&
-    pixelGrid[i][j - 1].id === CellType.empty.id &&
+    column[j - 1].id === CellType.empty.id &&
     Math.random() > 0.7
   ) {
     // Go up
@@ -339,8 +345,9 @@ export function createCell(x, y, cellType) {
 }
 
 export function swapCells(x1, y1, x2, y2) {
-  let destinationCell = pixelGrid[x2][y2];
   let originCell = pixelGrid[x1][y1];
+  let destinationCell = pixelGrid[x2][y2];
+
   pixelGrid[x1][y1] = destinationCell;
   pixelGrid[x2][y2] = originCell;
   delta[x1][y1] = destinationCell;

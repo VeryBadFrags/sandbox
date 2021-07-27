@@ -12,8 +12,9 @@ export function drawFull(gameState, lightMap) {
 
   let gameHeight = gameState[0].length;
   for (let i = 0; i < gameState.length; i++) {
+    let column = gameState[i];
     for (let j = 0; j < gameHeight; j++) {
-      let cell = gameState[i][j];
+      let cell = column[j];
       if (cell.id !== CellType.empty.id) {
         context.fillStyle = getHexColor(cell, lightMap ? lightMap[i][j] : 0);
         context.fillRect(i, j, 1, 1);
@@ -28,8 +29,9 @@ export function drawPartial(deltaBoard, fullBoard, lightMap, dynamicLight) {
   // Test dynamicLight first for performances
   if (dynamicLight) {
     for (let i = 0; i < gameWidth; i++) {
+      let column = deltaBoard[i];
       for (let j = 0; j < gameHeight; j++) {
-        let cell = deltaBoard[i][j];
+        let cell = column[j];
         if (cell) {
           context.fillStyle = getHexColor(cell, lightMap ? lightMap[i][j] : 0);
           context.fillRect(i, j, 1, 1);
@@ -41,33 +43,13 @@ export function drawPartial(deltaBoard, fullBoard, lightMap, dynamicLight) {
       }
     }
   } else {
-    for (let j = 0; j < gameHeight; j++) {
-      let lastPixel = null;
-      let firstColumn = null;
-      for (let i = 0; i < gameWidth; i++) {
-        let cell = deltaBoard[i][j];
-
+    for (let i = 0; i < gameWidth; i++) {
+      let column = deltaBoard[i];
+      for (let j = 0; j < gameHeight; j++) {
+        let cell = column[j];
         if (cell) {
-          if (!lastPixel) {
-            lastPixel = cell;
-            firstColumn = i;
-          } else if (cell.id !== lastPixel.id) {
-            context.fillStyle = lastPixel.color;
-            context.fillRect(firstColumn, j, i - firstColumn, 1);
-            lastPixel = cell;
-            firstColumn = i;
-          } else if (i === gameWidth - 1) {
-            // TODO missing case where left cell is empty
-            context.fillStyle = cell.color;
-            context.fillRect(firstColumn, j, i - firstColumn + 1, 1);
-          }
-        } else {
-          if (lastPixel) {
-            context.fillStyle = lastPixel.color;
-            context.fillRect(firstColumn, j, i - firstColumn, 1);
-          }
-          lastPixel = null;
-          firstColumn = null;
+          context.fillStyle = cell.color;
+          context.fillRect(i, j, 1, 1);
         }
       }
     }

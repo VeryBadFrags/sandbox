@@ -13,8 +13,8 @@ function nextState() {
   let iStart = leftToRight ? 0 : canvasWidth - 1;
   let iEnd = (i) => (leftToRight ? i < canvasWidth : i >= 0);
 
-  for (let j = canvasHeight - 2; j >= 0; j--) {
-    for (let i = iStart; iEnd(i); leftToRight ? i++ : i--) {
+  for (let i = iStart; iEnd(i); leftToRight ? i++ : i--) {
+    for (let j = canvasHeight - 2; j >= 0; j--) {
       let cell = Game.pixelGrid[i][j];
       if (cell.id === CellType.empty.id || cell.id === CellType.floor.id) {
         continue;
@@ -22,14 +22,13 @@ function nextState() {
 
       switch (cell.state) {
         case CellType.states.solid:
-          Game.processSolid(cell, i, j, canvasWidth, canvasHeight);
+          Game.processSolid(i, j, canvasWidth, canvasHeight);
           break;
-          case CellType.states.liquid:
-          Game.processLiquid(cell,i,j,canvasWidth);
-            break;
-        case cell.state === CellType.states.fire:
+        case CellType.states.liquid:
+          Game.processLiquid(i, j, canvasWidth);
+          break;
+        case CellType.states.fire:
           Game.processFire(
-            cell,
             i,
             j,
             canvasWidth,
@@ -39,7 +38,7 @@ function nextState() {
           );
           break;
         case CellType.states.gas:
-          Game.processGas(cell, i, j, canvasWidth);
+          Game.processGas(i, j, canvasWidth);
           break;
       }
     }
