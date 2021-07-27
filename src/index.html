@@ -23,12 +23,17 @@
     <div class="container">
       <div class="row mt-2">
         <div class="col mb-3">
-          <canvas id="game" class="border border-light rounded-2" width="800" height="600"></canvas>
+          <canvas
+            id="game"
+            class="border border-light rounded-2"
+            width="800"
+            height="600"
+          ></canvas>
           <!-- <canvas id="cursor" width="800" height="600"></canvas> -->
         </div>
 
         <div class="col mb-3">
-          <div class="card text-white bg-dark border-secondary text-start">
+          <div class="card text-white bg-dark border-secondary text-start mb-3">
             <div class="card-body">
               <div class="mb-3">
                 <label for="brush-type" class="form-label">🖌️ Brush type</label>
@@ -95,14 +100,29 @@
                 >
                   ⏯️
                 </button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  type="button"
+                  id="erase-button"
+                  aria-describedby="Erase all"
+                >
+                  🗑️
+                </button>
               </div>
+            </div>
+          </div>
+          <!-- Stats -->
+          <div class="card text-white bg-dark border-secondary text-start">
+            <div class="card-body">
               <div class="mb-3">FPS: <span id="fps-val"></span></div>
               <div class="mb-3">Engine: <span id="engine-val"></span> ms</div>
               <div class="mb-3">Render: <span id="render-val"></span> ms</div>
             </div>
           </div>
+          <!-- End Stats -->
         </div>
       </div>
+      <!-- End row-->
     </div>
 
     <script type="module" src="main.js"></script>

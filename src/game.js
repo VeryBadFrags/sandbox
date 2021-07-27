@@ -7,11 +7,9 @@ export const delta = Utils.initArray(canvas.width, canvas.height, null);
 
 let maxLightDistance = 6;
 
-export function processSolid(i, j, canvasWidth, canvasHeight) {
-  let column = pixelGrid[i];
-  let cell = column[j];
+export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
   if (cell.static) {
-    processStatic(cell, i, j, canvasWidth, canvasHeight);
+    processStatic(cell, i, j, column, canvasWidth, canvasHeight);
     return;
   }
 
@@ -62,11 +60,12 @@ export function processSolid(i, j, canvasWidth, canvasHeight) {
   } else if (cell.granular) {
     let coinToss = Math.random() >= 0.5 ? 1 : -1;
     if (i + coinToss >= 0 && i + coinToss < canvasWidth) {
-      if (pixelGrid[i + coinToss][j + 1].id === CellType.empty.id) {
+      let otherCell = pixelGrid[i + coinToss][j + 1];
+      if (otherCell.id === CellType.empty.id) {
         // Roll down
         swapCells(i, j, i + coinToss, j + 1);
       } else if (
-        pixelGrid[i + coinToss][j + 1].state === CellType.states.fire &&
+        otherCell.state === CellType.states.fire &&
         Math.random() > 0.9
       ) {
         if (Math.random() > cell.flammable) {
@@ -75,7 +74,7 @@ export function processSolid(i, j, canvasWidth, canvasHeight) {
           swapCells(i, j, i + coinToss, j + 1);
         }
       } else if (
-        pixelGrid[i + coinToss][j + 1].state === CellType.states.liquid &&
+        otherCell.state === CellType.states.liquid &&
         Math.random() > 0.95
       ) {
         // Swirl in liquid
@@ -85,8 +84,8 @@ export function processSolid(i, j, canvasWidth, canvasHeight) {
   }
 }
 
-function processStatic(cell, i, j, canvasWidth, canvasHeight) {
-  let cellBelow = pixelGrid[i][j + 1];
+function processStatic(cell, i, j, column, canvasWidth, canvasHeight) {
+  let cellBelow = column[j + 1];
   if (cell.id === CellType.plant.id) {
     // Propagate
     if (Utils.countNeighbors(i, j, pixelGrid, CellType.ice) >= 2) {
@@ -97,8 +96,8 @@ function processStatic(cell, i, j, canvasWidth, canvasHeight) {
       case 0:
         if (
           j > 0 &&
-          (pixelGrid[i][j - 1] === CellType.water ||
-            (pixelGrid[i][j - 1] === CellType.soil &&
+          (column[j - 1] === CellType.water ||
+            (column[j - 1] === CellType.soil &&
               Utils.countNeighbors(i, j, pixelGrid, CellType.plant) <= 3)) &&
           Math.random() > cell.propagation
         ) {
@@ -119,7 +118,7 @@ function processStatic(cell, i, j, canvasWidth, canvasHeight) {
       case 2:
         if (
           j < canvasHeight - 1 &&
-          pixelGrid[i][j + 1] === CellType.water &&
+          column[j + 1] === CellType.water &&
           Math.random() > cell.propagation
         ) {
           createCell(i, j + 1, CellType.plant);
@@ -169,7 +168,7 @@ function processStatic(cell, i, j, canvasWidth, canvasHeight) {
         createCell(i + 1, j - 1, CellType.ice);
       }
       if (
-        pixelGrid[i][j - 1] === CellType.water &&
+        column[j - 1] === CellType.water &&
         Math.random() > cell.propagation
       ) {
         createCell(i, j - 1, CellType.ice);
@@ -193,9 +192,7 @@ function processStatic(cell, i, j, canvasWidth, canvasHeight) {
   }
 }
 
-export function processLiquid(i, j, canvasWidth) {
-  let column = pixelGrid[i];
-  let cell = column[j];
+export function processLiquid(cell, i, j, column, canvasWidth) {
   let cellBelow = column[j + 1];
   // LIQUIDS
   if (cellBelow.id === CellType.empty.id) {
@@ -215,19 +212,21 @@ export function processLiquid(i, j, canvasWidth) {
     // Move liquid around
     let coinToss = Math.random() >= 0.5;
     if (coinToss) {
+      let nextCell = pixelGrid[i - 1][j];
       if (
         i > 0 &&
-        pixelGrid[i - 1][j] != cell &&
-        pixelGrid[i - 1][j].state !== CellType.states.solid
+        nextCell.id !== cell.id &&
+        nextCell.state !== CellType.states.solid
       ) {
         // Move left
         swapCells(i, j, i - 1, j);
       }
     } else {
+      let nextCell = pixelGrid[i + 1][j];
       if (
         i < canvasWidth - 1 &&
-        pixelGrid[i + 1][j] != cell &&
-        pixelGrid[i + 1][j].state !== CellType.states.solid
+        nextCell.id !== cell.id &&
+        nextCell.state !== CellType.states.solid
       ) {
         // Move right
         swapCells(i, j, i + 1, j);

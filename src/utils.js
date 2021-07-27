@@ -17,10 +17,11 @@ export function wipeMatrix(matrix, value) {
 export function initArray(width, height, cell = CellType.empty) {
   let newArray = new Array(width);
   for (let i = 0; i < width; i++) {
-    newArray[i] = new Array(height);
+    let newRow = new Array(height);
     for (let j = 0; j < height; j++) {
-      newArray[i][j] = cell;
+      newRow[j] = cell;
     }
+    newArray[i] = newRow;
   }
   return newArray;
 }

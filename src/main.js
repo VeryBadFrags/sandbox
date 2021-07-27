@@ -14,18 +14,19 @@ function nextState() {
   let iEnd = (i) => (leftToRight ? i < canvasWidth : i >= 0);
 
   for (let i = iStart; iEnd(i); leftToRight ? i++ : i--) {
+    let column = Game.pixelGrid[i];
     for (let j = canvasHeight - 2; j >= 0; j--) {
-      let cell = Game.pixelGrid[i][j];
-      if (cell.id === CellType.empty.id || cell.id === CellType.floor.id) {
+      let cell = column[j];
+      if (cell.id === CellType.empty.id) {
         continue;
       }
 
       switch (cell.state) {
         case CellType.states.solid:
-          Game.processSolid(i, j, canvasWidth, canvasHeight);
+          Game.processSolid(cell, i, j, column, canvasWidth, canvasHeight);
           break;
         case CellType.states.liquid:
-          Game.processLiquid(i, j, canvasWidth);
+          Game.processLiquid(cell, i, j, column, canvasWidth);
           break;
         case CellType.states.fire:
           Game.processFire(
@@ -52,7 +53,7 @@ function nextState() {
   // Tap
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      Game.pixelGrid[Math.floor(canvasWidth / 2) + i][0] = CellType.sand;
+      Game.createCell(Math.floor(canvasWidth / 2) + i, 0, CellType.sand);
     }
   }
 
@@ -122,13 +123,17 @@ function init() {
 
   // Walls
   let halfScreen = Math.floor(canvasHeight / 2);
-  for (let i = canvasWidth / 2 - 25; i < canvasWidth / 2 + 24; i++) {
-    Game.pixelGrid[i][halfScreen] = CellType.floor;
+  for (
+    let i = Math.floor(canvasWidth / 2) - 25;
+    i < Math.floor(canvasWidth / 2) + 24;
+    i++
+  ) {
+    Game.createCell(i, halfScreen, CellType.floor);
   }
 
   for (let j = halfScreen; j >= halfScreen - 15; j--) {
-    Game.pixelGrid[canvasWidth / 2 - 25][j] = CellType.floor;
-    Game.pixelGrid[canvasWidth / 2 + 24][j] = CellType.floor;
+    Game.createCell(Math.floor(canvasWidth / 2) - 25, j, CellType.floor);
+    Game.createCell(Math.floor(canvasWidth / 2 + 24), j, CellType.floor);
   }
 
   Display.drawFull(Game.pixelGrid);
@@ -166,6 +171,12 @@ function init() {
 
   const playPauseButton = document.getElementById("play-pause");
   playPauseButton.addEventListener("click", togglePlay);
+
+  const eraseButton = document.getElementById("erase-button");
+  eraseButton.addEventListener("click", () => {
+    Utils.wipeMatrix(Game.pixelGrid, CellType.empty);
+    Display.drawFull(Game.pixelGrid);
+  });
 
   let lightsCheck = document.getElementById("dynamic-lights");
   lightsCheck.addEventListener("click", (e) => {
