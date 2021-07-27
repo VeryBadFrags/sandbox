@@ -17,6 +17,7 @@ export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
 
   switch (cell.id) {
     case CellType.seed.id:
+      // Germinate
       if (
         Math.random() > 0.999 &&
         Utils.countNeighbors(i, j, pixelGrid, CellType.soil) >= 3
@@ -30,11 +31,14 @@ export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
         createCell(i, j, CellType.water);
         createCell(i, j + 1, CellType.water);
       }
-      if (i > 0 && pixelGrid[i - 1][j + 1] === CellType.ice) {
+      if (i - 1 >= 0 && pixelGrid[i - 1][j + 1].id === CellType.ice.id) {
         createCell(i, j, CellType.water);
         createCell(i - 1, j + 1, CellType.water);
       }
-      if (i < canvasWidth - 1 && pixelGrid[i + 1][j + 1] === CellType.ice) {
+      if (
+        i + 1 < canvasWidth &&
+        pixelGrid[i + 1][j + 1].id === CellType.ice.id
+      ) {
         createCell(i, j, CellType.water);
         createCell(i + 1, j + 1, CellType.water);
       }
@@ -43,12 +47,6 @@ export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
 
   if (cellBelow.id === CellType.empty.id) {
     swapCells(i, j, i, j + 1);
-  } else if (cellBelow.state === CellType.states.fire && Math.random() > 0.9) {
-    if (Math.random() > cell.flammable) {
-      createCell(i, j, CellType.fire);
-    } else {
-      swapCells(i, j, i, j + 1);
-    }
   } else if (cellBelow.state === CellType.states.liquid) {
     // Sink in liquids
     if (
@@ -57,138 +55,164 @@ export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
     ) {
       swapCells(i, j, i, j + 1);
     }
+  } else if (cellBelow.state === CellType.states.fire && Math.random() > 0.9) {
+    if (Math.random() > cell.flammable) {
+      createCell(i, j, CellType.fire);
+    } else {
+      swapCells(i, j, i, j + 1);
+    }
   } else if (cell.granular) {
-    let coinToss = Math.random() >= 0.5 ? 1 : -1;
-    if (i + coinToss >= 0 && i + coinToss < canvasWidth) {
-      let otherCell = pixelGrid[i + coinToss][j + 1];
-      if (otherCell.id === CellType.empty.id) {
-        // Roll down
-        swapCells(i, j, i + coinToss, j + 1);
-      } else if (
-        otherCell.state === CellType.states.fire &&
-        Math.random() > 0.9
-      ) {
-        if (Math.random() > cell.flammable) {
-          createCell(i, j, CellType.fire);
-        } else {
-          swapCells(i, j, i + coinToss, j + 1);
-        }
-      } else if (
-        otherCell.state === CellType.states.liquid &&
-        Math.random() > 0.95
-      ) {
-        // Swirl in liquid
-        swapCells(i, j, i + coinToss, j + 1);
-      }
+    // Fall sideways
+    let direction = Math.random() >= 0.5 ? 1 : -1;
+    if(!rollGrainSideways(cell, i, j, direction, canvasWidth)) {
+      rollGrainSideways(cell, i, j, -direction, canvasWidth);
     }
   }
 }
 
-function processStatic(cell, i, j, column, canvasWidth, canvasHeight) {
-  let cellBelow = column[j + 1];
-  if (cell.id === CellType.plant.id) {
-    // Propagate
-    if (Utils.countNeighbors(i, j, pixelGrid, CellType.ice) >= 2) {
-      return;
+function rollGrainSideways(cell, i, j, direction, canvasWidth) {
+  if (i + direction >= 0 && i + direction < canvasWidth) {
+    let otherCell = pixelGrid[i + direction][j + 1];
+    if (otherCell.id === CellType.empty.id && Math.random() > 0.2) {
+      // Roll down
+      swapCells(i, j, i + direction, j + 1);
+      return true;
+    } else if (
+      otherCell.state === CellType.states.fire &&
+      Math.random() > 0.9
+    ) {
+      if (Math.random() > cell.flammable) {
+        createCell(i, j, CellType.fire);
+      } else {
+        swapCells(i, j, i + direction, j + 1);
+      }
+      return true;
+    } else if (
+      otherCell.state === CellType.states.liquid &&
+      Math.random() > 0.95
+    ) {
+      // Swirl in liquid
+      swapCells(i, j, i + direction, j + 1);
+      return true;
     }
-    let direction = Math.floor(Math.random() * 4);
-    switch (direction) {
-      case 0:
-        if (
-          j > 0 &&
-          (column[j - 1] === CellType.water ||
-            (column[j - 1] === CellType.soil &&
-              Utils.countNeighbors(i, j, pixelGrid, CellType.plant) <= 3)) &&
-          Math.random() > cell.propagation
-        ) {
-          createCell(i, j - 1, CellType.plant);
-        }
-        break;
-      case 1:
-        if (
-          i < canvasWidth - 1 &&
-          (pixelGrid[i + 1][j] === CellType.water ||
-            (pixelGrid[i + 1][j] === CellType.soil &&
-              Utils.countNeighbors(i, j, pixelGrid, CellType.plant) <= 2)) &&
-          Math.random() > cell.propagation
-        ) {
-          createCell(i + 1, j, CellType.plant);
-        }
-        break;
-      case 2:
-        if (
-          j < canvasHeight - 1 &&
-          column[j + 1] === CellType.water &&
-          Math.random() > cell.propagation
-        ) {
-          createCell(i, j + 1, CellType.plant);
-        }
-        break;
-      case 3:
-        if (
-          i > 0 &&
-          (pixelGrid[i - 1][j] === CellType.water ||
-            (pixelGrid[i - 1][j] === CellType.soil &&
-              Utils.countNeighbors(i, j, pixelGrid, CellType.plant) <= 2)) &&
-          Math.random() > cell.propagation
-        ) {
-          createCell(i - 1, j, CellType.plant);
-        }
-        break;
-    }
+  }
+  return false;
+}
 
-    // Spawn seed
-    if (
-      cellBelow.id === CellType.empty.id &&
-      Math.random() > 0.999 &&
-      Utils.countNeighbors(i, j, pixelGrid, CellType.plant) > 5
-    ) {
-      createCell(i, j + 1, CellType.seed);
-    }
-  } else if (cell.id === CellType.ice.id) {
-    // Propagate
-    if (
-      j > 0 &&
-      Utils.countNeighbors(i, j, pixelGrid, CellType.water) >= 2 &&
-      Utils.countNeighbors(i, j, pixelGrid, CellType.ice) <= 4
-    ) {
-      // TODO replace with for loop
+function processStatic(cell, i, j, column, canvasWidth, canvasHeight) {
+  switch (cell.id) {
+    case CellType.plant.id:
+      processPlant(cell, i, j, column, canvasWidth, canvasHeight);
+      break;
+    case CellType.ice.id:
+      processIce(cell, i, j, column, canvasWidth);
+      break;
+  }
+}
+
+function processPlant(cell, i, j, column, canvasWidth, canvasHeight) {
+  let cellBelow = column[j + 1];
+  // Propagate
+  if (Utils.countNeighbors(i, j, pixelGrid, CellType.ice) >= 2) {
+    return;
+  }
+  let direction = Math.floor(Math.random() * 4);
+  switch (direction) {
+    case 0:
       if (
-        i > 0 &&
-        pixelGrid[i - 1][j - 1] === CellType.water &&
+        j > 0 &&
+        (column[j - 1] === CellType.water ||
+          (column[j - 1] === CellType.soil &&
+            Utils.countNeighbors(i, j, pixelGrid, CellType.plant) <= 3)) &&
         Math.random() > cell.propagation
       ) {
-        createCell(i - 1, j - 1, CellType.ice);
+        createCell(i, j - 1, CellType.plant);
       }
+      break;
+    case 1:
       if (
         i < canvasWidth - 1 &&
-        pixelGrid[i + 1][j - 1] === CellType.water &&
+        (pixelGrid[i + 1][j] === CellType.water ||
+          (pixelGrid[i + 1][j] === CellType.soil &&
+            Utils.countNeighbors(i, j, pixelGrid, CellType.plant) <= 2)) &&
         Math.random() > cell.propagation
       ) {
-        createCell(i + 1, j - 1, CellType.ice);
+        createCell(i + 1, j, CellType.plant);
       }
+      break;
+    case 2:
       if (
-        column[j - 1] === CellType.water &&
+        j < canvasHeight - 1 &&
+        column[j + 1] === CellType.water &&
         Math.random() > cell.propagation
       ) {
-        createCell(i, j - 1, CellType.ice);
+        createCell(i, j + 1, CellType.plant);
       }
-    }
+      break;
+    case 3:
+      if (
+        i > 0 &&
+        (pixelGrid[i - 1][j] === CellType.water ||
+          (pixelGrid[i - 1][j] === CellType.soil &&
+            Utils.countNeighbors(i, j, pixelGrid, CellType.plant) <= 2)) &&
+        Math.random() > cell.propagation
+      ) {
+        createCell(i - 1, j, CellType.plant);
+      }
+      break;
+  }
 
-    // Drip
-    if (cellBelow.id === CellType.empty.id && Math.random() > cell.drip) {
-      createCell(i, j + 1, CellType.water);
-    }
-    // Melt
+  // Spawn seed
+  if (
+    cellBelow.id === CellType.empty.id &&
+    Math.random() > 0.999 &&
+    Utils.countNeighbors(i, j, pixelGrid, CellType.plant) > 5
+  ) {
+    createCell(i, j + 1, CellType.seed);
+  }
+}
+
+function processIce(cell, i, j, column, canvasWidth) {
+  let cellBelow = column[j + 1];
+  // Propagate
+  if (
+    j > 0 &&
+    Utils.countNeighbors(i, j, pixelGrid, CellType.water) >= 2 &&
+    Utils.countNeighbors(i, j, pixelGrid, CellType.ice) <= 4
+  ) {
+    // TODO replace with for loop
     if (
-      (Math.random() > cell.lifetime &&
-        Utils.countNeighbors(i, j, pixelGrid, CellType.ice) < 6) ||
-      Utils.testNeighbors(i, j, pixelGrid, (c) =>
-        [CellType.fire, CellType.fire2, CellType.fire3].includes(c)
-      ) > 0
+      i > 0 &&
+      pixelGrid[i - 1][j - 1] === CellType.water &&
+      Math.random() > cell.propagation
     ) {
-      createCell(i, j, cell.melt);
+      createCell(i - 1, j - 1, CellType.ice);
     }
+    if (
+      i < canvasWidth - 1 &&
+      pixelGrid[i + 1][j - 1] === CellType.water &&
+      Math.random() > cell.propagation
+    ) {
+      createCell(i + 1, j - 1, CellType.ice);
+    }
+    if (column[j - 1] === CellType.water && Math.random() > cell.propagation) {
+      createCell(i, j - 1, CellType.ice);
+    }
+  }
+
+  // Drip
+  if (cellBelow.id === CellType.empty.id && Math.random() > cell.drip) {
+    createCell(i, j + 1, CellType.water);
+  }
+  // Melt
+  if (
+    (Math.random() > cell.lifetime &&
+      Utils.countNeighbors(i, j, pixelGrid, CellType.ice) < 6) ||
+    Utils.testNeighbors(i, j, pixelGrid, (c) =>
+      [CellType.fire, CellType.fire2, CellType.fire3].includes(c)
+    ) > 0
+  ) {
+    createCell(i, j, cell.melt);
   }
 }
 
@@ -210,42 +234,35 @@ export function processLiquid(cell, i, j, column, canvasWidth) {
     }
   } else if (cellBelow.state !== CellType.states.solid) {
     // Move liquid around
-    let coinToss = Math.random() >= 0.5;
-    if (coinToss) {
-      let nextCell = pixelGrid[i - 1][j];
-      if (
-        i > 0 &&
-        nextCell.id !== cell.id &&
-        nextCell.state !== CellType.states.solid
-      ) {
-        // Move left
-        swapCells(i, j, i - 1, j);
-      }
-    } else {
-      let nextCell = pixelGrid[i + 1][j];
-      if (
-        i < canvasWidth - 1 &&
-        nextCell.id !== cell.id &&
-        nextCell.state !== CellType.states.solid
-      ) {
-        // Move right
-        swapCells(i, j, i + 1, j);
-      }
+    let coinToss = Math.random() >= 0.5 ? 1 : -1;
+    if (!moveLiquidSideways(cell, i, j, coinToss, canvasWidth)) {
+      moveLiquidSideways(cell, i, j, -coinToss, canvasWidth);
     }
   }
 }
 
+function moveLiquidSideways(cell, i, j, direction, canvasWidth) {
+  if(i + direction >= 0 && i + direction < canvasWidth) {
+    let nextCell = pixelGrid[i + direction][j];
+    if(nextCell.id !== cell.id &&
+      nextCell.state !== CellType.states.solid) {
+        swapCells(i, j, i + direction, j);
+        return true;
+      }
+  }
+  return false;
+}
+
 export function processFire(
+  cell,
   i,
   j,
+  column,
   canvasWidth,
   canvasHeight,
   lightMap,
   dynamicLights
 ) {
-  let column = pixelGrid[i];
-  let cell = column[j];
-
   // Propagate
   let a = Math.floor(Math.random() * 3) - 1;
   let b = Math.floor(Math.random() * 3) - 1;
@@ -266,8 +283,8 @@ export function processFire(
 
   // Extinguish
   if (
-    Utils.testNeighbors(i, j, pixelGrid, (test) => test.dousing) >= 2 ||
-    (Math.random() > cell.lifetime && !Utils.isFuelAround(i, j, pixelGrid))
+    (Math.random() > cell.lifetime && !Utils.isFuelAround(i, j, pixelGrid)) ||
+    Utils.testNeighbors(i, j, pixelGrid, (test) => test.dousing) >= 2
   ) {
     createCell(i, j, cell.nextCell);
   } else if (
@@ -276,7 +293,6 @@ export function processFire(
     column[j - 1].id === CellType.empty.id
     // || column[j - 1].flammable
   ) {
-    // TODO use melt
     // Evolve
     createCell(i, j - 1, Math.random() >= 0.5 ? cell.nextCell : cell);
   }
@@ -310,9 +326,7 @@ export function processFire(
   //  lightMap[x][y] = lightMap[x][y] + 10;
 }
 
-export function processGas(i, j, canvasWidth) {
-  let column = pixelGrid[i];
-  let cell = column[j];
+export function processGas(cell, i, j, column, canvasWidth) {
   // SMOKE
   if (Math.random() > cell.lifetime) {
     destroyCell(i, j);

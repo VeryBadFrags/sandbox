@@ -29,9 +29,10 @@ function nextState() {
           Game.processLiquid(cell, i, j, column, canvasWidth);
           break;
         case CellType.states.fire:
-          Game.processFire(
+          Game.processFire(cell,
             i,
             j,
+            column,
             canvasWidth,
             canvasHeight,
             lightMap,
@@ -39,14 +40,10 @@ function nextState() {
           );
           break;
         case CellType.states.gas:
-          Game.processGas(i, j, canvasWidth);
+          Game.processGas(cell, i, j, column, canvasWidth);
           break;
       }
     }
-  }
-
-  for (let i = 0; i < canvasWidth; i++) {
-    // destroy last row
     Game.destroyCell(i, canvasHeight - 1);
   }
 

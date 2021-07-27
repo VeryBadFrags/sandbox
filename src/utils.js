@@ -27,15 +27,17 @@ export function initArray(width, height, cell = CellType.empty) {
 }
 
 export function isFuelAround(x, y, pixelGrid) {
+  let xMax = Math.min(x + 1, pixelGrid.length - 1);
+  let yMax = Math.min(y + 1, pixelGrid[0].length - 1);
   for (
     let i = Math.max(x - 1, 0);
-    i <= Math.min(x + 1, pixelGrid.length - 1);
+    i <= xMax;
     i++
   ) {
     let column = pixelGrid[i];
     for (
       let j = Math.max(y - 1, 0);
-      j <= Math.min(y + 1, column.length - 1);
+      j <= yMax;
       j++
     ) {
       if (i !== x || j !== y) {
@@ -46,21 +48,24 @@ export function isFuelAround(x, y, pixelGrid) {
   return false;
 }
 
-export function countNeighbors(x, y, pixelGrid, cellTypes) {
+export function countNeighbors(x, y, pixelGrid, neighType) {
+  let neighTypeId = neighType.id;
   let count = 0;
+  let xMax = Math.min(x + 1, pixelGrid.length - 1);
+  let yMax = Math.min(y + 1, pixelGrid[0].length - 1);
   for (
     let i = Math.max(x - 1, 0);
-    i <= Math.min(x + 1, pixelGrid.length - 1);
+    i <= xMax;
     i++
   ) {
     let column = pixelGrid[i];
     for (
       let j = Math.max(y - 1, 0);
-      j <= Math.min(y + 1, column.length - 1);
+      j <= yMax;
       j++
     ) {
       if (i !== x || j !== y) {
-        if (column[j] === cellTypes) {
+        if (column[j].id === neighTypeId) {
           count++;
         }
       }
@@ -69,21 +74,23 @@ export function countNeighbors(x, y, pixelGrid, cellTypes) {
   return count;
 }
 
-export function testNeighbors(x, y, pixelGrid, testNeighbor) {
+export function testNeighbors(x, y, pixelGrid, testFunction) {
   let count = 0;
+  let xMax = Math.min(x + 1, pixelGrid.length - 1);
+  let yMax = Math.min(y + 1, pixelGrid[0].length - 1);
   for (
     let i = Math.max(x - 1, 0);
-    i <= Math.min(x + 1, pixelGrid.length - 1);
+    i <= xMax;
     i++
   ) {
     let column = pixelGrid[i];
     for (
       let j = Math.max(y - 1, 0);
-      j <= Math.min(y + 1, column.length - 1);
+      j <= yMax;
       j++
     ) {
       if (i !== x || j !== y) {
-        if (testNeighbor(column[j])) {
+        if (testFunction(column[j])) {
           count++;
         }
       }
