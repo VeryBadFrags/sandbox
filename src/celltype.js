@@ -2,11 +2,11 @@ export const states = {
   liquid: "liquid",
   solid: "solid",
   gas: "gas",
-  fire:"fire"
-}
+  fire: "fire",
+};
 
 export const empty = {
-  id:0,
+  id: 0,
   name: "✏️ Eraser",
   key: "e",
   color: "#000000",
@@ -15,7 +15,7 @@ export const empty = {
 
 // FIRE
 export const smoke = {
-  id:9,
+  id: 9,
   color: "#333333",
   density: 0.1,
   state: states.gas,
@@ -23,7 +23,7 @@ export const smoke = {
   nextCell: empty,
 };
 export const fire3 = {
-  id:8,
+  id: 8,
   color: "#ff8800",
   density: 0.1,
   state: states.fire,
@@ -32,7 +32,7 @@ export const fire3 = {
   nextCell: smoke,
 };
 export const fire2 = {
-  id:7,
+  id: 7,
   color: "#ff4400",
   density: 0.1,
   state: states.fire,
@@ -41,9 +41,9 @@ export const fire2 = {
   nextCell: fire3,
 };
 export const fire = {
-  id:6,
+  id: 6,
   name: "🔥 Fire",
-  key:"f",
+  key: "f",
   color: "#e00000",
   density: 0.2,
   state: states.fire,
@@ -54,7 +54,7 @@ export const fire = {
 
 // LIQUIDS
 export const water = {
-  id:2,
+  id: 2,
   name: "🌊 Water",
   key: "w",
   color: "#2222ff",
@@ -64,19 +64,19 @@ export const water = {
 };
 
 export const oil = {
-  id:3,
+  id: 3,
   name: "🛢️ Oil",
   key: "o",
   color: "#963e48",
   density: 0.5,
   state: states.liquid,
-  flammable: 0.7,
+  flammable: 0.2,
   melt: fire,
 };
 
 // SOLIDS
 export const floor = {
-  id:4,
+  id: 4,
   name: "🧱 Concrete",
   key: "c",
   color: "#aaaaaa",
@@ -85,7 +85,7 @@ export const floor = {
   static: true,
 };
 export const ice = {
-  id:10,
+  id: 10,
   name: "🧊 Ice",
   key: "i",
   color: "#00eeee",
@@ -98,7 +98,7 @@ export const ice = {
   melt: water,
 };
 export const soil = {
-  id:11,
+  id: 11,
   name: "🍂 Soil",
   key: "l",
   color: "#322110",
@@ -108,13 +108,13 @@ export const soil = {
   dousing: false,
 };
 export const wood = {
-  id:12,
+  id: 12,
   name: "🌳 Wood",
   key: "d",
   color: "#654321",
   density: 20,
   state: states.solid,
-  flammable: 0.99,
+  flammable: 0.9,
   melt: fire,
   ash: soil,
   static: true,
@@ -126,12 +126,12 @@ export const coal = {
   color: "#222",
   density: 30,
   state: states.solid,
-  flammable: 0.9999,
+  flammable: 0.995,
   melt: fire,
   granular: true,
 };
 export const sand = {
-  id:1,
+  id: 1,
   name: "🏜️ Sand",
   key: "s",
   color: "#c2ff80",
@@ -141,27 +141,27 @@ export const sand = {
   dousing: true,
 };
 export const salt = {
-  id:13,
+  id: 13,
   name: "🧂 Salt",
   key: "m",
   color: "#eeeeee",
   state: states.solid,
   density: 10,
   granular: true,
-}
+};
 export const powder = {
-  id:14,
+  id: 14,
   name: "💣 Gunpowder",
   key: "g",
   color: "#555555",
   density: 4,
   state: states.solid,
   granular: true,
-  flammable: 0.4,
+  flammable: 0.001,
   melt: fire,
 };
 export const crystals = {
-  id:5,
+  id: 5,
   name: "💎 Crystals",
   key: "y",
   color: "#ff80b6",
@@ -169,28 +169,28 @@ export const crystals = {
   state: states.solid,
 };
 export const seed = {
-  id:17,
-  name:"🌱 Seed",
+  id: 17,
+  name: "🌱 Seed",
   key: "z",
   color: "#b5651d",
   density: 5,
   granular: true,
-  flammable: 0.95,
+  flammable: 0.8,
   melt: soil,
   //ash: soil,
   state: states.solid,
-}
+};
 export const plant = {
-  id:16,
+  id: 16,
   name: "🌿 Plant",
-  key:"p",
+  key: "p",
   color: "#00bf00",
   state: states.solid,
   density: 10,
-  propagation: 0.7,
+  propagation: 0.5,
   propTarget: water,
   spawn: seed,
-  flammable: 0.81,
+  flammable: 0.7,
   melt: fire,
   ash: soil,
   static: true,
