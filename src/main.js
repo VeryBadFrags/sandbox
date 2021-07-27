@@ -8,6 +8,8 @@ let canvasWidth, canvasHeight;
 
 const canvas = document.getElementById("game");
 
+let pascalsLaw = false;
+
 function nextState() {
   let leftToRight = Math.random() >= 0.5;
   let iStart = leftToRight ? 0 : canvasWidth - 1;
@@ -26,7 +28,7 @@ function nextState() {
           Game.processSolid(cell, i, j, column, canvasWidth, canvasHeight);
           break;
         case CellType.states.liquid:
-          Game.processLiquid(cell, i, j, column, canvasWidth);
+          Game.processLiquid(cell, i, j, column, canvasWidth, canvasHeight, pascalsLaw);
           break;
         case CellType.states.fire:
           Game.processFire(cell,

@@ -64,7 +64,7 @@ export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
   } else if (cell.granular) {
     // Fall sideways
     let direction = Math.random() >= 0.5 ? 1 : -1;
-    if(!rollGrainSideways(cell, i, j, direction, canvasWidth)) {
+    if (!rollGrainSideways(cell, i, j, direction, canvasWidth)) {
       rollGrainSideways(cell, i, j, -direction, canvasWidth);
     }
   }
@@ -216,7 +216,15 @@ function processIce(cell, i, j, column, canvasWidth) {
   }
 }
 
-export function processLiquid(cell, i, j, column, canvasWidth) {
+export function processLiquid(
+  cell,
+  i,
+  j,
+  column,
+  canvasWidth,
+  canvasHeight,
+  pascalsLaw
+) {
   let cellBelow = column[j + 1];
   // LIQUIDS
   if (cellBelow.id === CellType.empty.id) {
@@ -232,6 +240,17 @@ export function processLiquid(cell, i, j, column, canvasWidth) {
     ) {
       swapCells(i, j, i, j + 1);
     }
+  } else if (
+    pascalsLaw &&
+    j - 1 >= 0 &&
+    pixelGrid[i][j - 1].id === CellType.empty.id
+    && i-1 >= 0 && pixelGrid[i-1][j].id === cell.id
+    && i+1 < canvasWidth && pixelGrid[i+1][j].id === cell.id
+  ) {
+    let higherCell = Utils.getHigherCell(cell, i, j, pixelGrid);
+    if (higherCell) {
+      swapCells(i, j-1, higherCell[0], higherCell[1]);
+    }
   } else if (cellBelow.state !== CellType.states.solid) {
     // Move liquid around
     let coinToss = Math.random() >= 0.5 ? 1 : -1;
@@ -242,13 +261,12 @@ export function processLiquid(cell, i, j, column, canvasWidth) {
 }
 
 function moveLiquidSideways(cell, i, j, direction, canvasWidth) {
-  if(i + direction >= 0 && i + direction < canvasWidth) {
+  if (i + direction >= 0 && i + direction < canvasWidth) {
     let nextCell = pixelGrid[i + direction][j];
-    if(nextCell.id !== cell.id &&
-      nextCell.state !== CellType.states.solid) {
-        swapCells(i, j, i + direction, j);
-        return true;
-      }
+    if (nextCell.id !== cell.id && nextCell.state !== CellType.states.solid) {
+      swapCells(i, j, i + direction, j);
+      return true;
+    }
   }
   return false;
 }

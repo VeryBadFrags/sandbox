@@ -29,17 +29,9 @@ export function initArray(width, height, cell = CellType.empty) {
 export function isFuelAround(x, y, pixelGrid) {
   let xMax = Math.min(x + 1, pixelGrid.length - 1);
   let yMax = Math.min(y + 1, pixelGrid[0].length - 1);
-  for (
-    let i = Math.max(x - 1, 0);
-    i <= xMax;
-    i++
-  ) {
+  for (let i = Math.max(x - 1, 0); i <= xMax; i++) {
     let column = pixelGrid[i];
-    for (
-      let j = Math.max(y - 1, 0);
-      j <= yMax;
-      j++
-    ) {
+    for (let j = Math.max(y - 1, 0); j <= yMax; j++) {
       if (i !== x || j !== y) {
         if (column[j].flammable) return true;
       }
@@ -48,22 +40,106 @@ export function isFuelAround(x, y, pixelGrid) {
   return false;
 }
 
+export function getHigherCell(cell, x, y, pixelGrid) {
+  let explored = [];
+  let coords = hashCoordinates(x, y);
+  explored.push(coords);
+  let highest = findHigherCell(cell, x, y, pixelGrid, explored, y);
+  return highest;
+}
+
+function findHigherCell(cell, x, y, pixelGrid, explored, inputHeight) {
+  {
+    let upCoordinates = hashCoordinates(x, y - 1);
+    if (
+      y - 1 >= 0 &&
+      pixelGrid[x][y - 1].id === cell.id &&
+      !explored.includes(upCoordinates)
+    ) {
+      explored.push(upCoordinates);
+      if (y - 1 < inputHeight - 1) {
+        return [x, y - 1];
+      }
+      let newHeight = findHigherCell(
+        pixelGrid[x][y - 1],
+        x,
+        y - 1,
+        pixelGrid,
+        explored,
+        inputHeight
+      );
+      if (newHeight) return newHeight;
+    }
+  }
+
+  let leftCoordinates = hashCoordinates(x - 1, y);
+  if (
+    x - 1 >= 0 &&
+    pixelGrid[x - 1][y].id === cell.id &&
+    !explored.includes(leftCoordinates)
+  ) {
+    explored.push(leftCoordinates);
+    let newHeight = findHigherCell(
+      pixelGrid[x - 1][y],
+      x - 1,
+      y,
+      pixelGrid,
+      explored,
+      inputHeight
+    );
+    if (newHeight) return newHeight;
+  }
+
+  let rightCoordinates = hashCoordinates(x + 1, y);
+  if (
+    x + 1 < pixelGrid.length &&
+    pixelGrid[x + 1][y].id === cell.id &&
+    !explored.includes(rightCoordinates)
+  ) {
+    explored.push(rightCoordinates);
+    let newHeight = findHigherCell(
+      pixelGrid[x + 1][y],
+      x + 1,
+      y,
+      pixelGrid,
+      explored,
+      inputHeight
+    );
+    if (newHeight) return newHeight;
+  }
+
+  let downCoordinates = hashCoordinates(x, y + 1);
+  if (
+    y + 1 < pixelGrid[x].length &&
+    pixelGrid[x][y + 1].id === cell.id &&
+    !explored.includes(downCoordinates)
+  ) {
+    explored.push(downCoordinates);
+    let newHeight = findHigherCell(
+      cell,
+      x,
+      y + 1,
+      pixelGrid,
+      explored,
+      inputHeight
+    );
+    if (newHeight) return newHeight;
+  }
+  return null;
+}
+
+function hashCoordinates(x, y) {
+  return x * 3 + y * 5;
+}
+
 export function countNeighbors(x, y, pixelGrid, neighType) {
   let neighTypeId = neighType.id;
   let count = 0;
   let xMax = Math.min(x + 1, pixelGrid.length - 1);
   let yMax = Math.min(y + 1, pixelGrid[0].length - 1);
-  for (
-    let i = Math.max(x - 1, 0);
-    i <= xMax;
-    i++
-  ) {
+  for (let i = Math.max(x - 1, 0); i <= xMax; i++) {
     let column = pixelGrid[i];
-    for (
-      let j = Math.max(y - 1, 0);
-      j <= yMax;
-      j++
-    ) {
+    for (let j = Math.max(y - 1, 0); j <= yMax; j++) {
       if (i !== x || j !== y) {
         if (column[j].id === neighTypeId) {
           count++;
@@ -78,17 +154,9 @@ export function testNeighbors(x, y, pixelGrid, testFunction) {
   let count = 0;
   let xMax = Math.min(x + 1, pixelGrid.length - 1);
   let yMax = Math.min(y + 1, pixelGrid[0].length - 1);
-  for (
-    let i = Math.max(x - 1, 0);
-    i <= xMax;
-    i++
-  ) {
+  for (let i = Math.max(x - 1, 0); i <= xMax; i++) {
     let column = pixelGrid[i];
-    for (
-      let j = Math.max(y - 1, 0);
-      j <= yMax;
-      j++
-    ) {
+    for (let j = Math.max(y - 1, 0); j <= yMax; j++) {
       if (i !== x || j !== y) {
         if (testFunction(column[j])) {
           count++;
@@ -187,7 +255,7 @@ export function hslToHex(h, s, l) {
 }
 
 export function getDistance(a1, b1, a2, b2) {
-  return Math.sqrt(((a2 - a1) ** 2) + ((b2 - b1) ** 2));
+  return Math.sqrt((a2 - a1) ** 2 + (b2 - b1) ** 2);
 }
 
 export function createIntermediatePoints(a1, b1, a2, b2) {
