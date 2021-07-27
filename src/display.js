@@ -23,21 +23,52 @@ export function drawFull(gameState, lightMap) {
 }
 
 export function drawPartial(deltaBoard, fullBoard, lightMap, dynamicLight) {
+  let gameWidth = deltaBoard.length;
   let gameHeight = deltaBoard[0].length;
-  for (let i = 0; i < deltaBoard.length; i++) {
-    for (let j = 0; j < gameHeight; j++) {
-      let cell = deltaBoard[i][j];
-      if (cell) {
-        if (dynamicLight) {
+  // Test dynamicLight first for performances
+  if (dynamicLight) {
+    for (let i = 0; i < gameWidth; i++) {
+      for (let j = 0; j < gameHeight; j++) {
+        let cell = deltaBoard[i][j];
+        if (cell) {
           context.fillStyle = getHexColor(cell, lightMap ? lightMap[i][j] : 0);
-        } else {
-          context.fillStyle = cell.color;
+          context.fillRect(i, j, 1, 1);
+        } else if (lightMap && lightMap[i][j] > 0) {
+          cell = fullBoard[i][j];
+          context.fillStyle = getHexColor(cell, lightMap[i][j]);
+          context.fillRect(i, j, 1, 1);
         }
-        context.fillRect(i, j, 1, 1);
-      } else if (dynamicLight && lightMap && lightMap[i][j] > 0) {
-        cell = fullBoard[i][j];
-        context.fillStyle = getHexColor(cell, lightMap[i][j]);
-        context.fillRect(i, j, 1, 1);
+      }
+    }
+  } else {
+    for (let j = 0; j < gameHeight; j++) {
+      let lastPixel = null;
+      let firstColumn = null;
+      for (let i = 0; i < gameWidth; i++) {
+        let cell = deltaBoard[i][j];
+
+        if (cell) {
+          if (!lastPixel) {
+            lastPixel = cell;
+            firstColumn = i;
+          } else if (cell.id !== lastPixel.id) {
+            context.fillStyle = lastPixel.color;
+            context.fillRect(firstColumn, j, i - firstColumn, 1);
+            lastPixel = cell;
+            firstColumn = i;
+          } else if (i === gameWidth - 1) {
+            // TODO missing case where left cell is empty
+            context.fillStyle = cell.color;
+            context.fillRect(firstColumn, j, i - firstColumn + 1, 1);
+          }
+        } else {
+          if (lastPixel) {
+            context.fillStyle = lastPixel.color;
+            context.fillRect(firstColumn, j, i - firstColumn, 1);
+          }
+          lastPixel = null;
+          firstColumn = null;
+        }
       }
     }
   }

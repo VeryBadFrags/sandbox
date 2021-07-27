@@ -126,7 +126,7 @@ export const coal = {
   color: "#222",
   density: 30,
   state: states.solid,
-  flammable: 0.995,
+  flammable: 0.99,
   melt: fire,
   granular: true,
 };

@@ -410,16 +410,23 @@ function createCell(x, y, cellType) {
 const interval = 16.667;
 let timer = 0;
 let lastTime = 0;
-let requestDrawFull = false;
 let skipFrames = false;
 let dynamicLights = false;
 
 let lightMap;
 let play = true;
+const fpsVal = document.getElementById("fps-val");
+let fpsTimer = 0;
 function update(time = 0) {
   const deltaTime = time - lastTime;
   lastTime = time;
+
   timer += deltaTime;
+  fpsTimer += deltaTime;
+  if (fpsTimer > 1000) {
+    fpsVal.innerText = Math.round(1000 / deltaTime);
+    fpsTimer = 0;
+  }
 
   if (timer > interval) {
     if (play) {
@@ -429,19 +436,9 @@ function update(time = 0) {
       nextState();
     }
 
-    if (!skipFrames || timer <= 2 * interval) {
-      if (requestDrawFull) {
-        Display.drawFull(Game.pixelGrid, lightMap);
-        requestDrawFull = false;
-      } else {
-        Display.drawPartial(
-          Game.delta,
-          Game.pixelGrid,
-          lightMap,
-          dynamicLights
-        );
-      }
-    }
+    // if (!skipFrames || timer <= 2 * interval) {
+    Display.drawPartial(Game.delta, Game.pixelGrid, lightMap, dynamicLights);
+    // }
     Utils.wipeMatrix(Game.delta, null);
     timer = timer % interval;
   }
@@ -455,6 +452,7 @@ function init() {
 
   lightMap = Utils.initArray(canvasWidth, canvasHeight, 0);
 
+  // Walls
   let halfScreen = Math.floor(canvasHeight / 2);
   for (let i = canvasWidth / 2 - 25; i < canvasWidth / 2 + 24; i++) {
     Game.pixelGrid[i][halfScreen] = CellType.floor;
@@ -467,7 +465,8 @@ function init() {
 
   Display.drawFull(Game.pixelGrid);
 
-  mainBrush = new Brush(() => (requestDrawFull = true));
+  // Brush
+  mainBrush = new Brush();
   mainBrush.init();
 
   let togglePlay = () => {

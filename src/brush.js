@@ -12,10 +12,6 @@ let brushSize = 4;
 let brushOpacity = 10;
 
 export default class Brush {
-  constructor(requestDrawFull) {
-    this.requestDrawFull = requestDrawFull;
-  }
-
   setBrushType(brush) {
     brushType = brush;
     brushTypeSelector.value = brush.name;
@@ -74,7 +70,6 @@ export default class Brush {
         Game.delta[x][y] = brushType;
         Game.pixelGrid[x][y] = brushType;
       }
-      // this.requestDrawFull();
     };
 
     brushOpacitySlider.addEventListener("click", function (e) {
