@@ -14,6 +14,10 @@ module.exports = {
         sourceMap: false,
       },
     ],
-    // ["@snowpack/plugin-optimize", {}],
   ],
+  optimize: {
+    bundle: true,
+    minify: true,
+    target: 'es2018',
+  },
 };

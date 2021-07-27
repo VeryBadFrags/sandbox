@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/VeryBadFrags/sandbox#readme",
   "dependencies": {
-    "@snowpack/plugin-optimize": "^0.2.13",
     "@snowpack/plugin-sass": "^1.4.0",
     "snowpack": "^3.8.3"
   },
