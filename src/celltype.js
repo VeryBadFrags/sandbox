@@ -227,7 +227,7 @@ CellsMap.forEach((k) => {
     let opt = document.createElement("option");
     opt.value = cell.name;
     opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
-    if (cell === sand) {
+    if (cell === floor) {
       opt.selected = "selected";
     }
     brushTypeSelector.appendChild(opt);

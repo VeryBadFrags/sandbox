@@ -7,9 +7,9 @@ const brushSizeInput = document.getElementById("brush-size");
 const brushSizeSlider = document.getElementById("brush-size-slider");
 const brushOpacitySlider = document.getElementById("brush-opacity");
 
-let brushType = CellType.sand;
-let brushSize = 4;
-let brushOpacity = 10;
+let brushType = CellType.floor;
+let brushSize = 2;
+let brushOpacity = 100;
 
 export default class Brush {
   setBrushType(brush) {
