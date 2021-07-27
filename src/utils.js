@@ -121,23 +121,23 @@ export function hexToHSL(hex) {
       })
       .join("");
   }
-  var result = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})[\da-z]{0,0}$/i.exec(hex);
+  let result = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})[\da-z]{0,0}$/i.exec(hex);
   if (!result) {
     return null;
   }
-  var r = parseInt(result[1], 16);
-  var g = parseInt(result[2], 16);
-  var b = parseInt(result[3], 16);
+  let r = parseInt(result[1], 16);
+  let g = parseInt(result[2], 16);
+  let b = parseInt(result[3], 16);
   (r /= 255), (g /= 255), (b /= 255);
-  var max = Math.max(r, g, b),
+  let max = Math.max(r, g, b),
     min = Math.min(r, g, b);
-  var h,
+  let h,
     s,
     l = (max + min) / 2;
   if (max == min) {
     h = s = 0;
   } else {
-    var d = max - min;
+    let d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
     switch (max) {
       case r:
@@ -175,9 +175,7 @@ export function hslToHex(h, s, l) {
 }
 
 export function getDistance(a1, b1, a2, b2) {
-  return Math.sqrt(
-    Math.pow(Math.abs(a2 - a1), 2) + Math.pow(Math.abs(b2 - b1), 2)
-  );
+  return Math.sqrt(((a2 - a1) ** 2) + ((b2 - b1) ** 2));
 }
 
 export function createIntermediatePoints(a1, b1, a2, b2) {
@@ -186,11 +184,7 @@ export function createIntermediatePoints(a1, b1, a2, b2) {
   let bDistance = Math.abs(b2 - b1);
   if (aDistance > bDistance) {
     let leftToRight = a1 < a2;
-    for (
-      let i = a1;
-      leftToRight ? i <= a2 : i >= a2;
-      leftToRight ? i++ : i--
-    ) {
+    for (let i = a1; leftToRight ? i <= a2 : i >= a2; leftToRight ? i++ : i--) {
       let progress = (i - Math.min(a1, a2)) / aDistance;
       let j;
       if (leftToRight) {
@@ -207,7 +201,7 @@ export function createIntermediatePoints(a1, b1, a2, b2) {
       upToDown ? j < b2 : j > b2;
       upToDown ? j++ : j--
     ) {
-      let progress = (j - Math.min(b1,b2)) / bDistance;
+      let progress = (j - Math.min(b1, b2)) / bDistance;
       let i;
       if (upToDown) {
         i = Math.round((a2 - a1) * progress + a1);
