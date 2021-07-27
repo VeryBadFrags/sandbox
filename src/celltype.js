@@ -190,7 +190,7 @@ export const plant = {
   propagation: 0.5,
   propTarget: water,
   spawn: seed,
-  flammable: 0.7,
+  flammable: 0.6,
   melt: fire,
   ash: soil,
   static: true,
