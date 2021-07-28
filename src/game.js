@@ -260,10 +260,9 @@ export function processLiquid(
 
 function moveLiquidSideways(cell, i, j, direction, canvasWidth) {
   if (i + direction >= 0 && i + direction < canvasWidth) {
-    if (
-      pixelGrid[i + direction][j + 1] === CellType.empty ||
-      Math.random() >= 0.5
-    ) {
+    if (pixelGrid[i + direction][j + 1] === CellType.empty) {
+      swapCells(i, j, i + direction, j + 1);
+    } else if (Math.random() >= 0.5) { // TODO use liquid thickness instead of 0.5
       let nextCell = pixelGrid[i + direction][j];
       if (nextCell !== cell && nextCell.state !== CellType.states.solid) {
         swapCells(i, j, i + direction, j);
