@@ -8,8 +8,7 @@ export const states = {
 export const empty = {
   name: "✏️ Eraser",
   key: "e",
-  color: "#000000",
-  density: 0.5,
+  color: "#000",
 };
 
 // FIRE

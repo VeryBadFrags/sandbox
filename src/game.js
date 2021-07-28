@@ -35,10 +35,7 @@ export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
         createCell(i, j, CellType.water);
         createCell(i - 1, j + 1, CellType.water);
       }
-      if (
-        i + 1 < canvasWidth &&
-        pixelGrid[i + 1][j + 1] === CellType.ice
-      ) {
+      if (i + 1 < canvasWidth && pixelGrid[i + 1][j + 1] === CellType.ice) {
         createCell(i, j, CellType.water);
         createCell(i + 1, j + 1, CellType.water);
       }
@@ -208,8 +205,11 @@ function processIce(cell, i, j, column, canvasWidth) {
   if (
     (Math.random() > cell.lifetime &&
       Utils.countNeighbors(i, j, pixelGrid, CellType.ice) < 6) ||
-    Utils.testNeighbors(i, j, pixelGrid, (c) =>
-      [CellType.fire, CellType.fire2, CellType.fire3].includes(c)
+    Utils.testNeighbors(
+      i,
+      j,
+      pixelGrid,
+      (c) => c.state === CellType.states.fire
     ) > 0
   ) {
     createCell(i, j, cell.melt);
@@ -230,42 +230,45 @@ export function processLiquid(
   if (cellBelow === CellType.empty) {
     // Move down
     swapCells(i, j, i, j + 1);
-  } else if (
-    cellBelow !== cell &&
-    cellBelow.state === CellType.states.liquid
-  ) {
+  } else if (cellBelow.state === CellType.states.liquid) {
     if (
+      cellBelow !== cell &&
       Math.random() <=
-      (cell.density - cellBelow.density) / cellBelow.density / 5
+        (cell.density - cellBelow.density) / cellBelow.density / 5
     ) {
       swapCells(i, j, i, j + 1);
-    }
-  } else if (
-    pascalsLaw &&
-    j - 1 >= 0 &&
-    pixelGrid[i][j - 1] === CellType.empty
-    && i-1 >= 0 && pixelGrid[i-1][j] === cell
-    && i+1 < canvasWidth && pixelGrid[i+1][j] === cell
-  ) {
-    let higherCell = Utils.getHigherCell(cell, i, j, pixelGrid);
-    if (higherCell) {
-      swapCells(i, j-1, higherCell[0], higherCell[1]);
-    }
-  } else if (cellBelow.state !== CellType.states.solid) {
-    // Move liquid around
-    let coinToss = Math.random() >= 0.5 ? 1 : -1;
-    if (!moveLiquidSideways(cell, i, j, coinToss, canvasWidth)) {
-      moveLiquidSideways(cell, i, j, -coinToss, canvasWidth);
+    } else if (
+      pascalsLaw &&
+      j - 1 >= 0 &&
+      pixelGrid[i][j - 1] === CellType.empty &&
+      i - 1 >= 0 &&
+      pixelGrid[i - 1][j] === cell &&
+      i + 1 < canvasWidth &&
+      pixelGrid[i + 1][j] === cell
+    ) {
+      let higherCell = Utils.getHigherCell(cell, i, j, pixelGrid);
+      if (higherCell) {
+        swapCells(i, j - 1, higherCell[0], higherCell[1]);
+      }
+    } else {
+      // Move liquid around
+      let direction = Math.random() >= 0.5 ? 1 : -1;
+      moveLiquidSideways(cell, i, j, direction, canvasWidth);
     }
   }
 }
 
 function moveLiquidSideways(cell, i, j, direction, canvasWidth) {
   if (i + direction >= 0 && i + direction < canvasWidth) {
-    let nextCell = pixelGrid[i + direction][j];
-    if (nextCell !== cell && nextCell.state !== CellType.states.solid) {
-      swapCells(i, j, i + direction, j);
-      return true;
+    if (
+      pixelGrid[i + direction][j + 1] === CellType.empty ||
+      Math.random() >= 0.5
+    ) {
+      let nextCell = pixelGrid[i + direction][j];
+      if (nextCell !== cell && nextCell.state !== CellType.states.solid) {
+        swapCells(i, j, i + direction, j);
+        return true;
+      }
     }
   }
   return false;
@@ -290,7 +293,7 @@ export function processFire(
     if (target.flammable && Math.random() > target.flammable) {
       createCell(i + a, j + b, target.melt);
       if (
-        j + b + 1 < canvasHeight - 1 &&
+        j + b + 1 < canvasHeight &&
         target.ash &&
         pixelGrid[i + a][j + b + 1] === CellType.empty
       ) {
@@ -348,11 +351,7 @@ export function processGas(cell, i, j, column, canvasWidth) {
   // SMOKE
   if (Math.random() > cell.lifetime) {
     destroyCell(i, j);
-  } else if (
-    j > 0 &&
-    column[j - 1] === CellType.empty &&
-    Math.random() > 0.7
-  ) {
+  } else if (j > 0 && column[j - 1] === CellType.empty && Math.random() > 0.7) {
     // Go up
     swapCells(i, j, i, j - 1);
   } else {
