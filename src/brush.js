@@ -42,7 +42,7 @@ export default class Brush {
 
     let intervalId;
 
-    const spawnSand = (x, y) => {
+    const spawnCell = (x, y) => {
       let actualBrushSize = brushSize - 1;
       for (
         let i = Math.max(0, x - actualBrushSize);
@@ -80,10 +80,10 @@ export default class Brush {
     let isMouseDown = false;
     function onMouseDown() {
       isMouseDown = true;
-      spawnSand(mouseX, mouseY);
+      spawnCell(mouseX, mouseY);
       intervalId = setInterval(
         function () {
-          spawnSand(mouseX, mouseY);
+          spawnCell(mouseX, mouseY);
         },
         brushType === CellType.concrete ? 1 : 20
       );
@@ -106,9 +106,9 @@ export default class Brush {
         if (Utils.getDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
           let interpolated = Utils.createIntermediatePoints(mouseX,mouseY,prevMouseX,prevMouseY);
 
-          interpolated.forEach(point => spawnSand(point[0], point[1]));
+          interpolated.forEach(point => spawnCell(point[0], point[1]));
         }
-        spawnSand(mouseX, mouseY);
+        spawnCell(mouseX, mouseY);
       }
 
       prevMouseX = mouseX;

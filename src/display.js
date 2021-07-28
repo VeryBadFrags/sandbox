@@ -23,34 +23,35 @@ export function drawFull(gameState, lightMap) {
   }
 }
 
-export function drawPartial(deltaBoard, fullBoard, lightMap, dynamicLight) {
+export function drawPartial(deltaBoard) {
   let gameWidth = deltaBoard.length;
   let gameHeight = deltaBoard[0].length;
-  // Test dynamicLight first for performances
-  if (dynamicLight) {
-    for (let i = 0; i < gameWidth; i++) {
-      let column = deltaBoard[i];
-      for (let j = 0; j < gameHeight; j++) {
-        let cell = column[j];
-        if (cell) {
-          context.fillStyle = getHexColor(cell, lightMap ? lightMap[i][j] : 0);
-          context.fillRect(i, j, 1, 1);
-        } else if (lightMap && lightMap[i][j] > 0) {
-          cell = fullBoard[i][j];
-          context.fillStyle = getHexColor(cell, lightMap[i][j]);
-          context.fillRect(i, j, 1, 1);
-        }
+  for (let i = 0; i < gameWidth; i++) {
+    let column = deltaBoard[i];
+    for (let j = 0; j < gameHeight; j++) {
+      let cell = column[j];
+      if (cell) {
+        context.fillStyle = cell.color;
+        context.fillRect(i, j, 1, 1);
       }
     }
-  } else {
-    for (let i = 0; i < gameWidth; i++) {
-      let column = deltaBoard[i];
-      for (let j = 0; j < gameHeight; j++) {
-        let cell = column[j];
-        if (cell) {
-          context.fillStyle = cell.color;
-          context.fillRect(i, j, 1, 1);
-        }
+  }
+}
+
+export function drawPartialDynamic(deltaBoard, fullBoard, lightMap) {
+  let gameWidth = deltaBoard.length;
+  let gameHeight = deltaBoard[0].length;
+  for (let i = 0; i < gameWidth; i++) {
+    let column = deltaBoard[i];
+    for (let j = 0; j < gameHeight; j++) {
+      let cell = column[j];
+      if (cell) {
+        context.fillStyle = getHexColor(cell, lightMap ? lightMap[i][j] : 0);
+        context.fillRect(i, j, 1, 1);
+      } else if (lightMap && lightMap[i][j] > 0) {
+        cell = fullBoard[i][j];
+        context.fillStyle = getHexColor(cell, lightMap[i][j]);
+        context.fillRect(i, j, 1, 1);
       }
     }
   }

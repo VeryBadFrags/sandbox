@@ -28,10 +28,19 @@ function nextState() {
           Game.processSolid(cell, i, j, column, canvasWidth, canvasHeight);
           break;
         case CellType.states.liquid:
-          Game.processLiquid(cell, i, j, column, canvasWidth, canvasHeight, pascalsLaw);
+          Game.processLiquid(
+            cell,
+            i,
+            j,
+            column,
+            canvasWidth,
+            canvasHeight,
+            pascalsLaw
+          );
           break;
         case CellType.states.fire:
-          Game.processFire(cell,
+          Game.processFire(
+            cell,
             i,
             j,
             column,
@@ -97,7 +106,16 @@ function update(time = 0) {
     let t1 = performance.now();
 
     let renderStart = performance.now();
-    Display.drawPartial(Game.delta, Game.pixelGrid, lightMap, dynamicLights);
+    if (dynamicLights) {
+      Display.drawPartialDynamic(
+        Game.delta,
+        Game.pixelGrid,
+        lightMap,
+        dynamicLights
+      );
+    } else {
+      Display.drawPartial(Game.delta);
+    }
     let renderEnd = performance.now();
     Utils.wipeMatrix(Game.delta, null);
     timer = timer % interval;
@@ -180,6 +198,7 @@ function init() {
   let lightsCheck = document.getElementById("dynamic-lights");
   lightsCheck.addEventListener("click", (e) => {
     dynamicLights = e.target.checked;
+    // TODO Full draw when turning off to clear light effects
   });
   lightsCheck.checked = dynamicLights;
 }
