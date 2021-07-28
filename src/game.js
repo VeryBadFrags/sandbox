@@ -15,8 +15,8 @@ export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
 
   let cellBelow = column[j + 1];
 
-  switch (cell.id) {
-    case CellType.seed.id:
+  switch (cell) {
+    case CellType.seed:
       // Germinate
       if (
         Math.random() > 0.999 &&
@@ -26,18 +26,18 @@ export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
         return;
       }
       break;
-    case CellType.salt.id:
-      if (cellBelow.id === CellType.ice.id) {
+    case CellType.salt:
+      if (cellBelow === CellType.ice) {
         createCell(i, j, CellType.water);
         createCell(i, j + 1, CellType.water);
       }
-      if (i - 1 >= 0 && pixelGrid[i - 1][j + 1].id === CellType.ice.id) {
+      if (i - 1 >= 0 && pixelGrid[i - 1][j + 1] === CellType.ice) {
         createCell(i, j, CellType.water);
         createCell(i - 1, j + 1, CellType.water);
       }
       if (
         i + 1 < canvasWidth &&
-        pixelGrid[i + 1][j + 1].id === CellType.ice.id
+        pixelGrid[i + 1][j + 1] === CellType.ice
       ) {
         createCell(i, j, CellType.water);
         createCell(i + 1, j + 1, CellType.water);
@@ -45,7 +45,7 @@ export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
       break;
   }
 
-  if (cellBelow.id === CellType.empty.id) {
+  if (cellBelow === CellType.empty) {
     swapCells(i, j, i, j + 1);
   } else if (cellBelow.state === CellType.states.liquid) {
     // Sink in liquids
@@ -73,7 +73,7 @@ export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
 function rollGrainSideways(cell, i, j, direction, canvasWidth) {
   if (i + direction >= 0 && i + direction < canvasWidth) {
     let otherCell = pixelGrid[i + direction][j + 1];
-    if (otherCell.id === CellType.empty.id && Math.random() > 0.2) {
+    if (otherCell === CellType.empty && Math.random() > 0.2) {
       // Roll down
       swapCells(i, j, i + direction, j + 1);
       return true;
@@ -100,11 +100,11 @@ function rollGrainSideways(cell, i, j, direction, canvasWidth) {
 }
 
 function processStatic(cell, i, j, column, canvasWidth, canvasHeight) {
-  switch (cell.id) {
-    case CellType.plant.id:
+  switch (cell) {
+    case CellType.plant:
       processPlant(cell, i, j, column, canvasWidth, canvasHeight);
       break;
-    case CellType.ice.id:
+    case CellType.ice:
       processIce(cell, i, j, column, canvasWidth);
       break;
   }
@@ -164,7 +164,7 @@ function processPlant(cell, i, j, column, canvasWidth, canvasHeight) {
 
   // Spawn seed
   if (
-    cellBelow.id === CellType.empty.id &&
+    cellBelow === CellType.empty &&
     Math.random() > 0.999 &&
     Utils.countNeighbors(i, j, pixelGrid, CellType.plant) > 5
   ) {
@@ -201,7 +201,7 @@ function processIce(cell, i, j, column, canvasWidth) {
   }
 
   // Drip
-  if (cellBelow.id === CellType.empty.id && Math.random() > cell.drip) {
+  if (cellBelow === CellType.empty && Math.random() > cell.drip) {
     createCell(i, j + 1, CellType.water);
   }
   // Melt
@@ -227,11 +227,11 @@ export function processLiquid(
 ) {
   let cellBelow = column[j + 1];
   // LIQUIDS
-  if (cellBelow.id === CellType.empty.id) {
+  if (cellBelow === CellType.empty) {
     // Move down
     swapCells(i, j, i, j + 1);
   } else if (
-    cellBelow.id !== cell.id &&
+    cellBelow !== cell &&
     cellBelow.state === CellType.states.liquid
   ) {
     if (
@@ -243,9 +243,9 @@ export function processLiquid(
   } else if (
     pascalsLaw &&
     j - 1 >= 0 &&
-    pixelGrid[i][j - 1].id === CellType.empty.id
-    && i-1 >= 0 && pixelGrid[i-1][j].id === cell.id
-    && i+1 < canvasWidth && pixelGrid[i+1][j].id === cell.id
+    pixelGrid[i][j - 1] === CellType.empty
+    && i-1 >= 0 && pixelGrid[i-1][j] === cell
+    && i+1 < canvasWidth && pixelGrid[i+1][j] === cell
   ) {
     let higherCell = Utils.getHigherCell(cell, i, j, pixelGrid);
     if (higherCell) {
@@ -263,7 +263,7 @@ export function processLiquid(
 function moveLiquidSideways(cell, i, j, direction, canvasWidth) {
   if (i + direction >= 0 && i + direction < canvasWidth) {
     let nextCell = pixelGrid[i + direction][j];
-    if (nextCell.id !== cell.id && nextCell.state !== CellType.states.solid) {
+    if (nextCell !== cell && nextCell.state !== CellType.states.solid) {
       swapCells(i, j, i + direction, j);
       return true;
     }
@@ -292,7 +292,7 @@ export function processFire(
       if (
         j + b + 1 < canvasHeight - 1 &&
         target.ash &&
-        pixelGrid[i + a][j + b + 1].id === CellType.empty.id
+        pixelGrid[i + a][j + b + 1] === CellType.empty
       ) {
         createCell(i + a, j + b + 1, target.ash);
       }
@@ -308,7 +308,7 @@ export function processFire(
   } else if (
     j > 0 &&
     Math.random() > 0.8 &&
-    column[j - 1].id === CellType.empty.id
+    column[j - 1] === CellType.empty
     // || column[j - 1].flammable
   ) {
     // Evolve
@@ -350,7 +350,7 @@ export function processGas(cell, i, j, column, canvasWidth) {
     destroyCell(i, j);
   } else if (
     j > 0 &&
-    column[j - 1].id === CellType.empty.id &&
+    column[j - 1] === CellType.empty &&
     Math.random() > 0.7
   ) {
     // Go up
@@ -362,7 +362,7 @@ export function processGas(cell, i, j, column, canvasWidth) {
       j > 0 &&
       i + coinFlip >= 0 &&
       i + coinFlip < canvasWidth &&
-      pixelGrid[i + coinFlip][j - 1].id === CellType.empty.id &&
+      pixelGrid[i + coinFlip][j - 1] === CellType.empty &&
       Math.random() > 0.7
     ) {
       swapCells(i, j, i + coinFlip, j - 1);

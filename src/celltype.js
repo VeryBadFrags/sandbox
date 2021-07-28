@@ -6,7 +6,6 @@ export const states = {
 };
 
 export const empty = {
-  id: 0,
   name: "✏️ Eraser",
   key: "e",
   color: "#000000",
@@ -15,7 +14,6 @@ export const empty = {
 
 // FIRE
 export const smoke = {
-  id: 9,
   color: "#333333",
   density: 0.1,
   state: states.gas,
@@ -23,7 +21,6 @@ export const smoke = {
   nextCell: empty,
 };
 export const fire3 = {
-  id: 8,
   color: "#ff8800",
   density: 0.1,
   state: states.fire,
@@ -32,7 +29,6 @@ export const fire3 = {
   nextCell: smoke,
 };
 export const fire2 = {
-  id: 7,
   color: "#ff4400",
   density: 0.1,
   state: states.fire,
@@ -41,7 +37,6 @@ export const fire2 = {
   nextCell: fire3,
 };
 export const fire = {
-  id: 6,
   name: "🔥 Fire",
   key: "f",
   color: "#e00000",
@@ -54,7 +49,6 @@ export const fire = {
 
 // LIQUIDS
 export const water = {
-  id: 2,
   name: "🌊 Water",
   key: "w",
   color: "#2222ff",
@@ -64,7 +58,6 @@ export const water = {
 };
 
 export const oil = {
-  id: 3,
   name: "🛢️ Oil",
   key: "o",
   color: "#963e48",
@@ -75,8 +68,7 @@ export const oil = {
 };
 
 // SOLIDS
-export const floor = {
-  id: 4,
+export const concrete = {
   name: "🧱 Concrete",
   key: "c",
   color: "#aaaaaa",
@@ -85,7 +77,6 @@ export const floor = {
   static: true,
 };
 export const ice = {
-  id: 10,
   name: "🧊 Ice",
   key: "i",
   color: "#00eeee",
@@ -98,7 +89,6 @@ export const ice = {
   melt: water,
 };
 export const soil = {
-  id: 11,
   name: "🍂 Soil",
   key: "l",
   color: "#322110",
@@ -108,7 +98,6 @@ export const soil = {
   dousing: false,
 };
 export const wood = {
-  id: 12,
   name: "🌳 Wood",
   key: "d",
   color: "#654321",
@@ -120,7 +109,6 @@ export const wood = {
   static: true,
 };
 export const coal = {
-  id: 18,
   name: "♨️ Coal",
   key: "h",
   color: "#222",
@@ -131,7 +119,6 @@ export const coal = {
   granular: true,
 };
 export const sand = {
-  id: 1,
   name: "🏜️ Sand",
   key: "s",
   color: "#c2ff80",
@@ -141,7 +128,6 @@ export const sand = {
   dousing: true,
 };
 export const salt = {
-  id: 13,
   name: "🧂 Salt",
   key: "m",
   color: "#eeeeee",
@@ -150,7 +136,6 @@ export const salt = {
   granular: true,
 };
 export const powder = {
-  id: 14,
   name: "💣 Gunpowder",
   key: "g",
   color: "#555555",
@@ -161,7 +146,6 @@ export const powder = {
   melt: fire,
 };
 export const crystals = {
-  id: 5,
   name: "💎 Crystals",
   key: "y",
   color: "#ff80b6",
@@ -169,7 +153,6 @@ export const crystals = {
   state: states.solid,
 };
 export const seed = {
-  id: 17,
   name: "🌱 Seed",
   key: "z",
   color: "#b5651d",
@@ -181,7 +164,6 @@ export const seed = {
   state: states.solid,
 };
 export const plant = {
-  id: 16,
   name: "🌿 Plant",
   key: "p",
   color: "#00bf00",
@@ -199,7 +181,7 @@ export const plant = {
 export const CellsMap = [
   empty,
   sand,
-  floor,
+  concrete,
   wood,
   water,
   ice,
@@ -227,7 +209,7 @@ CellsMap.forEach((k) => {
     let opt = document.createElement("option");
     opt.value = cell.name;
     opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
-    if (cell === floor) {
+    if (cell === concrete) {
       opt.selected = "selected";
     }
     brushTypeSelector.appendChild(opt);

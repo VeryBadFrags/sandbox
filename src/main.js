@@ -19,7 +19,7 @@ function nextState() {
     let column = Game.pixelGrid[i];
     for (let j = canvasHeight - 2; j >= 0; j--) {
       let cell = column[j];
-      if (cell.id === CellType.empty.id) {
+      if (cell === CellType.empty) {
         continue;
       }
 
@@ -127,12 +127,12 @@ function init() {
     i < Math.floor(canvasWidth / 2) + 24;
     i++
   ) {
-    Game.createCell(i, halfScreen, CellType.floor);
+    Game.createCell(i, halfScreen, CellType.concrete);
   }
 
   for (let j = halfScreen; j >= halfScreen - 15; j--) {
-    Game.createCell(Math.floor(canvasWidth / 2) - 25, j, CellType.floor);
-    Game.createCell(Math.floor(canvasWidth / 2 + 24), j, CellType.floor);
+    Game.createCell(Math.floor(canvasWidth / 2) - 25, j, CellType.concrete);
+    Game.createCell(Math.floor(canvasWidth / 2 + 24), j, CellType.concrete);
   }
 
   Display.drawFull(Game.pixelGrid);

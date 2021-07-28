@@ -7,7 +7,7 @@ const brushSizeInput = document.getElementById("brush-size");
 const brushSizeSlider = document.getElementById("brush-size-slider");
 const brushOpacitySlider = document.getElementById("brush-opacity");
 
-let brushType = CellType.floor;
+let brushType = CellType.concrete;
 let brushSize = 2;
 let brushOpacity = 100;
 
@@ -85,7 +85,7 @@ export default class Brush {
         function () {
           spawnSand(mouseX, mouseY);
         },
-        brushType === CellType.floor ? 1 : 20
+        brushType === CellType.concrete ? 1 : 20
       );
     }
 

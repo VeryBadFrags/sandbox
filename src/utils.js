@@ -53,7 +53,7 @@ function findHigherCell(cell, x, y, pixelGrid, explored, inputHeight) {
     let upCoordinates = hashCoordinates(x, y - 1);
     if (
       y - 1 >= 0 &&
-      pixelGrid[x][y - 1].id === cell.id &&
+      pixelGrid[x][y - 1] === cell &&
       !explored.includes(upCoordinates)
     ) {
       explored.push(upCoordinates);
@@ -75,7 +75,7 @@ function findHigherCell(cell, x, y, pixelGrid, explored, inputHeight) {
   let leftCoordinates = hashCoordinates(x - 1, y);
   if (
     x - 1 >= 0 &&
-    pixelGrid[x - 1][y].id === cell.id &&
+    pixelGrid[x - 1][y] === cell &&
     !explored.includes(leftCoordinates)
   ) {
     explored.push(leftCoordinates);
@@ -93,7 +93,7 @@ function findHigherCell(cell, x, y, pixelGrid, explored, inputHeight) {
   let rightCoordinates = hashCoordinates(x + 1, y);
   if (
     x + 1 < pixelGrid.length &&
-    pixelGrid[x + 1][y].id === cell.id &&
+    pixelGrid[x + 1][y] === cell &&
     !explored.includes(rightCoordinates)
   ) {
     explored.push(rightCoordinates);
@@ -111,7 +111,7 @@ function findHigherCell(cell, x, y, pixelGrid, explored, inputHeight) {
   let downCoordinates = hashCoordinates(x, y + 1);
   if (
     y + 1 < pixelGrid[x].length &&
-    pixelGrid[x][y + 1].id === cell.id &&
+    pixelGrid[x][y + 1] === cell &&
     !explored.includes(downCoordinates)
   ) {
     explored.push(downCoordinates);
@@ -133,7 +133,6 @@ function hashCoordinates(x, y) {
 }
 
 export function countNeighbors(x, y, pixelGrid, neighType) {
-  let neighTypeId = neighType.id;
   let count = 0;
   let xMax = Math.min(x + 1, pixelGrid.length - 1);
   let yMax = Math.min(y + 1, pixelGrid[0].length - 1);
@@ -141,7 +140,7 @@ export function countNeighbors(x, y, pixelGrid, neighType) {
     let column = pixelGrid[i];
     for (let j = Math.max(y - 1, 0); j <= yMax; j++) {
       if (i !== x || j !== y) {
-        if (column[j].id === neighTypeId) {
+        if (column[j] === neighType) {
           count++;
         }
       }
