@@ -1,9 +1,6 @@
 import * as CellType from "./celltype.js";
 
 export function wipeMatrix(matrix, value) {
-  if (matrix.length < 1 || matrix[0].length < 1) {
-    return null;
-  }
   let width = matrix.length;
   let height = matrix[0].length;
   for (let x = 0; x < width; x++) {
@@ -16,14 +13,18 @@ export function wipeMatrix(matrix, value) {
 
 export function initArray(width, height, cell = CellType.empty) {
   let newArray = new Array(width);
-  for (let i = 0; i < width; i++) {
+  for (let x = 0; x < width; x++) {
     let newRow = new Array(height);
-    for (let j = 0; j < height; j++) {
-      newRow[j] = cell;
+    for (let y = 0; y < height; y++) {
+      newRow[y] = cell;
     }
-    newArray[i] = newRow;
+    newArray[x] = newRow;
   }
   return newArray;
+}
+
+export function copyArray(arrayToCopy) {
+  return arrayToCopy.map(row => row.slice());
 }
 
 export function isFuelAround(x, y, pixelGrid) {
