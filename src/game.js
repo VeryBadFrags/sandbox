@@ -48,7 +48,7 @@ export function processSolid(cell, i, j, column, canvasWidth, canvasHeight) {
     // Sink in liquids
     if (
       Math.random() <=
-      (cell.density - cellBelow.density) / cellBelow.density / 100
+      (cell.density - cellBelow.density) / cellBelow.density / 50
     ) {
       swapCells(i, j, i, j + 1);
     }
@@ -86,7 +86,7 @@ function rollGrainSideways(cell, i, j, direction, canvasWidth) {
       return true;
     } else if (
       otherCell.state === CellType.states.liquid &&
-      Math.random() > 0.95
+      Math.random() > 0.9
     ) {
       // Swirl in liquid
       swapCells(i, j, i + direction, j + 1);

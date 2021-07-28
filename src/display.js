@@ -26,13 +26,13 @@ export function drawFull(gameState, lightMap) {
 export function drawPartial(deltaBoard) {
   let gameWidth = deltaBoard.length;
   let gameHeight = deltaBoard[0].length;
-  for (let i = 0; i < gameWidth; i++) {
-    let column = deltaBoard[i];
-    for (let j = 0; j < gameHeight; j++) {
-      let cell = column[j];
+  for (let x = 0; x < gameWidth; x++) {
+    let column = deltaBoard[x];
+    for (let y = 0; y < gameHeight; y++) {
+      let cell = column[y];
       if (cell) {
         context.fillStyle = cell.color;
-        context.fillRect(i, j, 1, 1);
+        context.fillRect(x, y, 1, 1);
       }
     }
   }

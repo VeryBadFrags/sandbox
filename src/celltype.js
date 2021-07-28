@@ -121,7 +121,7 @@ export const sand = {
   name: "🏜️ Sand",
   key: "s",
   color: "#c2ff80",
-  density: 9,
+  density: 10,
   state: states.solid,
   granular: true,
   dousing: true,
@@ -131,7 +131,7 @@ export const salt = {
   key: "m",
   color: "#eeeeee",
   state: states.solid,
-  density: 10,
+  density: 9,
   granular: true,
 };
 export const powder = {
