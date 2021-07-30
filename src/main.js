@@ -122,8 +122,8 @@ function update(time = 0) {
 
     if (fpsTimer > 1000) {
       fpsVal.innerText = Math.round(1000 / deltaTime);
-      engineVal.innerText = t1 - t0;
-      renderVal.innerText = renderEnd - renderStart;
+      engineVal.innerText = Math.round(t1 - t0);
+      renderVal.innerText = Math.round(renderEnd - renderStart);
       fpsTimer = 0;
     }
   }
