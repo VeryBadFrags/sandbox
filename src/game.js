@@ -262,7 +262,8 @@ function moveLiquidSideways(cell, i, j, direction, canvasWidth) {
   if (i + direction >= 0 && i + direction < canvasWidth) {
     if (pixelGrid[i + direction][j + 1] === CellType.empty) {
       swapCells(i, j, i + direction, j + 1);
-    } else if (Math.random() >= 0.5) { // TODO use liquid thickness instead of 0.5
+    } else if (Math.random() >= 0.5) {
+      // TODO use liquid thickness instead of 0.5
       let nextCell = pixelGrid[i + direction][j];
       if (nextCell !== cell && nextCell.state !== CellType.states.solid) {
         swapCells(i, j, i + direction, j);
@@ -283,23 +284,7 @@ export function processFire(
   lightMap,
   dynamicLights
 ) {
-  // Propagate
-  let a = Math.floor(Math.random() * 3) - 1;
-  let b = Math.floor(Math.random() * 3) - 1;
-  if (i + a >= 0 && i + a < canvasWidth && j + b >= 0 && j + b < canvasHeight) {
-    let target = pixelGrid[i + a][j + b];
-
-    if (target.flammable && Math.random() > target.flammable) {
-      createCell(i + a, j + b, target.melt);
-      if (
-        j + b + 1 < canvasHeight &&
-        target.ash &&
-        pixelGrid[i + a][j + b + 1] === CellType.empty
-      ) {
-        createCell(i + a, j + b + 1, target.ash);
-      }
-    }
-  }
+  propagateFire(i, canvasWidth, j, canvasHeight);
 
   // Extinguish
   if (
@@ -317,33 +302,67 @@ export function processFire(
     createCell(i, j - 1, Math.random() >= 0.5 ? cell.nextCell : cell);
   }
 
-  // Lightmap
-  if (dynamicLights) {
-    if (column[j].state === CellType.states.fire) {
+  updateFireLightMap(
+    dynamicLights,
+    column,
+    j,
+    i,
+    canvasWidth,
+    canvasHeight,
+    lightMap
+  );
+}
+
+function updateFireLightMap(
+  dynamicLights,
+  column,
+  j,
+  i,
+  canvasWidth,
+  canvasHeight,
+  lightMap
+) {
+  if (dynamicLights && column[j].state === CellType.states.fire) {
+    for (
+      let a = Math.max(i - maxLightDistance, 0);
+      a <= Math.min(i + maxLightDistance, canvasWidth - 1);
+      a++
+    ) {
       for (
-        let a = Math.max(i - maxLightDistance, 0);
-        a <= Math.min(i + maxLightDistance, canvasWidth - 1);
-        a++
+        let b = Math.max(j - maxLightDistance, 0);
+        b <= Math.min(j + maxLightDistance, canvasHeight - 1);
+        b++
       ) {
-        for (
-          let b = Math.max(j - maxLightDistance, 0);
-          b <= Math.min(j + maxLightDistance, canvasHeight - 1);
-          b++
+        if (
+          (a !== i || b !== j) &&
+          pixelGrid[a][b].state !== CellType.states.fire
         ) {
-          if (
-            (a !== i || b !== j) &&
-            pixelGrid[a][b].state !== CellType.states.fire
-          ) {
-            let distance = Utils.getDistance(a, b, i, j);
-            lightMap[a][b] =
-              lightMap[a][b] + Math.max(0, maxLightDistance - distance);
-          }
+          let distance = Utils.getDistance(a, b, i, j);
+          lightMap[a][b] =
+            lightMap[a][b] + Math.max(0, maxLightDistance - distance);
         }
       }
     }
   }
-  //} else if (pixelGrid[x][y].state === CellType.states.liquid && Math.random() > 0.99) {
-  //  lightMap[x][y] = lightMap[x][y] + 10;
+}
+
+function propagateFire(i, canvasWidth, j, canvasHeight) {
+  let a = Math.floor(Math.random() * 3) - 1;
+  let b = Math.floor(Math.random() * 3) - 1;
+  if (i + a >= 0 && i + a < canvasWidth && j + b >= 0 && j + b < canvasHeight) {
+    let target = pixelGrid[i + a][j + b];
+
+    if (target.flammable && Math.random() > target.flammable) {
+      createCell(i + a, j + b, target.melt);
+      if (
+        j + b + 1 < canvasHeight &&
+        target.ash &&
+        pixelGrid[i + a][j + b + 1] === CellType.empty
+      ) {
+        createCell(i + a, j + b + 1, target.ash);
+      }
+    }
+  }
 }
 
 export function processGas(cell, i, j, column, canvasWidth) {

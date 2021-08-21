@@ -61,7 +61,6 @@ function getHexColor(cell, lightValue) {
   if (lightValue > 0) {
     let hsl = Utils.hexToHSL(cell.color);
     hsl[2] = Math.min(hsl[2] + Math.floor(lightValue * 0.4), 100);
-    //hsl[0] = Math.floor(hsl[0] / lightValue); // move to red
     return Utils.hslToHex(hsl[0], hsl[1], hsl[2]);
   } else {
     return cell.color;

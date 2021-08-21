@@ -24,7 +24,7 @@ export function initArray(width, height, cell = CellType.empty) {
 }
 
 export function copyArray(arrayToCopy) {
-  return arrayToCopy.map(row => row.slice());
+  return arrayToCopy.map((row) => row.slice());
 }
 
 export function isFuelAround(x, y, pixelGrid) {
@@ -172,9 +172,7 @@ export function hextoRGB(hex) {
   if (hex.length === 3) {
     hex = hex
       .split("")
-      .map(function (hex) {
-        return hex + hex;
-      })
+      .map((val) => val * 2)
       .join("");
   }
   const result = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})[\da-z]{0,0}$/i.exec(
@@ -196,9 +194,7 @@ export function hexToHSL(hex) {
   if (hex.length === 3) {
     hex = hex
       .split("")
-      .map(function (hex) {
-        return hex + hex;
-      })
+      .map((val) => val * 2)
       .join("");
   }
   let result = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})[\da-z]{0,0}$/i.exec(hex);
@@ -208,7 +204,9 @@ export function hexToHSL(hex) {
   let r = parseInt(result[1], 16);
   let g = parseInt(result[2], 16);
   let b = parseInt(result[3], 16);
-  (r /= 255), (g /= 255), (b /= 255);
+  r /= 255;
+  g /= 255;
+  b /= 255;
   let max = Math.max(r, g, b),
     min = Math.min(r, g, b);
   let h,

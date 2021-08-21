@@ -28,33 +28,17 @@ function nextState() {
           Game.processSolid(cell, i, j, column, canvasWidth, canvasHeight);
           break;
         case CellType.states.liquid:
-          Game.processLiquid(
-            cell,
-            i,
-            j,
-            column,
-            canvasWidth,
-            canvasHeight,
-            pascalsLaw
-          );
+          Game.processLiquid(cell, i, j, column, canvasWidth, canvasHeight, pascalsLaw);
           break;
         case CellType.states.fire:
-          Game.processFire(
-            cell,
-            i,
-            j,
-            column,
-            canvasWidth,
-            canvasHeight,
-            lightMap,
-            dynamicLights
-          );
+          Game.processFire(cell, i, j, column, canvasWidth, canvasHeight, lightMap, dynamicLights);
           break;
         case CellType.states.gas:
           Game.processGas(cell, i, j, column, canvasWidth);
           break;
       }
     }
+
     Game.destroyCell(i, canvasHeight - 1);
   }
 
@@ -107,12 +91,7 @@ function update(time = 0) {
 
     let renderStart = performance.now();
     if (dynamicLights) {
-      Display.drawPartialDynamic(
-        Game.delta,
-        Game.pixelGrid,
-        lightMap,
-        dynamicLights
-      );
+      Display.drawPartialDynamic(Game.delta, Game.pixelGrid, lightMap, dynamicLights);
     } else {
       Display.drawPartial(Game.delta);
     }
@@ -140,11 +119,7 @@ function init() {
 
   // Walls
   let halfScreen = Math.floor(canvasHeight / 2);
-  for (
-    let i = Math.floor(canvasWidth / 2) - 25;
-    i < Math.floor(canvasWidth / 2) + 24;
-    i++
-  ) {
+  for (let i = Math.floor(canvasWidth / 2) - 25; i < Math.floor(canvasWidth / 2) + 24; i++) {
     Game.createCell(i, halfScreen, CellType.concrete);
   }
 
