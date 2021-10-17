@@ -148,9 +148,14 @@ function init() {
     }
   };
 
+  const keyToCell = new Map<string, CellType.Cell>();
+  CellType.CellsMap.filter((cell) => cell.key).forEach((cell) => {
+    keyToCell.set(cell.key, cell);
+  });
+
   document.addEventListener("keydown", (e) => {
-    if (CellType.CellsKeys[e.key]) {
-      mainBrush.setBrushType(CellType.CellsKeys[e.key]);
+    if (keyToCell.has(e.key)) {
+      mainBrush.setBrushType(keyToCell.get(e.key));
     } else if (e.key === "+" || e.key === "=") {
       mainBrush.increaseBrushSize(1);
     } else if (e.key === "-" || e.key === "_") {

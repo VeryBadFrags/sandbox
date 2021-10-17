@@ -216,13 +216,6 @@ export const CellsMap: Cell[] = [
   flame,
 ];
 
-export const CellsKeys = {};
-CellsMap.forEach((k) => {
-  if (k.key) {
-    CellsKeys[k.key] = k;
-  }
-});
-
 {
   const brushTypeSelector = document.getElementById("brush-type") as HTMLSelectElement;
   CellsMap.forEach((cell) => {
