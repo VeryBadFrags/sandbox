@@ -40,7 +40,7 @@ export default class Brush {
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
-    let intervalId;
+    let intervalId: NodeJS.Timeout;
 
     const spawnCell = (x: number, y: number) => {
       const actualBrushSize = brushSize - 1;
