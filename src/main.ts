@@ -1,3 +1,6 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./style.scss";
+
 import * as Display from "./display.js";
 import * as CellType from "./celltype.js";
 import * as Utils from "./utils.js";
