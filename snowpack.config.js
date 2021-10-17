@@ -14,6 +14,7 @@ module.exports = {
         sourceMap: false,
       },
     ],
+    ["@snowpack/plugin-typescript"],
   ],
   optimize: {
     bundle: true,
