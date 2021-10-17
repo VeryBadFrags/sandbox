@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // Snowpack Configuration File
 // See all supported options: https://www.snowpack.dev/reference/configuration
 
@@ -19,6 +20,6 @@ module.exports = {
   optimize: {
     bundle: true,
     minify: true,
-    target: 'es2019',
+    target: "es2019",
   },
 };
