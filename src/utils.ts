@@ -151,7 +151,12 @@ export function countNeighbors(
   return count;
 }
 
-export function testNeighbors(x: number, y: number, pixelGrid: CellType.Cell[][], testFunction) {
+export function testNeighbors(
+  x: number,
+  y: number,
+  pixelGrid: CellType.Cell[][],
+  testFunction: { (c: CellType.Cell): boolean }
+) {
   let count = 0;
   const xMax = Math.min(x + 1, pixelGrid.length - 1);
   const yMax = Math.min(y + 1, pixelGrid[0].length - 1);
