@@ -3,7 +3,7 @@
     "outDir": "./build",
     "allowJs": true,
     "target": "ES2019",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noUnusedLocals": true,
   },
   "include": ["./src/**/*"],
