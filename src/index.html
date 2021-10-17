@@ -4,14 +4,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sandbox</title>
+
+    <title>Sandbox - VeryBadFrags</title>
     <meta name="description" content="A falling sand game." />
     <meta property="og:site_name" content="Sandbox" />
     <meta property="og:title" content="Sandbox - VeryBadFrags" />
-    <meta
-      property="og:description"
-      content="A falling sand game."
-    />
+    <meta property="og:description" content="A falling sand game." />
 
     <link
       rel="alternate icon"
@@ -27,18 +25,14 @@
 
   <body class="bg-dark text-light">
     <div class="container">
+      <!-- Row -->
       <div class="row mt-2">
-
         <!-- Canvas -->
         <div class="col mb-3">
-          <canvas
-            id="game"
-            class="border border-light rounded-2"
-            width="800"
-            height="600"
-          ></canvas>
+          <canvas id="game" class="border border-light rounded-2" width="800" height="600"></canvas>
           <!-- <canvas id="cursor" width="800" height="600"></canvas> -->
         </div>
+        <!-- End Canvas -->
 
         <!-- Settings -->
         <div class="col mb-3">
@@ -46,11 +40,7 @@
             <div class="card-body">
               <div class="mb-3">
                 <label for="brush-type" class="form-label">🖌️ Brush type</label>
-                <select
-                  class="form-select form-select"
-                  name="brush-type"
-                  id="brush-type"
-                ></select>
+                <select class="form-select form-select" name="brush-type" id="brush-type"></select>
               </div>
               <div class="mb-3">
                 <label for="brush-size" class="form-label">⭕ Size</label>
@@ -67,13 +57,7 @@
                     />
                   </div>
                   <div class="col">
-                    <input
-                      class="form-control"
-                      type="number"
-                      id="brush-size"
-                      min="1"
-                      max="32"
-                    />
+                    <input class="form-control" type="number" id="brush-size" min="1" max="32" />
                   </div>
                 </div>
               </div>
@@ -90,15 +74,8 @@
                 />
               </div>
               <div class="form-check mb-3">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="dynamic-lights"
-                />
-                <label class="form-check-label" for="dynamic-lights">
-                  Dynamic lights
-                </label>
+                <input class="form-check-input" type="checkbox" value="" id="dynamic-lights" />
+                <label class="form-check-label" for="dynamic-lights"> Dynamic lights </label>
               </div>
               <div class="mb-3">
                 <button
@@ -120,6 +97,7 @@
               </div>
             </div>
           </div>
+          <!-- End Settings -->
 
           <!-- Stats -->
           <div class="card text-white bg-dark border-secondary text-start">
