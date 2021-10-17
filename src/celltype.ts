@@ -3,7 +3,7 @@ export type Cell = {
   color: string;
   density: number;
   key?: string;
-  state?: string;
+  state?: states;
   static?: boolean;
   granular?: boolean;
   lifetime?: number;
@@ -18,12 +18,12 @@ export type Cell = {
   drip?: number;
 };
 
-export const states = {
-  liquid: "liquid",
-  solid: "solid",
-  gas: "gas",
-  fire: "fire",
-};
+export enum states {
+  liquid,
+  solid,
+  gas,
+  fire,
+}
 
 export const empty: Cell = {
   name: "✏️ Eraser",
@@ -40,7 +40,7 @@ export const smoke: Cell = {
   lifetime: 0.98,
   nextCell: empty,
 };
-export const fire3: Cell = {
+export const flame3: Cell = {
   color: "#ff8800",
   density: 0.1,
   state: states.fire,
@@ -48,15 +48,15 @@ export const fire3: Cell = {
   propagation: 0.8,
   nextCell: smoke,
 };
-export const fire2: Cell = {
+export const flame2: Cell = {
   color: "#ff4400",
   density: 0.1,
   state: states.fire,
   lifetime: 0.89,
   propagation: 0.77,
-  nextCell: fire3,
+  nextCell: flame3,
 };
-export const fire: Cell = {
+export const flame: Cell = {
   name: "🔥 Fire",
   key: "f",
   color: "#e00000",
@@ -64,7 +64,7 @@ export const fire: Cell = {
   state: states.fire,
   lifetime: 0.9,
   propagation: 0.75,
-  nextCell: fire2,
+  nextCell: flame2,
 };
 
 // LIQUIDS
@@ -84,7 +84,7 @@ export const oil: Cell = {
   density: 0.5,
   state: states.liquid,
   flammable: 0.2,
-  melt: fire,
+  melt: flame,
 };
 
 // SOLIDS
@@ -124,7 +124,7 @@ export const wood: Cell = {
   density: 20,
   state: states.solid,
   flammable: 0.9,
-  melt: fire,
+  melt: flame,
   ash: soil,
   static: true,
 };
@@ -135,7 +135,7 @@ export const coal: Cell = {
   density: 30,
   state: states.solid,
   flammable: 0.99,
-  melt: fire,
+  melt: flame,
   granular: true,
 };
 export const sand: Cell = {
@@ -163,7 +163,7 @@ export const powder: Cell = {
   state: states.solid,
   granular: true,
   flammable: 0.001,
-  melt: fire,
+  melt: flame,
 };
 export const crystals: Cell = {
   name: "💎 Crystals",
@@ -193,7 +193,7 @@ export const plant: Cell = {
   propTarget: water,
   spawn: seed,
   flammable: 0.6,
-  melt: fire,
+  melt: flame,
   ash: soil,
   static: true,
 };
@@ -213,7 +213,7 @@ export const CellsMap: Cell[] = [
   soil,
   seed,
   crystals,
-  fire,
+  flame,
 ];
 
 export const CellsKeys = {};

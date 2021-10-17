@@ -55,7 +55,7 @@ export function processSolid(
     }
   } else if (cellBelow.state === CellType.states.fire && Math.random() > 0.9) {
     if (Math.random() > cell.flammable) {
-      createCell(i, j, CellType.fire);
+      createCell(i, j, CellType.flame);
     } else {
       swapCells(i, j, i, j + 1);
     }
@@ -83,7 +83,7 @@ function rollGrainSideways(
       return true;
     } else if (otherCell.state === CellType.states.fire && Math.random() > 0.9) {
       if (Math.random() > cell.flammable) {
-        createCell(i, j, CellType.fire);
+        createCell(i, j, CellType.flame);
       } else {
         swapCells(i, j, i + direction, j + 1);
       }
