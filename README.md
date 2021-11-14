@@ -1,4 +1,4 @@
-# Sandbox
+# Falling Sand
 
 A falling sand game.
 
