@@ -62,9 +62,9 @@ export function drawPartialDynamic(
 
 function getHexColor(cell: CellType.Cell, lightValue: number) {
   if (lightValue > 0) {
-    const hsl = [...cell.hsl];
-    hsl[2] = Math.min(hsl[2] + Math.floor(lightValue * 0.4), 100);
-    return `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`;
+    const hsl = cell.hsl;
+    const newL = Math.min(hsl[2] + Math.floor(lightValue * 0.4), 100);
+    return `hsl(${hsl[0]}, ${hsl[1]}%, ${newL}%)`;
   } else {
     return cell.color;
   }
