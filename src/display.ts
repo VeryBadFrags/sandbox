@@ -1,5 +1,4 @@
 import * as CellType from "./celltype.js";
-import * as Utils from "./utils.js";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 const context = canvas.getContext("2d", { alpha: false });
@@ -63,9 +62,9 @@ export function drawPartialDynamic(
 
 function getHexColor(cell: CellType.Cell, lightValue: number) {
   if (lightValue > 0) {
-    const hsl = Utils.hexToHSL(cell.color);
+    const hsl = [...cell.hsl];
     hsl[2] = Math.min(hsl[2] + Math.floor(lightValue * 0.4), 100);
-    return Utils.hslToHex(hsl[0], hsl[1], hsl[2]);
+    return `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`;
   } else {
     return cell.color;
   }

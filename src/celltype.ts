@@ -1,6 +1,7 @@
 export type Cell = {
   name?: string;
   color: string;
+  hsl: number[];
   density: number;
   key?: string;
   state?: states;
@@ -28,6 +29,7 @@ export enum states {
 export const empty: Cell = {
   name: "✏️ Eraser",
   color: "#000000",
+  hsl: [0, 0, 0],
   density: 0,
   key: "e",
 };
@@ -35,6 +37,7 @@ export const empty: Cell = {
 // FIRE
 export const smoke: Cell = {
   color: "#333333",
+  hsl: [0, 0, 20],
   density: 0.1,
   state: states.gas,
   lifetime: 0.98,
@@ -42,6 +45,7 @@ export const smoke: Cell = {
 };
 export const flame3: Cell = {
   color: "#ff8800",
+  hsl: [32, 100, 50],
   density: 0.1,
   state: states.fire,
   lifetime: 0.885,
@@ -50,6 +54,7 @@ export const flame3: Cell = {
 };
 export const flame2: Cell = {
   color: "#ff4400",
+  hsl: [16, 100, 50],
   density: 0.1,
   state: states.fire,
   lifetime: 0.89,
@@ -60,6 +65,7 @@ export const flame: Cell = {
   name: "🔥 Fire",
   key: "f",
   color: "#e00000",
+  hsl: [0, 100, 44],
   density: 0.2,
   state: states.fire,
   lifetime: 0.9,
@@ -72,6 +78,7 @@ export const water: Cell = {
   name: "🌊 Water",
   key: "w",
   color: "#2222ff",
+  hsl: [240, 100, 57],
   density: 1,
   state: states.liquid,
   dousing: true,
@@ -81,6 +88,7 @@ export const oil: Cell = {
   name: "🛢️ Oil",
   key: "o",
   color: "#963e48",
+  hsl: [353, 42, 42],
   density: 0.5,
   state: states.liquid,
   flammable: 0.2,
@@ -92,6 +100,7 @@ export const concrete: Cell = {
   name: "🧱 Concrete",
   key: "c",
   color: "#aaaaaa",
+  hsl: [0, 0, 67],
   density: 100,
   state: states.solid,
   static: true,
@@ -100,6 +109,7 @@ export const ice: Cell = {
   name: "🧊 Ice",
   key: "i",
   color: "#00eeee",
+  hsl: [180, 100, 47],
   density: 0.9,
   state: states.solid,
   propagation: 0.996,
@@ -112,6 +122,7 @@ export const soil: Cell = {
   name: "🍂 Soil",
   key: "l",
   color: "#322110",
+  hsl: [30, 52, 13],
   density: 20,
   state: states.solid,
   granular: true,
@@ -121,6 +132,7 @@ export const wood: Cell = {
   name: "🌳 Wood",
   key: "d",
   color: "#654321",
+  hsl: [30, 51, 26],
   density: 20,
   state: states.solid,
   flammable: 0.9,
@@ -132,6 +144,7 @@ export const coal: Cell = {
   name: "♨️ Coal",
   key: "h",
   color: "#222",
+  hsl: [0, 0, 13],
   density: 30,
   state: states.solid,
   flammable: 0.99,
@@ -142,6 +155,7 @@ export const sand: Cell = {
   name: "🏜️ Sand",
   key: "s",
   color: "#c2ff80",
+  hsl: [89, 100, 75],
   density: 10,
   state: states.solid,
   granular: true,
@@ -151,6 +165,7 @@ export const salt: Cell = {
   name: "🧂 Salt",
   key: "m",
   color: "#eeeeee",
+  hsl: [0, 0, 93],
   state: states.solid,
   density: 9,
   granular: true,
@@ -159,6 +174,7 @@ export const powder: Cell = {
   name: "💣 Gunpowder",
   key: "g",
   color: "#555555",
+  hsl: [0, 0, 33],
   density: 4,
   state: states.solid,
   granular: true,
@@ -169,6 +185,7 @@ export const crystals: Cell = {
   name: "💎 Crystals",
   key: "y",
   color: "#ff80b6",
+  hsl: [334, 100, 75],
   density: 30,
   state: states.solid,
 };
@@ -176,6 +193,7 @@ export const seed: Cell = {
   name: "🌱 Seed",
   key: "z",
   color: "#b5651d",
+  hsl: [28, 72, 41],
   density: 5,
   granular: true,
   flammable: 0.8,
@@ -187,6 +205,7 @@ export const plant: Cell = {
   name: "🌿 Plant",
   key: "p",
   color: "#00bf00",
+  hsl: [120, 100, 37],
   state: states.solid,
   density: 10,
   propagation: 0.5,
