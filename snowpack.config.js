@@ -5,21 +5,21 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
   mount: {
-    src: { url: "/" },
+    src: { url: '/' }
   },
   plugins: [
     [
-      "@snowpack/plugin-sass",
+      '@snowpack/plugin-sass',
       {
-        style: "compressed",
-        sourceMap: false,
-      },
+        style: 'compressed',
+        sourceMap: false
+      }
     ],
-    ["@snowpack/plugin-typescript"],
+    ['@snowpack/plugin-typescript']
   ],
   optimize: {
     bundle: true,
     minify: true,
-    target: "es2019",
-  },
-};
+    target: 'es2019'
+  }
+}
