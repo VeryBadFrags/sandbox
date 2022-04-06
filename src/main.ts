@@ -135,6 +135,10 @@ function init() {
     Game.createCell(Math.floor(canvasWidth / 2 + 24), j, CellType.concrete);
   }
 
+  for(let x = 0; x < canvasWidth; x++ ) {
+    Game.createCell(x, canvasHeight - 2, CellType.concrete);
+  }
+
   Display.drawFull(Game.pixelGrid);
 
   // Brush
