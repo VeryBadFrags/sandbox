@@ -22,19 +22,27 @@ export function drawFull(gameState: CellType.Cell[][], lightMap?: number[][]) {
   }
 }
 
+let imagedata = context.createImageData(canvas.width, canvas.height);
+
 export function drawPartial(deltaBoard: CellType.Cell[][]) {
   const gameWidth = deltaBoard.length;
   const gameHeight = deltaBoard[0].length;
+  
   for (let x = 0; x < gameWidth; x++) {
     const column = deltaBoard[x];
     for (let y = 0; y < gameHeight; y++) {
       const cell = column[y];
       if (cell) {
-        context.fillStyle = cell.color;
-        context.fillRect(x, y, 1, 1);
+        let pixelindex = (y * gameWidth + x) * 4;
+        imagedata.data[pixelindex] = cell.rgb[0];   // Red
+        imagedata.data[pixelindex+1] = cell.rgb[1]; // Green
+        imagedata.data[pixelindex+2] = cell.rgb[2]; // Blue
+        imagedata.data[pixelindex+3] = 255;   // Alpha
       }
     }
   }
+
+  context.putImageData(imagedata, 0 , 0);
 }
 
 export function drawPartialDynamic(
