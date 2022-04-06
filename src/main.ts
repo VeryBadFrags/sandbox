@@ -79,6 +79,7 @@ const fpsVal = document.getElementById("fps-val");
 const engineVal = document.getElementById("engine-val");
 const renderVal = document.getElementById("render-val");
 let fpsTimer = 0;
+
 function update(time = 0) {
   const deltaTime = time - lastTime;
   lastTime = time;
