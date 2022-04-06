@@ -240,7 +240,6 @@ export function processLiquid(
   pascalsLaw: boolean
 ) {
   const cellBelow = column[j + 1];
-  // LIQUIDS
   if (cellBelow === CellType.empty) {
     // Move down
     swapCells(i, j, i, j + 1);
@@ -266,7 +265,9 @@ export function processLiquid(
     } else {
       // Move liquid around
       const direction = Math.random() >= 0.5 ? 1 : -1;
-      moveLiquidSideways(cell, i, j, direction, canvasWidth);
+      if(!moveLiquidSideways(cell, i, j, direction, canvasWidth)){
+        moveLiquidSideways(cell, i, j, -direction, canvasWidth);
+      }
     }
   }
 }
@@ -281,6 +282,10 @@ function moveLiquidSideways(
   if (i + direction >= 0 && i + direction < canvasWidth) {
     if (pixelGrid[i + direction][j + 1] === CellType.empty) {
       swapCells(i, j, i + direction, j + 1);
+      return true;
+    } else if (pixelGrid[i + direction][j] === CellType.empty && pixelGrid[i][j+1] !== CellType.states.solid) {
+      swapCells(i, j, i + direction, j);
+      return true;
     } else if (Math.random() >= 0.5) {
       // TODO use liquid thickness instead of 0.5
       const nextCell = pixelGrid[i + direction][j];
