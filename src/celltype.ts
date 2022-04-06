@@ -2,6 +2,7 @@ export type Cell = {
   name?: string;
   color: string;
   hsl: number[];
+  rgb?: number[];
   density: number;
   key?: string;
   state?: states;
@@ -235,8 +236,45 @@ export const CellsMap: Cell[] = [
   flame,
 ];
 
+export const AllCells: Cell[] = [
+  empty,
+  smoke,
+  flame3,
+  flame2,
+  flame,
+  water,
+  oil,
+  concrete,
+  ice,
+  soil,
+  wood,
+  coal,
+  sand,
+  salt,
+  powder,
+  crystals,
+  seed,
+  plant,
+];
+
+export function hexToRgb(hex: string) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? [
+        parseInt(result[1], 16),
+        parseInt(result[2], 16),
+        parseInt(result[3], 16),
+      ]
+    : null;
+}
+
 {
-  const brushTypeSelector = document.getElementById("brush-type") as HTMLSelectElement;
+  // INIT
+
+  // Set Brush selector menu values
+  const brushTypeSelector = document.getElementById(
+    "brush-type"
+  ) as HTMLSelectElement;
   CellsMap.forEach((cell) => {
     const opt = document.createElement("option");
     opt.value = cell.name;
@@ -246,4 +284,7 @@ export const CellsMap: Cell[] = [
     }
     brushTypeSelector.appendChild(opt);
   });
+
+  // Set RGB values
+  AllCells.forEach((c) => (c.rgb = hexToRgb(c.color)));
 }
