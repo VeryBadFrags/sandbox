@@ -3,26 +3,33 @@ import * as CellType from "./celltype.js";
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 const context = canvas.getContext("2d", { alpha: false });
 
-export function drawFull(gameState: CellType.Cell[][], lightMap?: number[][]) {
-  // reset the grid
-  //context.clearRect(0, 0, canvas.width, canvas.height);
-  context.fillStyle = CellType.empty.color;
-  context.fillRect(0, 0, canvas.width, canvas.height);
+let imagedata = context.createImageData(canvas.width, canvas.height);
 
+export function drawFull(gameState: CellType.Cell[][], lightMap?: number[][]) {
+  // Reset imageData
+  imagedata = context.createImageData(canvas.width, canvas.height);
+
+  const gameWidth = gameState.length;
   const gameHeight = gameState[0].length;
-  for (let i = 0; i < gameState.length; i++) {
-    const column = gameState[i];
-    for (let j = 0; j < gameHeight; j++) {
-      const cell = column[j];
-      if (cell !== CellType.empty) {
-        context.fillStyle = getHexColor(cell, lightMap ? lightMap[i][j] : 0);
-        context.fillRect(i, j, 1, 1);
+
+  for (let x = 0; x < gameWidth; x++) {
+    const column = gameState[x];
+    for (let y = 0; y < gameHeight; y++) {
+      const cell = column[y];
+      if (cell) {
+        // TODO use lightmap to fix dynamic lights
+        
+        let pixelindex = (y * gameWidth + x) * 4;
+        imagedata.data[pixelindex] = cell.rgb[0];   // Red
+        imagedata.data[pixelindex+1] = cell.rgb[1]; // Green
+        imagedata.data[pixelindex+2] = cell.rgb[2]; // Blue
+        imagedata.data[pixelindex+3] = 255;   // Alpha
       }
     }
   }
-}
 
-let imagedata = context.createImageData(canvas.width, canvas.height);
+  context.putImageData(imagedata, 0 , 0);
+}
 
 export function drawPartial(deltaBoard: CellType.Cell[][]) {
   const gameWidth = deltaBoard.length;
