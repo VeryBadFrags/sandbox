@@ -122,8 +122,8 @@ function update(time = 0) {
     }
     const renderEnd = performance.now();
     Utils.wipeMatrix(Game.delta, null);
-    // timer %= interval; // accurate
-    timer -= frameMinInterval; // skip frames
+    timer %= frameMinInterval; // accurate
+    // timer -= frameMinInterval; // skip frames
     console.log(timer);
 
     if (fpsTimer > fpsDisplayInterval) {
