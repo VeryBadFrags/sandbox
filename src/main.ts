@@ -5,15 +5,14 @@ import * as Display from "./display.js";
 import * as CellType from "./celltype.js";
 import * as Utils from "./utils.js";
 import * as Game from "./game.js";
-import * as Solid from "./solid.js";
+import * as Solid from "./engine/solid.js";
 import * as Liquid from "./liquid";
 import Brush from "./brush.js";
 
-let canvasWidth: number, canvasHeight: number;
-
 const canvas = document.getElementById("game") as HTMLCanvasElement;
-
 const pascalsLaw = false;
+
+let canvasWidth: number, canvasHeight: number;
 
 const iStart = (ltr: boolean, size: number) => (ltr ? 0 : size - 1);
 const iEnd = (i: number, ltr: boolean, size: number) =>
@@ -94,9 +93,9 @@ let dynamicLights = false;
 
 let lightMap: number[][];
 let play = true;
-const fpsVal = document.getElementById("fps-val");
-const engineVal = document.getElementById("engine-val");
-const renderVal = document.getElementById("render-val");
+const fpsVal = document.getElementById("fps-val")!;
+const engineVal = document.getElementById("engine-val")!;
+const renderVal = document.getElementById("render-val")!;
 let fpsTimer = 0;
 
 function update(time = 0) {
@@ -202,10 +201,10 @@ function init() {
     }
   });
 
-  const playPauseButton = document.getElementById("play-pause");
+  const playPauseButton = document.getElementById("play-pause")!;
   playPauseButton.addEventListener("click", togglePlay);
 
-  const eraseButton = document.getElementById("erase-button");
+  const eraseButton = document.getElementById("erase-button")!;
   eraseButton.addEventListener("click", () => {
     Utils.wipeMatrix(Game.pixelGrid, CellType.empty);
     Display.drawFull(Game.pixelGrid);

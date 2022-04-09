@@ -25,10 +25,11 @@
   "homepage": "https://github.com/VeryBadFrags/sandbox#readme",
   "dependencies": {
     "bootstrap": "^5.1.3",
+    "sass": "^1.50.0",
     "typescript": "^4.5.4",
     "vite": "^2.9.0"
   },
   "devDependencies": {
-    "standard": "^16.0.4"
+    "ts-standard": "^11.0.0"
   }
 }
