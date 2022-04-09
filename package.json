@@ -30,6 +30,6 @@
     "vite": "^2.9.0"
   },
   "devDependencies": {
-    "ts-standard": "^11.0.0"
+    "eslint": "^8.13.0"
   }
 }

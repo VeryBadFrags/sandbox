@@ -1,8 +1,12 @@
-const canvas = document.getElementById("game") as HTMLCanvasElement;
 import * as Utils from "./utils.js";
 import * as CellType from "./celltype.js";
+const canvas = document.getElementById("game") as HTMLCanvasElement;
 
-export const pixelGrid = Utils.initArray(canvas.width, canvas.height, CellType.empty);
+export const pixelGrid = Utils.initArray(
+  canvas.width,
+  canvas.height,
+  CellType.empty
+);
 export const delta = Utils.initArray(canvas.width, canvas.height, null);
 
 const maxLightDistance = 6;
@@ -22,7 +26,12 @@ export function processFire(
   // Extinguish
   if (
     (Math.random() > cell.lifetime && !Utils.isFuelAround(i, j, pixelGrid)) ||
-    Utils.testNeighbors(i, j, pixelGrid, (test: CellType.Cell) => test.dousing) >= 2
+    Utils.testNeighbors(
+      i,
+      j,
+      pixelGrid,
+      (test: CellType.Cell) => test.dousing
+    ) >= 2
   ) {
     createCell(i, j, cell.nextCell);
   } else if (
@@ -35,7 +44,15 @@ export function processFire(
     createCell(i, j - 1, Math.random() >= 0.5 ? cell.nextCell : cell);
   }
 
-  updateFireLightMap(dynamicLights, column, j, i, canvasWidth, canvasHeight, lightMap);
+  updateFireLightMap(
+    dynamicLights,
+    column,
+    j,
+    i,
+    canvasWidth,
+    canvasHeight,
+    lightMap
+  );
 }
 
 function updateFireLightMap(
@@ -58,16 +75,25 @@ function updateFireLightMap(
         b <= Math.min(j + maxLightDistance, canvasHeight - 1);
         b++
       ) {
-        if ((a !== i || b !== j) && pixelGrid[a][b].state !== CellType.states.fire) {
+        if (
+          (a !== i || b !== j) &&
+          pixelGrid[a][b].state !== CellType.states.fire
+        ) {
           const distance = Utils.getDistance(a, b, i, j);
-          lightMap[a][b] = lightMap[a][b] + Math.max(0, maxLightDistance - distance);
+          lightMap[a][b] =
+            lightMap[a][b] + Math.max(0, maxLightDistance - distance);
         }
       }
     }
   }
 }
 
-function propagateFire(i: number, canvasWidth: number, j: number, canvasHeight: number) {
+function propagateFire(
+  i: number,
+  canvasWidth: number,
+  j: number,
+  canvasHeight: number
+) {
   const a = Math.floor(Math.random() * 3) - 1;
   const b = Math.floor(Math.random() * 3) - 1;
   if (i + a >= 0 && i + a < canvasWidth && j + b >= 0 && j + b < canvasHeight) {

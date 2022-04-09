@@ -1,4 +1,4 @@
-export type Cell = {
+export interface Cell {
   name?: string;
   color: string;
   hsl: number[];
@@ -18,7 +18,7 @@ export type Cell = {
   melt?: Cell;
   ash?: Cell;
   drip?: number;
-};
+}
 
 export enum states {
   liquid,
@@ -199,7 +199,7 @@ export const seed: Cell = {
   granular: true,
   flammable: 0.8,
   melt: soil,
-  //ash: soil,
+  // ash: soil,
   state: states.solid,
 };
 export const plant: Cell = {
@@ -258,8 +258,8 @@ export const AllCells: Cell[] = [
 ];
 
 export function hexToRgb(hex: string) {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result != null
     ? [
         parseInt(result[1], 16),
         parseInt(result[2], 16),

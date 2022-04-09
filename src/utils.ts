@@ -1,6 +1,9 @@
 import * as CellType from "./celltype.js";
 
-export function wipeMatrix(matrix: (CellType.Cell | number)[][], value: CellType.Cell | number) {
+export function wipeMatrix(
+  matrix: Array<Array<CellType.Cell | number>>,
+  value: CellType.Cell | number
+) {
   const width = matrix.length;
   const height = matrix[0].length;
   for (let x = 0; x < width; x++) {
@@ -11,7 +14,11 @@ export function wipeMatrix(matrix: (CellType.Cell | number)[][], value: CellType
   }
 }
 
-export function initArray(width: number, height: number, cell: CellType.Cell | number) {
+export function initArray(
+  width: number,
+  height: number,
+  cell: CellType.Cell | number
+) {
   const newArray = new Array(width);
   for (let x = 0; x < width; x++) {
     const newRow = new Array(height);
@@ -23,11 +30,15 @@ export function initArray(width: number, height: number, cell: CellType.Cell | n
   return newArray;
 }
 
-export function copyArray(arrayToCopy: [][]) {
+export function copyArray(arrayToCopy: Array<[]>) {
   return arrayToCopy.map((row: []) => row.slice());
 }
 
-export function isFuelAround(x: number, y: number, pixelGrid: CellType.Cell[][]) {
+export function isFuelAround(
+  x: number,
+  y: number,
+  pixelGrid: CellType.Cell[][]
+) {
   const xMax = Math.min(x + 1, pixelGrid.length - 1);
   const yMax = Math.min(y + 1, pixelGrid[0].length - 1);
   for (let i = Math.max(x - 1, 0); i <= xMax; i++) {
@@ -63,7 +74,11 @@ function findHigherCell(
 ): number[] {
   {
     const upCoordinates = hashCoordinates(x, y - 1);
-    if (y - 1 >= 0 && pixelGrid[x][y - 1] === cell && !explored.includes(upCoordinates)) {
+    if (
+      y - 1 >= 0 &&
+      pixelGrid[x][y - 1] === cell &&
+      !explored.includes(upCoordinates)
+    ) {
       explored.push(upCoordinates);
       if (y - 1 < inputHeight - 1) {
         return [x, y - 1];
@@ -81,7 +96,11 @@ function findHigherCell(
   }
 
   const leftCoordinates = hashCoordinates(x - 1, y);
-  if (x - 1 >= 0 && pixelGrid[x - 1][y] === cell && !explored.includes(leftCoordinates)) {
+  if (
+    x - 1 >= 0 &&
+    pixelGrid[x - 1][y] === cell &&
+    !explored.includes(leftCoordinates)
+  ) {
     explored.push(leftCoordinates);
     const newHeight = findHigherCell(
       pixelGrid[x - 1][y],
@@ -119,7 +138,14 @@ function findHigherCell(
     !explored.includes(downCoordinates)
   ) {
     explored.push(downCoordinates);
-    const newHeight = findHigherCell(cell, x, y + 1, pixelGrid, explored, inputHeight);
+    const newHeight = findHigherCell(
+      cell,
+      x,
+      y + 1,
+      pixelGrid,
+      explored,
+      inputHeight
+    );
     if (newHeight) return newHeight;
   }
   return null;
@@ -155,7 +181,7 @@ export function testNeighbors(
   x: number,
   y: number,
   pixelGrid: CellType.Cell[][],
-  testFunction: { (c: CellType.Cell): boolean }
+  testFunction: (c: CellType.Cell) => boolean
 ) {
   let count = 0;
   const xMax = Math.min(x + 1, pixelGrid.length - 1);
@@ -177,7 +203,12 @@ export function getDistance(a1: number, b1: number, a2: number, b2: number) {
   return Math.sqrt((a2 - a1) ** 2 + (b2 - b1) ** 2);
 }
 
-export function createIntermediatePoints(a1: number, b1: number, a2: number, b2: number) {
+export function createIntermediatePoints(
+  a1: number,
+  b1: number,
+  a2: number,
+  b2: number
+) {
   const points = [];
   const aDistance = Math.abs(a2 - a1);
   const bDistance = Math.abs(b2 - b1);
@@ -195,7 +226,11 @@ export function createIntermediatePoints(a1: number, b1: number, a2: number, b2:
     }
   } else {
     const upToDown = b1 < b2;
-    for (let j = upToDown ? b1 + 1 : b1 - 1; upToDown ? j < b2 : j > b2; upToDown ? j++ : j--) {
+    for (
+      let j = upToDown ? b1 + 1 : b1 - 1;
+      upToDown ? j < b2 : j > b2;
+      upToDown ? j++ : j--
+    ) {
       const progress = (j - Math.min(b1, b2)) / bDistance;
       let i: number;
       if (upToDown) {

@@ -2,22 +2,30 @@ import * as CellType from "./celltype.js";
 import * as Game from "./game.js";
 import * as Utils from "./utils.js";
 
-const brushTypeSelector = document.getElementById("brush-type") as HTMLSelectElement;
-const brushSizeInput = document.getElementById("brush-size") as HTMLInputElement;
-const brushSizeSlider = document.getElementById("brush-size-slider") as HTMLInputElement;
-const brushOpacitySlider = document.getElementById("brush-opacity") as HTMLInputElement;
+const brushTypeSelector = document.getElementById(
+  "brush-type"
+) as HTMLSelectElement;
+const brushSizeInput = document.getElementById(
+  "brush-size"
+) as HTMLInputElement;
+const brushSizeSlider = document.getElementById(
+  "brush-size-slider"
+) as HTMLInputElement;
+const brushOpacitySlider = document.getElementById(
+  "brush-opacity"
+) as HTMLInputElement;
 
 let brushType = CellType.concrete;
 let brushSize = 2;
 let brushOpacity = 100;
 
 export default class Brush {
-  setBrushType(brush: CellType.Cell) {
+  setBrushType(brush: CellType.Cell): void {
     brushType = brush;
     brushTypeSelector.value = brush.name;
   }
 
-  increaseBrushSize(size: number) {
+  increaseBrushSize(size: number): void {
     if (size > 0) {
       brushSize += size + Math.floor(brushSize / 10);
     } else {
@@ -29,20 +37,20 @@ export default class Brush {
     brushSizeSlider.value = brushSize.toString();
   }
 
-  increaseOpacity(size: number) {
+  increaseOpacity(size: number): void {
     brushOpacity += size;
     brushOpacity = Math.max(0, Math.min(100, brushOpacity));
     brushOpacitySlider.value = brushOpacity.toString();
   }
 
-  init() {
+  init(): void {
     const canvas = document.getElementById("game") as HTMLCanvasElement;
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
     let intervalId: NodeJS.Timeout;
 
-    const spawnCell = (x: number, y: number) => {
+    const spawnCell = (x: number, y: number): void => {
       const actualBrushSize = brushSize - 1;
       for (
         let i = Math.max(0, x - actualBrushSize);
@@ -60,7 +68,13 @@ export default class Brush {
           }
         }
       }
-      if (brushSize > 0 && x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight) {
+      if (
+        brushSize > 0 &&
+        x >= 0 &&
+        x < canvasWidth &&
+        y >= 0 &&
+        y < canvasHeight
+      ) {
         Game.delta[x][y] = brushType;
         Game.pixelGrid[x][y] = brushType;
       }
@@ -83,14 +97,18 @@ export default class Brush {
       );
     }
 
-    let prevMouseX = 0,
-      prevMouseY = 0,
-      mouseX = 0,
-      mouseY = 0;
+    let prevMouseX = 0;
+    let prevMouseY = 0;
+    let mouseX = 0;
+    let mouseY = 0;
     const rect = canvas.getBoundingClientRect();
     function onMouseMove(e: MouseEvent) {
-      mouseX = Math.round(((e.clientX - rect.left) / (rect.right - rect.left)) * canvas.width);
-      mouseY = Math.round(((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height);
+      mouseX = Math.round(
+        ((e.clientX - rect.left) / (rect.right - rect.left)) * canvas.width
+      );
+      mouseY = Math.round(
+        ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height
+      );
 
       if (isMouseDown) {
         if (Utils.getDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
@@ -115,7 +133,8 @@ export default class Brush {
     }
 
     brushTypeSelector.addEventListener("change", function (e) {
-      brushType = CellType.CellsMap[(<HTMLSelectElement>e.target).selectedIndex];
+      brushType =
+        CellType.CellsMap[(<HTMLSelectElement>e.target).selectedIndex];
     });
 
     brushSizeInput.addEventListener("input", function (e) {
