@@ -5,7 +5,8 @@ import * as Display from "./display.js";
 import * as CellType from "./celltype.js";
 import * as Utils from "./utils.js";
 import * as Game from "./game.js";
-import * as Solid from "engine/solid.js";
+import * as Solid from "./solid.js";
+import * as Liquid from "./liquid";
 import Brush from "./brush.js";
 
 let canvasWidth: number, canvasHeight: number;
@@ -14,12 +15,17 @@ const canvas = document.getElementById("game") as HTMLCanvasElement;
 
 const pascalsLaw = false;
 
+const iStart = (ltr: boolean, size: number) => (ltr ? 0 : size - 1);
+const iEnd = (i: number, ltr: boolean, size: number) =>
+  ltr ? i < size : i >= 0;
 function nextState() {
   const leftToRight = Math.random() >= 0.5;
-  const iStart = leftToRight ? 0 : canvasWidth - 1;
-  const iEnd = (i: number) => (leftToRight ? i < canvasWidth : i >= 0);
 
-  for (let i = iStart; iEnd(i); leftToRight ? i++ : i--) {
+  for (
+    let i = iStart(leftToRight, canvasWidth);
+    iEnd(i, leftToRight, canvasWidth);
+    leftToRight ? i++ : i--
+  ) {
     const column = Game.pixelGrid[i];
     for (let j = canvasHeight - 2; j >= 0; j--) {
       const cell = column[j];
@@ -32,10 +38,19 @@ function nextState() {
           Solid.process(cell, i, j, column, canvasWidth, canvasHeight);
           break;
         case CellType.states.liquid:
-          Game.processLiquid(cell, i, j, column, canvasWidth, pascalsLaw);
+          Liquid.process(cell, i, j, column, canvasWidth, pascalsLaw);
           break;
         case CellType.states.fire:
-          Game.processFire(cell, i, j, column, canvasWidth, canvasHeight, lightMap, dynamicLights);
+          Game.processFire(
+            cell,
+            i,
+            j,
+            column,
+            canvasWidth,
+            canvasHeight,
+            lightMap,
+            dynamicLights
+          );
           break;
         case CellType.states.gas:
           Game.processGas(cell, i, j, column, canvasWidth);
@@ -116,7 +131,7 @@ function update(time = 0) {
       fpsVal.innerText = Math.round(fpsDisplayInterval / deltaTime).toString();
       engineVal.innerText = Math.round(engineEnd - engineStart).toString();
       renderVal.innerText = Math.round(renderEnd - renderStart).toString();
-      fpsTimer = 0; 
+      fpsTimer = 0;
     }
   }
 
@@ -132,7 +147,11 @@ function init() {
 
   // Walls
   const halfScreen = Math.floor(canvasHeight / 2);
-  for (let i = Math.floor(canvasWidth / 2) - 25; i < Math.floor(canvasWidth / 2) + 24; i++) {
+  for (
+    let i = Math.floor(canvasWidth / 2) - 25;
+    i < Math.floor(canvasWidth / 2) + 24;
+    i++
+  ) {
     Game.createCell(i, halfScreen, CellType.concrete);
   }
 
@@ -141,7 +160,7 @@ function init() {
     Game.createCell(Math.floor(canvasWidth / 2 + 24), j, CellType.concrete);
   }
 
-  for(let x = 0; x < canvasWidth; x++ ) {
+  for (let x = 0; x < canvasWidth; x++) {
     Game.createCell(x, canvasHeight - 2, CellType.concrete);
   }
 
@@ -192,7 +211,9 @@ function init() {
     Display.drawFull(Game.pixelGrid);
   });
 
-  const lightsCheck = document.getElementById("dynamic-lights") as HTMLInputElement;
+  const lightsCheck = document.getElementById(
+    "dynamic-lights"
+  ) as HTMLInputElement;
   lightsCheck.addEventListener("click", (e) => {
     dynamicLights = (<HTMLInputElement>e.target).checked;
     // TODO Full draw when turning off to clear light effects
