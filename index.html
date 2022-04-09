@@ -29,7 +29,12 @@
       <div class="row mt-2">
         <!-- Canvas -->
         <div class="col mb-3">
-          <canvas id="game" class="border border-light rounded-2" width="800" height="600"></canvas>
+          <canvas
+            id="game"
+            class="border border-light rounded-2"
+            width="800"
+            height="600"
+          ></canvas>
           <!-- <canvas id="cursor" width="800" height="600"></canvas> -->
         </div>
         <!-- End Canvas -->
@@ -40,7 +45,11 @@
             <div class="card-body">
               <div class="mb-3">
                 <label for="brush-type" class="form-label">🖌️ Brush type</label>
-                <select class="form-select form-select" name="brush-type" id="brush-type"></select>
+                <select
+                  class="form-select form-select"
+                  name="brush-type"
+                  id="brush-type"
+                ></select>
               </div>
               <div class="mb-3">
                 <label for="brush-size" class="form-label">⭕ Size</label>
@@ -49,15 +58,20 @@
                   <div class="col-12 col-md-8">
                     <input
                       type="range"
-                      class="form-range"
+                      class="form-range slider"
                       min="1"
                       max="32"
-                      class="slider"
                       id="brush-size-slider"
                     />
                   </div>
                   <div class="col">
-                    <input class="form-control" type="number" id="brush-size" min="1" max="32" />
+                    <input
+                      class="form-control"
+                      type="number"
+                      id="brush-size"
+                      min="1"
+                      max="32"
+                    />
                   </div>
                 </div>
               </div>
@@ -66,16 +80,22 @@
                 <small>( { } )</small>
                 <input
                   type="range"
-                  class="form-range"
+                  class="form-range slider"
                   min="0"
                   max="100"
-                  class="slider"
                   id="brush-opacity"
                 />
               </div>
               <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" value="" id="dynamic-lights" />
-                <label class="form-check-label" for="dynamic-lights"> Dynamic lights </label>
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="dynamic-lights"
+                />
+                <label class="form-check-label" for="dynamic-lights">
+                  Dynamic lights
+                </label>
               </div>
               <div class="mb-3">
                 <button
@@ -113,6 +133,6 @@
       <!-- End row-->
     </div>
 
-    <script type="module" src="main.js"></script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
