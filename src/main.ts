@@ -42,9 +42,11 @@ function nextState() {
       }
     }
 
+    // Destroy the last row
     Game.destroyCell(i, canvasHeight - 1);
   }
 
+  // Spawn cells at the top
   createTaps();
 }
 
@@ -104,13 +106,13 @@ function update(time = 0) {
     }
     const renderEnd = performance.now();
     Utils.wipeMatrix(Game.delta, null);
-    timer = timer % interval;
+    timer = timer % interval; // TODO or set it to 0 or remove interval?
 
     if (fpsTimer > 1000) {
       fpsVal.innerText = Math.round(1000 / deltaTime).toString();
       engineVal.innerText = Math.round(t1 - t0).toString();
       renderVal.innerText = Math.round(renderEnd - renderStart).toString();
-      fpsTimer = 0;
+      fpsTimer = 0; 
     }
   }
 
