@@ -2,7 +2,7 @@ import * as CellType from "./celltype.js";
 
 export function wipeMatrix(
   matrix: Array<Array<CellType.Cell | number>>,
-  value: CellType.Cell | number
+  value?: CellType.Cell | number
 ) {
   const width = matrix.length;
   const height = matrix[0].length;
