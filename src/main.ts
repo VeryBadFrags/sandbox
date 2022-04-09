@@ -5,6 +5,7 @@ import * as Display from "./display.js";
 import * as CellType from "./celltype.js";
 import * as Utils from "./utils.js";
 import * as Game from "./game.js";
+import * as Solid from "engine/solid.js";
 import Brush from "./brush.js";
 
 let canvasWidth: number, canvasHeight: number;
@@ -28,7 +29,7 @@ function nextState() {
 
       switch (cell.state) {
         case CellType.states.solid:
-          Game.processSolid(cell, i, j, column, canvasWidth, canvasHeight);
+          Solid.process(cell, i, j, column, canvasWidth, canvasHeight);
           break;
         case CellType.states.liquid:
           Game.processLiquid(cell, i, j, column, canvasWidth, pascalsLaw);
@@ -70,7 +71,8 @@ function createTaps() {
   }
 }
 
-const interval = 16.667;
+const frameMinInterval = 16.667;
+const fpsDisplayInterval = 1000;
 let timer = 0;
 let lastTime = 0;
 let dynamicLights = false;
@@ -88,15 +90,15 @@ function update(time = 0) {
   fpsTimer += deltaTime;
 
   timer += deltaTime;
-  if (timer > interval) {
-    const t0 = performance.now();
+  if (timer > frameMinInterval) {
+    const engineStart = performance.now();
     if (play) {
       if (dynamicLights) {
         Utils.wipeMatrix(lightMap, 0);
       }
       nextState();
     }
-    const t1 = performance.now();
+    const engineEnd = performance.now();
 
     const renderStart = performance.now();
     if (dynamicLights) {
@@ -106,11 +108,13 @@ function update(time = 0) {
     }
     const renderEnd = performance.now();
     Utils.wipeMatrix(Game.delta, null);
-    timer = timer % interval; // TODO or set it to 0 or remove interval?
+    // timer %= interval; // accurate
+    timer -= frameMinInterval; // skip frames
+    console.log(timer);
 
-    if (fpsTimer > 1000) {
-      fpsVal.innerText = Math.round(1000 / deltaTime).toString();
-      engineVal.innerText = Math.round(t1 - t0).toString();
+    if (fpsTimer > fpsDisplayInterval) {
+      fpsVal.innerText = Math.round(fpsDisplayInterval / deltaTime).toString();
+      engineVal.innerText = Math.round(engineEnd - engineStart).toString();
       renderVal.innerText = Math.round(renderEnd - renderStart).toString();
       fpsTimer = 0; 
     }
