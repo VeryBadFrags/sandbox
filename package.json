@@ -8,9 +8,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "clean": "rm -rf build/",
-    "lint": "standard --fix",
-    "test": "standard"
+    "clean": "rm -rf build/"
   },
   "repository": {
     "type": "git",
