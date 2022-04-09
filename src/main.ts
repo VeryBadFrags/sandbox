@@ -6,7 +6,7 @@ import * as CellType from "./celltype.js";
 import * as Utils from "./utils.js";
 import * as Game from "./game.js";
 import * as Solid from "./engine/solid.js";
-import * as Liquid from "./liquid";
+import * as Liquid from "./engine/liquid";
 import Brush from "./brush.js";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;

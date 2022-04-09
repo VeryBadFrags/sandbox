@@ -1,6 +1,6 @@
-import * as Utils from "./utils.js";
-import * as CellType from "./celltype.js";
-import * as Game from "./game.js";
+import * as Utils from "../utils.js";
+import * as CellType from "../celltype.js";
+import * as Game from "../game.js";
 
 export function process(
   cell: CellType.Cell,
@@ -11,6 +11,7 @@ export function process(
   pascalsLaw: boolean
 ) {
   const cellBelow = column[j + 1];
+  
   if (cellBelow === CellType.empty) {
     // Move down
     Game.swapCells(i, j, i, j + 1);
@@ -29,7 +30,7 @@ export function process(
       Game.pixelGrid[i - 1][j] === cell &&
       i + 1 < canvasWidth &&
       Game.pixelGrid[i + 1][j] === cell
-    ) {
+    ) { // PASCAL LAW
       const higherCell = Utils.getHigherCell(cell, i, j, Game.pixelGrid);
       if (higherCell) {
         Game.swapCells(i, j - 1, higherCell[0], higherCell[1]);
