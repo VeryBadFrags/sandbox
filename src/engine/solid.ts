@@ -47,7 +47,7 @@ export function process(
       break;
   }
 
-  if (cellBelow === CellType.empty) {
+  if (cellBelow === CellType.empty || cellBelow.state === CellType.states.gas) {
     Game.swapCells(i, j, i, j + 1);
   } else if (cellBelow.state === CellType.states.liquid) {
     // Sink in liquids
