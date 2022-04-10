@@ -21,19 +21,31 @@ export function processFire(
   lightMap: number[][],
   dynamicLights: boolean
 ) {
-  propagateFire(i, canvasWidth, j, canvasHeight);
-
-  // Extinguish
+  // Douse
   if (
-    (Math.random() > cell.lifetime && !Utils.isFuelAround(i, j, pixelGrid)) ||
     Utils.testNeighbors(
       i,
       j,
       pixelGrid,
       (test: CellType.Cell) => test.dousing,
       (current: CellType.Cell, x: number, y: number) =>
-        current.melt ? createCell(x, y, current.melt) : null
-    ) >= 2
+        current.melt && Math.random() > 0.5 ? createCell(x, y, current.melt) : null
+    ) > 0
+  ) {
+    const lastCell = cell.nextCell.state === CellType.states.fire ? cell.nextCell.nextCell : cell.nextCell;
+    createCell(i,j, lastCell);
+    return;
+  }
+
+  // Extinguish
+  if (
+    Math.random() > cell.lifetime &&
+    Utils.testNeighbors(
+      i,
+      j,
+      pixelGrid,
+      (test: CellType.Cell) => test.flammable > 0
+    ) < 1
   ) {
     createCell(i, j, cell.nextCell);
   } else if (
@@ -46,6 +58,9 @@ export function processFire(
     createCell(i, j - 1, Math.random() >= 0.5 ? cell.nextCell : cell);
   }
 
+  propagateFire(i, canvasWidth, j, canvasHeight);
+
+  // TODO move outside of this function
   updateFireLightMap(
     dynamicLights,
     column,
