@@ -144,7 +144,7 @@ export const wood: Cell = {
 export const coal: Cell = {
   name: "♨️ Coal",
   key: "h",
-  color: "#222",
+  color: "#202020",
   hsl: [0, 0, 13],
   density: 30,
   state: states.solid,
