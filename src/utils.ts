@@ -181,7 +181,8 @@ export function testNeighbors(
   x: number,
   y: number,
   pixelGrid: CellType.Cell[][],
-  testFunction: (c: CellType.Cell) => boolean
+  testFunction: (c: CellType.Cell) => boolean,
+  action?: (c: CellType.Cell, x: number, y: number) => void
 ) {
   let count = 0;
   const xMax = Math.min(x + 1, pixelGrid.length - 1);
@@ -192,6 +193,7 @@ export function testNeighbors(
       if (i !== x || j !== y) {
         if (testFunction(column[j])) {
           count++;
+          action ? action(column[j], i, j) : null;
         }
       }
     }

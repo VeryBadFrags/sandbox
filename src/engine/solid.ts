@@ -47,7 +47,20 @@ export function process(
       break;
   }
 
-  if (cellBelow === CellType.empty || cellBelow.state === CellType.states.gas) {
+  if (cell.disolve) {
+    if (
+      Math.random() > 0.995 &&
+      Utils.countNeighbors(i, j, Game.pixelGrid, cell.disolve) >= 2
+    ) {
+      Game.createCell(i, j, cell.disolveInto);
+      return;
+    }
+  }
+
+  if (
+    (cellBelow === CellType.empty || cellBelow.state === CellType.states.gas) &&
+    Math.random() >= 1 / (cell.density * 100)
+  ) {
     Game.swapCells(i, j, i, j + 1);
   } else if (cellBelow.state === CellType.states.liquid) {
     // Sink in liquids

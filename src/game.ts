@@ -30,7 +30,9 @@ export function processFire(
       i,
       j,
       pixelGrid,
-      (test: CellType.Cell) => test.dousing
+      (test: CellType.Cell) => test.dousing,
+      (current: CellType.Cell, x: number, y: number) =>
+        current.melt ? createCell(x, y, current.melt) : null
     ) >= 2
   ) {
     createCell(i, j, cell.nextCell);

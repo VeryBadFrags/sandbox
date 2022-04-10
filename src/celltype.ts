@@ -18,6 +18,8 @@ export interface Cell {
   melt?: Cell;
   ash?: Cell;
   drip?: number;
+  disolve?: Cell;
+  disolveInto?: Cell;
 }
 
 export enum states {
@@ -81,6 +83,16 @@ export const water: Cell = {
   color: "#2222ff",
   hsl: [240, 100, 57],
   density: 1,
+  state: states.liquid,
+  dousing: true,
+  melt: smoke,
+};
+
+export const saltyWater: Cell = {
+  name: "Salty Water",
+  color: "#22A2ff",
+  hsl: [240, 100, 57],
+  density: 2,
   state: states.liquid,
   dousing: true,
 };
@@ -170,7 +182,14 @@ export const salt: Cell = {
   state: states.solid,
   density: 9,
   granular: true,
+  disolve: water,
+  disolveInto: saltyWater,
 };
+
+{ // Reference after salt
+  saltyWater.melt = salt;
+}
+
 export const powder: Cell = {
   name: "💣 Gunpowder",
   key: "g",
@@ -243,6 +262,7 @@ export const AllCells: Cell[] = [
   flame2,
   flame,
   water,
+  saltyWater,
   oil,
   concrete,
   ice,
