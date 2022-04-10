@@ -124,7 +124,6 @@ function update(time = 0) {
     Utils.wipeMatrix(Game.delta, null);
     timer %= frameMinInterval; // accurate
     // timer -= frameMinInterval; // skip frames
-    console.log(timer);
 
     if (fpsTimer > fpsDisplayInterval) {
       fpsVal.innerText = Math.round(fpsDisplayInterval / deltaTime).toString();
