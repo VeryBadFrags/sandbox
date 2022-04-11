@@ -62,8 +62,11 @@ export function process(
     Math.random() >= 1 / (cell.density * 100)
   ) {
     Game.swapCells(i, j, i, j + 1);
-  } else if (cellBelow.state === CellType.states.liquid) {
-    // Sink in liquids
+    return;
+  }
+  
+  // Sink in liquids
+  if (cellBelow.state === CellType.states.liquid) {
     if (
       Math.random() <=
       (cell.density - cellBelow.density) / cellBelow.density / 50
@@ -98,20 +101,18 @@ function rollGrainSideways(
       // Roll down
       Game.swapCells(i, j, i + direction, j + 1);
       return true;
-    } else if (
-      otherCell.state === CellType.states.fire &&
-      Math.random() > 0.9
-    ) {
+    }
+
+    if (otherCell.state === CellType.states.fire && Math.random() > 0.9) {
       if (Math.random() > cell.flammable) {
         Game.createCell(i, j, CellType.flame);
       } else {
         Game.swapCells(i, j, i + direction, j + 1);
       }
       return true;
-    } else if (
-      otherCell.state === CellType.states.liquid &&
-      Math.random() > 0.9
-    ) {
+    }
+
+    if (otherCell.state === CellType.states.liquid && Math.random() > 0.9) {
       // Swirl in liquid
       Game.swapCells(i, j, i + direction, j + 1);
       return true;
