@@ -138,7 +138,7 @@ export const ice: Cell = {
   drip: 0.999,
   static: true,
   melt: water,
-  dousing: true
+  dousing: true,
 };
 export const soil: Cell = {
   name: "🍂 Soil",
@@ -195,7 +195,8 @@ export const salt: Cell = {
   disolveInto: saltyWater,
 };
 
-{ // Reference after salt
+{
+  // Reference after salt
   saltyWater.melt = salt;
 }
 
@@ -307,22 +308,14 @@ export function hexToRgb(hex: string) {
     "brush-type"
   ) as HTMLSelectElement;
 
-  const tap1Select = document.getElementById(
-    "select-tap1"
-  ) as HTMLSelectElement;
-
-  let selects = [brushTypeSelector, tap1Select];
-
   CellsMap.forEach((cell) => {
-    selects.forEach(select => {
-      const opt = document.createElement("option");
-      opt.value = cell.name;
-      opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
-      if (cell === concrete) {
-        opt.selected = true;
-      }
-      select.appendChild(opt);
-    });
+    const opt = document.createElement("option");
+    opt.value = cell.name;
+    opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
+    if (cell === concrete) {
+      opt.selected = true;
+    }
+    brushTypeSelector.appendChild(opt);
   });
 
   // Set RGB values
