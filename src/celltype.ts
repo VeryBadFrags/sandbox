@@ -108,6 +108,14 @@ export const oil: Cell = {
   melt: flame,
 };
 
+// export const acid: Cell = {
+//   name: "Acid",
+//   key: "a",
+//   color: "#00ff00",
+//   density: 3,
+//   state: states.liquid,
+// }
+
 // SOLIDS
 export const concrete: Cell = {
   name: "🧱 Concrete",
@@ -130,6 +138,7 @@ export const ice: Cell = {
   drip: 0.999,
   static: true,
   melt: water,
+  dousing: true
 };
 export const soil: Cell = {
   name: "🍂 Soil",
@@ -253,10 +262,12 @@ export const CellsMap: Cell[] = [
   seed,
   crystals,
   flame,
+  // acid,
 ];
 
 export const AllCells: Cell[] = [
   empty,
+  // acid,
   smoke,
   flame3,
   flame2,
@@ -295,14 +306,23 @@ export function hexToRgb(hex: string) {
   const brushTypeSelector = document.getElementById(
     "brush-type"
   ) as HTMLSelectElement;
+
+  const tap1Select = document.getElementById(
+    "select-tap1"
+  ) as HTMLSelectElement;
+
+  let selects = [brushTypeSelector, tap1Select];
+
   CellsMap.forEach((cell) => {
-    const opt = document.createElement("option");
-    opt.value = cell.name;
-    opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
-    if (cell === concrete) {
-      opt.selected = true;
-    }
-    brushTypeSelector.appendChild(opt);
+    selects.forEach(select => {
+      const opt = document.createElement("option");
+      opt.value = cell.name;
+      opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
+      if (cell === concrete) {
+        opt.selected = true;
+      }
+      select.appendChild(opt);
+    });
   });
 
   // Set RGB values
