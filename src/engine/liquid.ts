@@ -58,7 +58,7 @@ export function process(
     }
 
     // Swirl in liquids
-    if (Math.random() >= 0.5) {
+    if (i + direction >= 0 && i + direction < canvasWidth && Math.random() >= 0.5) {
       // TODO use liquid thickness instead of 0.5
       const nextCell = Game.pixelGrid[i + direction][j];
       if (nextCell !== cell && nextCell.state === CellType.states.liquid) {
