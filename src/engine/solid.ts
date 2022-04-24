@@ -64,9 +64,15 @@ export function process(
     Game.swapCells(i, j, i, j + 1);
     return;
   }
-  
+
   // Sink in liquids
-  if (cellBelow.state === CellType.states.liquid) {
+  if (
+    cellBelow.state === CellType.states.liquid &&
+    i - 1 >= 0 &&
+    Game.pixelGrid[i - 1][j + 1] === CellType.states.liquid &&
+    i + 1 < canvasWidth &&
+    Game.pixelGrid[i + 1][j + 1] === CellType.states.liquid
+  ) {
     if (
       Math.random() <=
       (cell.density - cellBelow.density) / cellBelow.density / 50
