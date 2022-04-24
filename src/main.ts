@@ -65,22 +65,40 @@ function nextState() {
   createTaps();
 }
 
+let tap1 = CellType.oil;
+let tap2 = CellType.sand;
+let tap3 = CellType.water;
+
+// Tap listeners
+const tapSelect = document.getElementById('select-tap1') as HTMLSelectElement;
+tapSelect.addEventListener("change", function (e) {
+  tap1 = CellType.TapValues[(<HTMLSelectElement>e.target).selectedIndex];
+});
+const tap2Select = document.getElementById('select-tap2') as HTMLSelectElement;
+tap2Select.addEventListener("change", function (e) {
+  tap2 = CellType.TapValues[(<HTMLSelectElement>e.target).selectedIndex];
+});
+const tap3Select = document.getElementById('select-tap3') as HTMLSelectElement;
+tap3Select.addEventListener("change", function (e) {
+  tap3 = CellType.TapValues[(<HTMLSelectElement>e.target).selectedIndex];
+});
+
 function createTaps() {
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor(canvasWidth / 2) + i, 0, CellType.sand);
+      Game.createCell(Math.floor(canvasWidth / 4) + i, 0, tap1);
     }
   }
 
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor((3 * canvasWidth) / 4) + i, 0, CellType.water);
+      Game.createCell(Math.floor(canvasWidth / 2) + i, 0, tap2);
     }
   }
 
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor(canvasWidth / 4) + i, 0, CellType.oil);
+      Game.createCell(Math.floor((3 * canvasWidth) / 4) + i, 0, tap3);
     }
   }
 }

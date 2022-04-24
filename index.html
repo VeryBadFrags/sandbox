@@ -46,7 +46,7 @@
               <div class="mb-3">
                 <label for="brush-type" class="form-label">🖌️ Brush type</label>
                 <select
-                  class="form-select form-select"
+                  class="form-select"
                   name="brush-type"
                   id="brush-type"
                 ></select>
@@ -75,6 +75,7 @@
                   </div>
                 </div>
               </div>
+              <!-- Opacity -->
               <div class="mb-3">
                 <label for="brush-opacity" class="form-label">☁️ Opacity</label>
                 <small>( { } )</small>
@@ -86,12 +87,41 @@
                   id="brush-opacity"
                 />
               </div>
+
+              <!-- Taps -->
+              <label>Taps</label>
+              <div class="row">
+                <div class="col-12">
+                  <select
+                    class="form-select form-select-sm"
+                    name="tap1"
+                    id="select-tap1"
+                  ></select>
+                </div>
+                <div class="col-12">
+                  <select
+                    class="form-select form-select-sm"
+                    name="tap2"
+                    id="select-tap2"
+                  ></select>
+                </div>
+                <div class="col-12">
+                  <select
+                    class="form-select form-select-sm"
+                    name="tap3"
+                    id="select-tap3"
+                  ></select>
+                </div>
+              </div>
+
+              <!-- Dynamic lights -->
               <div class="form-check mb-3">
                 <input
                   class="form-check-input"
                   type="checkbox"
                   value=""
                   id="dynamic-lights"
+                  disabled="true"
                 />
                 <label class="form-check-label" for="dynamic-lights">
                   Dynamic lights

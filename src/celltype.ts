@@ -289,6 +289,8 @@ export const AllCells: Cell[] = [
   plant,
 ];
 
+export const TapValues: Cell[] = [oil, sand, water, coal, seed, soil];
+
 export function hexToRgb(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result != null
@@ -300,6 +302,16 @@ export function hexToRgb(hex: string) {
     : null;
 }
 
+function addElementToSelect(cell, select) {
+  const opt = document.createElement("option");
+  opt.value = cell.name;
+  opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
+  if (cell === concrete) {
+    opt.selected = true;
+  }
+  select.appendChild(opt);
+}
+
 {
   // INIT
 
@@ -308,15 +320,14 @@ export function hexToRgb(hex: string) {
     "brush-type"
   ) as HTMLSelectElement;
 
-  CellsMap.forEach((cell) => {
-    const opt = document.createElement("option");
-    opt.value = cell.name;
-    opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
-    if (cell === concrete) {
-      opt.selected = true;
-    }
-    brushTypeSelector.appendChild(opt);
-  });
+  CellsMap.forEach((cell) => addElementToSelect(cell, brushTypeSelector));
+
+  for (let i = 1; i <= 3; i++) {
+    const tap1Select = document.getElementById(
+      "select-tap" + i
+    ) as HTMLSelectElement;
+    TapValues.forEach((cell) => addElementToSelect(cell, tap1Select));
+  }
 
   // Set RGB values
   AllCells.forEach((c) => (c.rgb = hexToRgb(c.color)));
