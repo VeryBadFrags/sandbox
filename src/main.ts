@@ -78,10 +78,12 @@ const tap2Select = document.getElementById('select-tap2') as HTMLSelectElement;
 tap2Select.addEventListener("change", function (e) {
   tap2 = CellType.TapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
+tap2Select.selectedIndex = 1;
 const tap3Select = document.getElementById('select-tap3') as HTMLSelectElement;
 tap3Select.addEventListener("change", function (e) {
   tap3 = CellType.TapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
+tap3Select.selectedIndex = 2;
 
 function createTaps() {
   for (let i = -3; i <= 3; i++) {
