@@ -113,9 +113,9 @@ let dynamicLights = false;
 
 let lightMap: number[][];
 let play = true;
-const fpsVal = document.getElementById("fps-val")!;
-const engineVal = document.getElementById("engine-val")!;
-const renderVal = document.getElementById("render-val")!;
+const fpsVal = document.getElementById("fps-val") as HTMLElement;
+const engineVal = document.getElementById("engine-val") as HTMLElement;
+const renderVal = document.getElementById("render-val") as HTMLElement;
 let fpsTimer = 0;
 
 function update(time = 0) {
@@ -220,10 +220,10 @@ function init() {
     }
   });
 
-  const playPauseButton = document.getElementById("play-pause")!;
+  const playPauseButton = document.getElementById("play-pause") as HTMLButtonElement;
   playPauseButton.addEventListener("click", togglePlay);
 
-  const eraseButton = document.getElementById("erase-button")!;
+  const eraseButton = document.getElementById("erase-button") as HTMLButtonElement;
   eraseButton.addEventListener("click", () => {
     Utils.wipeMatrix(Game.pixelGrid, CellType.empty);
     Display.drawFull(Game.pixelGrid);

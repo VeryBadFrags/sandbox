@@ -302,7 +302,7 @@ export function hexToRgb(hex: string) {
     : null;
 }
 
-function addElementToSelect(cell, select) {
+function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
   const opt = document.createElement("option");
   opt.value = cell.name;
   opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
