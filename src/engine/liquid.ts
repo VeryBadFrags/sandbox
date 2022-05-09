@@ -12,6 +12,21 @@ export function process(
 ) {
   const cellBelow = column[j + 1];
 
+  // Acid
+  if (
+    cell == CellType.acid &&
+    cellBelow.state === CellType.states.solid &&
+    Math.random() > 0.8
+  ) {
+    Game.createCell(i, j, CellType.smoke);
+    if (Math.random() > 0.999) {
+      Game.createCell(i, j + 1, CellType.acid);
+    } else {
+      Game.createCell(i, j + 1, CellType.empty);
+    }
+    return;
+  }
+
   // Fall down
   if (
     (cellBelow === CellType.empty || cellBelow.state === CellType.states.gas) &&
@@ -23,7 +38,6 @@ export function process(
   }
 
   if (cellBelow.state === CellType.states.liquid) {
-    
     const direction = Math.random() >= 0.5 ? 1 : -1;
     // Roll sideways
     if (!moveLiquidSideways(cell, i, j, direction, canvasWidth)) {
@@ -58,7 +72,11 @@ export function process(
     }
 
     // Swirl in liquids
-    if (i + direction >= 0 && i + direction < canvasWidth && Math.random() >= 0.5) {
+    if (
+      i + direction >= 0 &&
+      i + direction < canvasWidth &&
+      Math.random() >= 0.5
+    ) {
       // TODO use liquid thickness instead of 0.5
       const nextCell = Game.pixelGrid[i + direction][j];
       if (nextCell !== cell && nextCell.state === CellType.states.liquid) {
@@ -77,9 +95,7 @@ function moveLiquidSideways(
   canvasWidth: number
 ): boolean {
   if (i + direction >= 0 && i + direction < canvasWidth) {
-    if (
-      Game.pixelGrid[i + direction][j + 1] === CellType.empty
-    ) {
+    if (Game.pixelGrid[i + direction][j + 1] === CellType.empty) {
       Game.swapCells(i, j, i + direction, j + 1);
       return true;
     }

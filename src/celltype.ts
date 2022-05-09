@@ -1,7 +1,7 @@
 export interface Cell {
   name?: string;
   color: string;
-  hsl: number[];
+  hsl?: number[];
   rgb?: number[];
   density: number;
   key?: string;
@@ -32,7 +32,6 @@ export enum states {
 export const empty: Cell = {
   name: "✏️ Eraser",
   color: "#000000",
-  hsl: [0, 0, 0],
   density: 0,
   key: "e",
 };
@@ -40,7 +39,6 @@ export const empty: Cell = {
 // FIRE
 export const smoke: Cell = {
   color: "#333333",
-  hsl: [0, 0, 20],
   density: 0.1,
   state: states.gas,
   lifetime: 0.98,
@@ -48,7 +46,6 @@ export const smoke: Cell = {
 };
 export const flame3: Cell = {
   color: "#ff8800",
-  hsl: [32, 100, 50],
   density: 0.1,
   state: states.fire,
   lifetime: 0.885,
@@ -57,7 +54,6 @@ export const flame3: Cell = {
 };
 export const flame2: Cell = {
   color: "#ff4400",
-  hsl: [16, 100, 50],
   density: 0.1,
   state: states.fire,
   lifetime: 0.89,
@@ -68,7 +64,6 @@ export const flame: Cell = {
   name: "🔥 Fire",
   key: "f",
   color: "#e00000",
-  hsl: [0, 100, 44],
   density: 0.2,
   state: states.fire,
   lifetime: 0.9,
@@ -81,7 +76,6 @@ export const water: Cell = {
   name: "🌊 Water",
   key: "w",
   color: "#2222ff",
-  hsl: [240, 100, 57],
   density: 1,
   state: states.liquid,
   dousing: true,
@@ -91,7 +85,6 @@ export const water: Cell = {
 export const saltyWater: Cell = {
   name: "Salty Water",
   color: "#22A2ff",
-  hsl: [240, 100, 57],
   density: 2,
   state: states.liquid,
   dousing: true,
@@ -101,27 +94,25 @@ export const oil: Cell = {
   name: "🛢️ Oil",
   key: "o",
   color: "#963e48",
-  hsl: [353, 42, 42],
   density: 0.5,
   state: states.liquid,
   flammable: 0.2,
   melt: flame,
 };
 
-// export const acid: Cell = {
-//   name: "Acid",
-//   key: "a",
-//   color: "#00ff00",
-//   density: 3,
-//   state: states.liquid,
-// }
+export const acid: Cell = {
+  name: "🧪 Acid",
+  key: "a",
+  color: "#00ff00",
+  density: 3,
+  state: states.liquid,
+};
 
 // SOLIDS
 export const concrete: Cell = {
   name: "🧱 Concrete",
   key: "c",
   color: "#aaaaaa",
-  hsl: [0, 0, 67],
   density: 100,
   state: states.solid,
   static: true,
@@ -130,7 +121,6 @@ export const ice: Cell = {
   name: "🧊 Ice",
   key: "i",
   color: "#00eeee",
-  hsl: [180, 100, 47],
   density: 0.9,
   state: states.solid,
   propagation: 0.996,
@@ -144,7 +134,6 @@ export const soil: Cell = {
   name: "🍂 Soil",
   key: "l",
   color: "#322110",
-  hsl: [30, 52, 13],
   density: 20,
   state: states.solid,
   granular: true,
@@ -154,7 +143,6 @@ export const wood: Cell = {
   name: "🌳 Wood",
   key: "d",
   color: "#654321",
-  hsl: [30, 51, 26],
   density: 20,
   state: states.solid,
   flammable: 0.9,
@@ -166,7 +154,6 @@ export const coal: Cell = {
   name: "♨️ Coal",
   key: "h",
   color: "#202020",
-  hsl: [0, 0, 13],
   density: 30,
   state: states.solid,
   flammable: 0.99,
@@ -177,7 +164,6 @@ export const sand: Cell = {
   name: "🏜️ Sand",
   key: "s",
   color: "#c2ff80",
-  hsl: [89, 100, 75],
   density: 10,
   state: states.solid,
   granular: true,
@@ -187,7 +173,6 @@ export const salt: Cell = {
   name: "🧂 Salt",
   key: "m",
   color: "#eeeeee",
-  hsl: [0, 0, 93],
   state: states.solid,
   density: 9,
   granular: true,
@@ -204,7 +189,6 @@ export const powder: Cell = {
   name: "💣 Gunpowder",
   key: "g",
   color: "#555555",
-  hsl: [0, 0, 33],
   density: 4,
   state: states.solid,
   granular: true,
@@ -215,7 +199,6 @@ export const crystals: Cell = {
   name: "💎 Crystals",
   key: "y",
   color: "#ff80b6",
-  hsl: [334, 100, 75],
   density: 30,
   state: states.solid,
 };
@@ -223,7 +206,6 @@ export const seed: Cell = {
   name: "🌱 Seed",
   key: "z",
   color: "#b5651d",
-  hsl: [28, 72, 41],
   density: 5,
   granular: true,
   flammable: 0.8,
@@ -235,7 +217,6 @@ export const plant: Cell = {
   name: "🌿 Plant",
   key: "p",
   color: "#00bf00",
-  hsl: [120, 100, 37],
   state: states.solid,
   density: 10,
   propagation: 0.5,
@@ -263,12 +244,12 @@ export const CellsMap: Cell[] = [
   seed,
   crystals,
   flame,
-  // acid,
+  acid,
 ];
 
 export const AllCells: Cell[] = [
   empty,
-  // acid,
+  acid,
   smoke,
   flame3,
   flame2,
@@ -291,6 +272,7 @@ export const AllCells: Cell[] = [
 
 export const TapValues: Cell[] = [oil, sand, water, coal, seed, soil];
 
+// TODO move to Utils
 export function hexToRgb(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result != null
@@ -300,6 +282,39 @@ export function hexToRgb(hex: string) {
         parseInt(result[3], 16),
       ]
     : null;
+}
+
+// TODO move to Utils
+function hexToHSL(hex: string): number[] {
+  const parsed = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  let r = parseInt(parsed[1], 16);
+  let g = parseInt(parsed[2], 16);
+  let b = parseInt(parsed[3], 16);
+  (r /= 255), (g /= 255), (b /= 255);
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h,
+    s,
+    l = (max + min) / 2;
+  if (max == min) {
+    h = s = 0; // achromatic
+  } else {
+    let d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+    h /= 6;
+  }
+  return [h, s, l];
 }
 
 function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
@@ -331,4 +346,5 @@ function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
 
   // Set RGB values
   AllCells.forEach((c) => (c.rgb = hexToRgb(c.color)));
+  AllCells.forEach((c) => (c.hsl = hexToHSL(c.color)));
 }
