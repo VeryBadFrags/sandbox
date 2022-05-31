@@ -1,22 +1,24 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.scss";
 
-import * as Display from "./display.js";
 import * as CellType from "./celltype.js";
-import * as Utils from "./utils.js";
+import * as Display from "./display.js";
 import * as Game from "./game.js";
-import * as Solid from "./engine/solid.js";
 import * as Liquid from "./engine/liquid";
+import * as Settings from "./settings";
+import * as Solid from "./engine/solid";
+import * as Utils from "./utils";
 import Brush from "./brush.js";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 const pascalsLaw = false;
-
-let canvasWidth: number, canvasHeight: number;
-
 const iStart = (ltr: boolean, size: number) => (ltr ? 0 : size - 1);
 const iEnd = (i: number, ltr: boolean, size: number) =>
   ltr ? i < size : i >= 0;
+
+let canvasWidth: number, canvasHeight: number;
+let mainBrush: Brush;
+
 function nextState() {
   const leftToRight = Math.random() >= 0.5;
 
@@ -70,16 +72,16 @@ let tap2 = CellType.sand;
 let tap3 = CellType.water;
 
 // Tap listeners
-const tapSelect = document.getElementById('select-tap1') as HTMLSelectElement;
+const tapSelect = document.getElementById("select-tap1") as HTMLSelectElement;
 tapSelect.addEventListener("change", function (e) {
   tap1 = CellType.TapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
-const tap2Select = document.getElementById('select-tap2') as HTMLSelectElement;
+const tap2Select = document.getElementById("select-tap2") as HTMLSelectElement;
 tap2Select.addEventListener("change", function (e) {
   tap2 = CellType.TapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 tap2Select.selectedIndex = 1;
-const tap3Select = document.getElementById('select-tap3') as HTMLSelectElement;
+const tap3Select = document.getElementById("select-tap3") as HTMLSelectElement;
 tap3Select.addEventListener("change", function (e) {
   tap3 = CellType.TapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
@@ -105,18 +107,18 @@ function createTaps() {
   }
 }
 
-const frameMinInterval = 16.667;
+const frameMinInterval = 1000 / 60; // 60 FPS
 const fpsDisplayInterval = 1000;
 let timer = 0;
 let lastTime = 0;
 let dynamicLights = false;
 
 let lightMap: number[][];
-let play = true;
 const fpsVal = document.getElementById("fps-val") as HTMLElement;
 const engineVal = document.getElementById("engine-val") as HTMLElement;
 const renderVal = document.getElementById("render-val") as HTMLElement;
 let fpsTimer = 0;
+let engineTimer = 0;
 
 function update(time = 0) {
   const deltaTime = time - lastTime;
@@ -124,9 +126,10 @@ function update(time = 0) {
   fpsTimer += deltaTime;
 
   timer += deltaTime;
-  if (timer > frameMinInterval) {
+  engineTimer += deltaTime;
+  while (timer > frameMinInterval) {
     const engineStart = performance.now();
-    if (play) {
+    if (Settings.play) {
       if (dynamicLights) {
         Utils.wipeMatrix(lightMap, 0);
       }
@@ -134,29 +137,36 @@ function update(time = 0) {
     }
     const engineEnd = performance.now();
 
-    const renderStart = performance.now();
-    if (dynamicLights) {
-      Display.drawPartialDynamic(Game.delta, Game.pixelGrid, lightMap);
-    } else {
-      Display.drawPartial(Game.delta);
-    }
-    const renderEnd = performance.now();
-    Utils.wipeMatrix(Game.delta, null);
-    timer %= frameMinInterval; // accurate
-    // timer -= frameMinInterval; // skip frames
-
-    if (fpsTimer > fpsDisplayInterval) {
-      fpsVal.innerText = Math.round(fpsDisplayInterval / deltaTime).toString();
+    if (engineTimer > fpsDisplayInterval) {
       engineVal.innerText = Math.round(engineEnd - engineStart).toString();
-      renderVal.innerText = Math.round(renderEnd - renderStart).toString();
-      fpsTimer = 0;
+      engineTimer = 0;
     }
+
+    // TODO add no-frame skip settong
+    // timer %= frameMinInterval;
+    timer -= frameMinInterval; // skip frames if necessary
   }
 
+  render(deltaTime);
   requestAnimationFrame(update);
 }
+function render(deltaTime: number) {
+  const renderStart = performance.now();
+  if (dynamicLights) {
+    Display.drawPartialDynamic(Game.delta, Game.pixelGrid, lightMap);
+  } else {
+    Display.drawPartial(Game.delta);
+  }
+  const renderEnd = performance.now();
 
-let mainBrush: Brush;
+  if (fpsTimer > fpsDisplayInterval) {
+    fpsVal.innerText = Math.round(fpsDisplayInterval / deltaTime).toString();
+    renderVal.innerText = Math.round(renderEnd - renderStart).toString();
+    fpsTimer = 0;
+  }
+  Utils.wipeMatrix(Game.delta, null);
+}
+
 function init() {
   canvasWidth = canvas.width;
   canvasHeight = canvas.height;
@@ -188,17 +198,6 @@ function init() {
   mainBrush = new Brush();
   mainBrush.init();
 
-  const togglePlay = () => {
-    play = !play;
-    if (play) {
-      playPauseButton.classList.add("btn-outline-primary");
-      playPauseButton.classList.remove("btn-outline-danger");
-    } else {
-      playPauseButton.classList.remove("btn-outline-primary");
-      playPauseButton.classList.add("btn-outline-danger");
-    }
-  };
-
   const keyToCell = new Map<string, CellType.Cell>();
   CellType.CellsMap.filter((cell) => cell.key).forEach((cell) => {
     keyToCell.set(cell.key, cell);
@@ -216,17 +215,8 @@ function init() {
     } else if (e.key === "}") {
       mainBrush.increaseOpacity(10);
     } else if (e.key === " ") {
-      togglePlay();
+      Settings.togglePlay();
     }
-  });
-
-  const playPauseButton = document.getElementById("play-pause") as HTMLButtonElement;
-  playPauseButton.addEventListener("click", togglePlay);
-
-  const eraseButton = document.getElementById("erase-button") as HTMLButtonElement;
-  eraseButton.addEventListener("click", () => {
-    Utils.wipeMatrix(Game.pixelGrid, CellType.empty);
-    Display.drawFull(Game.pixelGrid);
   });
 
   const lightsCheck = document.getElementById(
