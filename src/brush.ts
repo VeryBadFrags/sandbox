@@ -102,7 +102,14 @@ export default class Brush {
     let mouseX = 0;
     let mouseY = 0;
     const rect = canvas.getBoundingClientRect();
-    function onMouseMove(mouseX: number, mouseY: number) {
+    function onMouseMove(e: MouseEvent) {
+      mouseX = Math.round(
+        ((e.clientX - rect.left) / (rect.right - rect.left)) * canvas.width
+      );
+      mouseY = Math.round(
+        ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height
+      );
+      
       if (isMouseDown) {
         if (Utils.getDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
           const interpolated = Utils.createIntermediatePoints(
@@ -145,29 +152,33 @@ export default class Brush {
     // Mouse
     canvas.addEventListener("mousedown", onMouseDown);
     canvas.addEventListener("mouseup", mouseOff);
-    canvas.addEventListener("mousemove", (e) => {
-      mouseX = Math.round(
-        ((e.clientX - rect.left) / (rect.right - rect.left)) * canvas.width
-      );
-      mouseY = Math.round(
-        ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height
-      );
-      onMouseMove(mouseX, mouseY);
-    });
+    canvas.addEventListener("mousemove", onMouseMove);
     canvas.addEventListener("mouseout", mouseOff);
 
     // Touch
-    canvas.addEventListener("touchstart", onMouseDown);
-    canvas.addEventListener("touchend", mouseOff);
+    canvas.addEventListener("touchstart", (e) => {
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent("mousemove", {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+      canvas.dispatchEvent(mouseEvent);
+    });
+    canvas.addEventListener("touchend", (e) => {
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent("mousemove", {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+      canvas.dispatchEvent(mouseEvent);
+    });
     canvas.addEventListener("touchmove", (e) => {
       const touch = e.touches[0];
-      mouseX = Math.round(
-        ((touch.clientX - rect.left) / (rect.right - rect.left)) * canvas.width
-      );
-      mouseY = Math.round(
-        ((touch.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height
-      );
-      onMouseMove(mouseX, mouseY);
+      const mouseEvent = new MouseEvent("mousemove", {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+      canvas.dispatchEvent(mouseEvent);
     });
 
     // Prevent scrolling when touching the canvas
