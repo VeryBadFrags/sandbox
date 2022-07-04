@@ -150,6 +150,7 @@ function update(time = 0) {
   render(deltaTime);
   requestAnimationFrame(update);
 }
+
 function render(deltaTime: number) {
   const renderStart = performance.now();
   if (dynamicLights) {
@@ -173,20 +174,22 @@ function init() {
 
   lightMap = Utils.initArray(canvasWidth, canvasHeight, 0);
 
-  // Walls
-  const halfScreen = Math.floor(canvasHeight / 2);
-  for (
-    let i = Math.floor(canvasWidth / 2) - 25;
-    i < Math.floor(canvasWidth / 2) + 24;
-    i++
-  ) {
-    Game.createCell(i, halfScreen, CellType.concrete);
-  }
+  // Middle box
+  // {
+  // const halfScreen = Math.floor(canvasHeight / 2);
+  // for (
+  //   let i = Math.floor(canvasWidth / 2) - 25;
+  //   i < Math.floor(canvasWidth / 2) + 24;
+  //   i++
+  // ) {
+  //   Game.createCell(i, halfScreen, CellType.concrete);
+  // }
 
-  for (let j = halfScreen; j >= halfScreen - 15; j--) {
-    Game.createCell(Math.floor(canvasWidth / 2) - 25, j, CellType.concrete);
-    Game.createCell(Math.floor(canvasWidth / 2 + 24), j, CellType.concrete);
-  }
+  // for (let j = halfScreen; j >= halfScreen - 15; j--) {
+  //   Game.createCell(Math.floor(canvasWidth / 2) - 25, j, CellType.concrete);
+  //   Game.createCell(Math.floor(canvasWidth / 2 + 24), j, CellType.concrete);
+  // }
+  // }
 
   for (let x = 0; x < canvasWidth; x++) {
     Game.createCell(x, canvasHeight - 2, CellType.concrete);
