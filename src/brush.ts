@@ -102,14 +102,7 @@ export default class Brush {
     let mouseX = 0;
     let mouseY = 0;
     const rect = canvas.getBoundingClientRect();
-    function onMouseMove(e: MouseEvent) {
-      mouseX = Math.round(
-        ((e.clientX - rect.left) / (rect.right - rect.left)) * canvas.width
-      );
-      mouseY = Math.round(
-        ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height
-      );
-
+    function onMouseMove(mouseX: number, mouseY: number) {
       if (isMouseDown) {
         if (Utils.getDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
           const interpolated = Utils.createIntermediatePoints(
@@ -149,10 +142,61 @@ export default class Brush {
     brushSizeInput.value = brushSize.toString();
     brushSizeSlider.value = brushSize.toString();
 
-    // Listeners
+    // Mouse
     canvas.addEventListener("mousedown", onMouseDown);
     canvas.addEventListener("mouseup", mouseOff);
-    canvas.addEventListener("mousemove", onMouseMove);
+    canvas.addEventListener("mousemove", (e) => {
+      mouseX = Math.round(
+        ((e.clientX - rect.left) / (rect.right - rect.left)) * canvas.width
+      );
+      mouseY = Math.round(
+        ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height
+      );
+      onMouseMove(mouseX, mouseY);
+    });
     canvas.addEventListener("mouseout", mouseOff);
+
+    // Touch
+    canvas.addEventListener("touchstart", onMouseDown);
+    canvas.addEventListener("touchend", mouseOff);
+    canvas.addEventListener("touchmove", (e) => {
+      const touch = e.touches[0];
+      mouseX = Math.round(
+        ((touch.clientX - rect.left) / (rect.right - rect.left)) * canvas.width
+      );
+      mouseY = Math.round(
+        ((touch.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height
+      );
+      onMouseMove(mouseX, mouseY);
+    });
+
+    // Prevent scrolling when touching the canvas
+    document.body.addEventListener(
+      "touchstart",
+      (e) => {
+        if (e.target == canvas) {
+          e.preventDefault();
+        }
+      },
+      false
+    );
+    document.body.addEventListener(
+      "touchend",
+      (e) => {
+        if (e.target == canvas) {
+          e.preventDefault();
+        }
+      },
+      false
+    );
+    document.body.addEventListener(
+      "touchmove",
+      (e) => {
+        if (e.target == canvas) {
+          e.preventDefault();
+        }
+      },
+      false
+    );
   }
 }
