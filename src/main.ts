@@ -106,7 +106,7 @@ function createTaps() {
   }
 }
 
-const frameMinInterval = 1000 / 60; // 60 FPS
+const gameCyclesInterval = 1000 / 80; // Game Hz
 const fpsDisplayInterval = 1000;
 let timer = 0;
 let lastTime = 0;
@@ -126,7 +126,7 @@ function update(time = 0) {
 
   timer += deltaTime;
   engineTimer += deltaTime;
-  while (timer > frameMinInterval) {
+  while (timer > gameCyclesInterval) {
     const engineStart = performance.now();
     if (Settings.play) {
       if (dynamicLights) {
@@ -141,9 +141,9 @@ function update(time = 0) {
       engineTimer = 0;
     }
 
-    // TODO add no-frame skip settong
-    // timer %= frameMinInterval;
-    timer -= frameMinInterval; // skip frames if necessary
+    // TODO add no-frame skip setting
+    // timer %= gameCyclesInterval;
+    timer -= gameCyclesInterval; // skip frames if necessary
   }
 
   render(deltaTime);
