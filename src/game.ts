@@ -1,13 +1,17 @@
 import * as Utils from "./utils.js";
 import * as CellType from "./celltype.js";
+
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 
+const gameWidth = 800;
+const gameHeight = 600;
+
 export const pixelGrid = Utils.initArray(
-  canvas.width,
-  canvas.height,
+  gameWidth,
+  gameHeight,
   CellType.empty
 );
-export const delta = Utils.initArray(canvas.width, canvas.height, null);
+export const delta = Utils.initArray(gameWidth, gameHeight, null);
 
 const maxLightDistance = 6;
 
