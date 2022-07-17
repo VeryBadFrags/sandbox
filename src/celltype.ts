@@ -1,3 +1,5 @@
+import * as ColorUtils from "./utils/colorUtils";
+
 export interface Cell {
   name?: string;
   color: string;
@@ -272,51 +274,6 @@ export const AllCells: Cell[] = [
 
 export const TapValues: Cell[] = [oil, sand, water, coal, seed, soil];
 
-// TODO move to Utils
-export function hexToRgb(hex: string) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result != null
-    ? [
-        parseInt(result[1], 16),
-        parseInt(result[2], 16),
-        parseInt(result[3], 16),
-      ]
-    : null;
-}
-
-// TODO move to Utils
-function hexToHSL(hex: string): number[] {
-  const parsed = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  let r = parseInt(parsed[1], 16);
-  let g = parseInt(parsed[2], 16);
-  let b = parseInt(parsed[3], 16);
-  (r /= 255), (g /= 255), (b /= 255);
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  let h,
-    s,
-    l = (max + min) / 2;
-  if (max == min) {
-    h = s = 0; // achromatic
-  } else {
-    let d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r:
-        h = (g - b) / d + (g < b ? 6 : 0);
-        break;
-      case g:
-        h = (b - r) / d + 2;
-        break;
-      case b:
-        h = (r - g) / d + 4;
-        break;
-    }
-    h /= 6;
-  }
-  return [h, s, l];
-}
-
 function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
   const opt = document.createElement("option");
   opt.value = cell.name;
@@ -345,6 +302,6 @@ function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
   }
 
   // Set RGB values
-  AllCells.forEach((c) => (c.rgb = hexToRgb(c.color)));
-  AllCells.forEach((c) => (c.hsl = hexToHSL(c.color)));
+  AllCells.forEach((c) => (c.rgb = ColorUtils.hexToRgb(c.color)));
+  AllCells.forEach((c) => (c.hsl = ColorUtils.hexToHSL(c.color)));
 }

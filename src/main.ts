@@ -1,14 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.scss";
 
-import * as CellType from "./celltype.js";
-import * as Display from "./display.js";
-import * as Game from "./game.js";
+import * as CellType from "./celltype";
+import * as Display from "./display";
+import * as Game from "./game";
 import * as Liquid from "./engine/liquid";
 import * as Settings from "./settings";
 import * as Solid from "./engine/solid";
 import * as Utils from "./utils";
-import Brush from "./brush.js";
+import Brush from "./brush";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 const pascalsLaw = false;

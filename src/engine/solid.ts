@@ -1,6 +1,6 @@
-import * as Utils from "../utils.js";
-import * as CellType from "../celltype.js";
-import * as Game from "../game.js";
+import * as Utils from "../utils";
+import * as CellType from "../celltype";
+import * as Game from "../game";
 
 export function process(
   cell: CellType.Cell,

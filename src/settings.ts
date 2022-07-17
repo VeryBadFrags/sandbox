@@ -1,7 +1,7 @@
-import * as CellType from "./celltype.js";
-import * as Display from "./display.js";
-import * as Utils from "./utils.js";
-import * as Game from "./game.js";
+import * as CellType from "./celltype";
+import * as Display from "./display";
+import * as Utils from "./utils";
+import * as Game from "./game";
 
 export let play = true;
 

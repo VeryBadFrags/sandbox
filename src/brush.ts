@@ -1,6 +1,6 @@
-import * as CellType from "./celltype.js";
-import * as Game from "./game.js";
-import * as Utils from "./utils.js";
+import * as CellType from "./celltype";
+import * as Game from "./game";
+import * as DrawUtils from './utils/drawutils'
 
 const brushTypeSelector = document.getElementById(
   "brush-type"
@@ -111,8 +111,8 @@ export default class Brush {
       );
       
       if (isMouseDown) {
-        if (Utils.getDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
-          const interpolated = Utils.createIntermediatePoints(
+        if (DrawUtils.getDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
+          const interpolated = DrawUtils.createIntermediatePoints(
             mouseX,
             mouseY,
             prevMouseX,

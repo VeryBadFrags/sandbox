@@ -1,5 +1,6 @@
-import * as Utils from "./utils.js";
-import * as CellType from "./celltype.js";
+import * as Utils from "./utils";
+import * as DrawUtils from "./utils/drawUtils";
+import * as CellType from "./celltype";
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 
 export const pixelGrid = Utils.initArray(
@@ -96,7 +97,7 @@ function updateFireLightMap(
           (a !== i || b !== j) &&
           pixelGrid[a][b].state !== CellType.states.fire
         ) {
-          const distance = Utils.getDistance(a, b, i, j);
+          const distance = DrawUtils.getDistance(a, b, i, j);
           lightMap[a][b] =
             lightMap[a][b] + Math.max(0, maxLightDistance - distance);
         }

@@ -1,6 +1,6 @@
-import * as Utils from "../utils.js";
-import * as CellType from "../celltype.js";
-import * as Game from "../game.js";
+import * as Utils from "../utils";
+import * as CellType from "../celltype";
+import * as Game from "../game";
 
 export function process(
   cell: CellType.Cell,
@@ -40,8 +40,8 @@ export function process(
   if (cellBelow.state === CellType.states.liquid) {
     const direction = Math.random() >= 0.5 ? 1 : -1;
     // Roll sideways
-    if (!moveLiquidSideways(cell, i, j, direction, canvasWidth)) {
-      moveLiquidSideways(cell, i, j, -direction, canvasWidth);
+    if (!moveLiquidSideways(i, j, direction, canvasWidth)) {
+      moveLiquidSideways(i, j, -direction, canvasWidth);
     }
 
     // Settle in less dense liquids
@@ -88,7 +88,6 @@ export function process(
 }
 
 function moveLiquidSideways(
-  cell: CellType.Cell,
   i: number,
   j: number,
   direction: number,

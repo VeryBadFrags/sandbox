@@ -1,4 +1,4 @@
-import * as CellType from "./celltype.js";
+import * as CellType from "./celltype";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 const context = canvas.getContext("2d", { alpha: false });
