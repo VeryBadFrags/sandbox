@@ -1,6 +1,6 @@
 import * as CellType from "./celltype";
 import * as Game from "./game";
-import * as DrawUtils from './utils/drawutils'
+import * as DrawUtils from './utils/drawUtils'
 
 const brushTypeSelector = document.getElementById(
   "brush-type"
