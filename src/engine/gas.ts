@@ -5,13 +5,12 @@ export function process(
   cell: CellType.Cell,
   i: number,
   j: number,
-  column: CellType.Cell[],
   canvasWidth: number
 ) {
   // SMOKE
   if (Math.random() > cell.lifetime) {
     Game.destroyCell(i, j);
-  } else if (j > 0 && column[j - 1] === CellType.empty && Math.random() > 0.7) {
+  } else if (j > 0 && Game.getCell(i, j - 1) === CellType.empty && Math.random() > 0.7) {
     // Go up
     Game.swapCells(i, j, i, j - 1);
   } else {

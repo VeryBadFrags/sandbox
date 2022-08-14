@@ -6,11 +6,10 @@ export function process(
   cell: CellType.Cell,
   i: number,
   j: number,
-  column: CellType.Cell[],
   canvasWidth: number,
   pascalsLaw: boolean
 ) {
-  const cellBelow = column[j + 1];
+  const cellBelow = Game.getCell(i, j + 1);
 
   // Acid
   if (

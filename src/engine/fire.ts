@@ -9,7 +9,6 @@ export function process(
   cell: CellType.Cell,
   i: number,
   j: number,
-  column: CellType.Cell[],
   canvasWidth: number,
   canvasHeight: number,
   lightMap: number[][],
@@ -50,8 +49,8 @@ export function process(
   } else if (
     j > 0 &&
     Math.random() > 0.8 &&
-    column[j - 1] === CellType.empty
-    // || column[j - 1].flammable
+    Game.getCell(i, j - 1) === CellType.empty
+    // || Game.getCell(i, j - 1).flammable
   ) {
     // Evolve
     Game.createCell(i, j - 1, Math.random() >= 0.5 ? cell.nextCell : cell);
@@ -59,10 +58,8 @@ export function process(
 
   propagateFire(i, canvasWidth, j, canvasHeight);
 
-  // TODO move outside of this function
   updateFireLightMap(
     dynamicLights,
-    column,
     j,
     i,
     canvasWidth,
@@ -73,14 +70,13 @@ export function process(
 
 function updateFireLightMap(
   dynamicLights: boolean,
-  column: CellType.Cell[],
   j: number,
   i: number,
   canvasWidth: number,
   canvasHeight: number,
   lightMap: number[][]
 ) {
-  if (dynamicLights && column[j].state === CellType.states.fire) {
+  if (dynamicLights && Game.getCell(i, j).state === CellType.states.fire) {
     for (
       let a = Math.max(i - maxLightDistance, 0);
       a <= Math.min(i + maxLightDistance, canvasWidth - 1);

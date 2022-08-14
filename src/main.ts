@@ -10,6 +10,7 @@ import * as Liquid from "./engine/liquid";
 import * as Solid from "./engine/solid";
 import * as Gas from "./engine/gas";
 import * as Utils from "./utils";
+import * as ArrayHelper from "./utils/arrayHelper";
 import Brush from "./brush";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
@@ -31,9 +32,8 @@ function nextState() {
     iEnd(i, leftToRight, canvasWidth);
     leftToRight ? i++ : i--
   ) {
-    const column = Game.pixelGrid[i];
     for (let j = canvasHeight - 2; j >= 0; j--) {
-      const cell = column[j];
+      const cell = Game.getCell(i, j);
       if (cell === CellType.empty) {
         continue;
       }
@@ -43,14 +43,13 @@ function nextState() {
           Solid.process(cell, i, j, canvasWidth, canvasHeight);
           break;
         case CellType.states.liquid:
-          Liquid.process(cell, i, j, column, canvasWidth, pascalsLaw);
+          Liquid.process(cell, i, j, canvasWidth, pascalsLaw);
           break;
         case CellType.states.fire:
           Fire.process(
             cell,
             i,
             j,
-            column,
             canvasWidth,
             canvasHeight,
             lightMap,
@@ -58,7 +57,7 @@ function nextState() {
           );
           break;
         case CellType.states.gas:
-          Gas.process(cell, i, j, column, canvasWidth);
+          Gas.process(cell, i, j, canvasWidth);
           break;
       }
     }
@@ -173,7 +172,7 @@ function render(deltaTime: number) {
 }
 
 function init() {
-  lightMap = Utils.initArray(canvasWidth, canvasHeight, 0);
+  lightMap = ArrayHelper.initArray(canvasWidth, canvasHeight, 0);
 
   // Middle box
   // {
