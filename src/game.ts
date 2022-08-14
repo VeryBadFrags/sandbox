@@ -9,6 +9,10 @@ export const pixelGrid = Utils.initArray(
 );
 export const delta = Utils.initArray(canvas.width, canvas.height, null);
 
+export function getCell(i: number, j: number) {
+  return pixelGrid[i][j];
+}
+
 export function createCell(x: number, y: number, cellType: CellType.Cell) {
   pixelGrid[x][y] = cellType;
   delta[x][y] = cellType;

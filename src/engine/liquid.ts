@@ -28,11 +28,7 @@ export function process(
   }
 
   // Fall down
-  if (
-    (cellBelow === CellType.empty || cellBelow.state === CellType.states.gas) &&
-    Math.random() >= 1 / (cell.density * 100)
-  ) {
-    // Move down
+  if (cellBelow === CellType.empty || cellBelow.state === CellType.states.gas) {
     Game.swapCells(i, j, i, j + 1);
     return;
   }
@@ -41,47 +37,53 @@ export function process(
     const direction = Math.random() >= 0.5 ? 1 : -1;
     // Roll sideways
     if (!moveLiquidSideways(i, j, direction, canvasWidth)) {
-      moveLiquidSideways(i, j, -direction, canvasWidth);
-    }
-
-    // Settle in less dense liquids
-    if (
-      cellBelow !== cell &&
-      Math.random() <=
-        (cell.density - cellBelow.density) / cellBelow.density / 5
-    ) {
-      Game.swapCells(i, j, i, j + 1);
+      if (moveLiquidSideways(i, j, -direction, canvasWidth)) {
+        return;
+      }
+    } else {
       return;
     }
 
-    // Pascal's Law
-    if (
-      pascalsLaw &&
-      j - 1 >= 0 &&
-      Game.pixelGrid[i][j - 1] === CellType.empty &&
-      i - 1 >= 0 &&
-      Game.pixelGrid[i - 1][j] === cell &&
-      i + 1 < canvasWidth &&
-      Game.pixelGrid[i + 1][j] === cell
-    ) {
-      const higherCell = Utils.getHigherCell(cell, i, j, Game.pixelGrid);
-      if (higherCell) {
-        Game.swapCells(i, j - 1, higherCell[0], higherCell[1]);
+    // Interract with other liquids
+    if (cellBelow !== cell) {
+      // Settle in less dense liquids
+      if (
+        Math.random() <=
+        (cell.density - cellBelow.density) / cellBelow.density / 5
+      ) {
+        Game.swapCells(i, j, i, j + 1);
         return;
       }
-    }
 
-    // Swirl in liquids
-    if (
-      i + direction >= 0 &&
-      i + direction < canvasWidth &&
-      Math.random() >= 0.5
-    ) {
-      // TODO use liquid thickness instead of 0.5
-      const nextCell = Game.pixelGrid[i + direction][j];
-      if (nextCell !== cell && nextCell.state === CellType.states.liquid) {
-        Game.swapCells(i, j, i + direction, j);
-        return;
+      // Swirl in liquids
+      if (
+        i + direction >= 0 &&
+        i + direction < canvasWidth &&
+        Math.random() >= 0.5
+      ) {
+        // TODO use liquid thickness instead of 0.5
+        const nextCell = Game.getCell(i + direction, j);
+        if (nextCell !== cell && nextCell.state === CellType.states.liquid) {
+          Game.swapCells(i, j, i + direction, j);
+          return;
+        }
+      }
+    } else {
+      // Pascal's Law
+      if (
+        pascalsLaw &&
+        j - 1 >= 0 &&
+        Game.getCell(i, j - 1) === CellType.empty &&
+        i - 1 >= 0 &&
+        Game.getCell(i - 1, j) === cell &&
+        i + 1 < canvasWidth &&
+        Game.getCell(i + 1, j) === cell
+      ) {
+        const higherCell = Utils.getHigherCell(cell, i, j, Game.pixelGrid);
+        if (higherCell) {
+          Game.swapCells(i, j - 1, higherCell[0], higherCell[1]);
+          return;
+        }
       }
     }
   }
@@ -94,14 +96,14 @@ function moveLiquidSideways(
   canvasWidth: number
 ): boolean {
   if (i + direction >= 0 && i + direction < canvasWidth) {
-    if (Game.pixelGrid[i + direction][j + 1] === CellType.empty) {
+    if (Game.getCell(i + direction, j + 1) === CellType.empty) {
       Game.swapCells(i, j, i + direction, j + 1);
       return true;
     }
 
     if (
-      Game.pixelGrid[i + direction][j] === CellType.empty &&
-      Game.pixelGrid[i][j + 1] !== CellType.states.solid
+      Game.getCell(i + direction, j) === CellType.empty &&
+      Game.getCell(i, j + 1) !== CellType.states.solid
     ) {
       Game.swapCells(i, j, i + direction, j);
       return true;

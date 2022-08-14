@@ -21,7 +21,7 @@ export function process(
       j > 0 &&
       i + coinFlip >= 0 &&
       i + coinFlip < canvasWidth &&
-      Game.pixelGrid[i + coinFlip][j - 1] === CellType.empty &&
+      Game.getCell(i + coinFlip, j - 1) === CellType.empty &&
       Math.random() > 0.7
     ) {
       Game.swapCells(i, j, i + coinFlip, j - 1);

@@ -1,6 +1,6 @@
 import * as CellType from "./celltype";
 import * as Game from "./game";
-import * as DrawUtils from './utils/drawUtils'
+import * as DrawUtils from "./utils/drawUtils";
 
 const brushTypeSelector = document.getElementById(
   "brush-type"
@@ -63,8 +63,7 @@ export default class Brush {
           j++
         ) {
           if (Math.random() <= brushOpacity / 100) {
-            Game.delta[i][j] = brushType;
-            Game.pixelGrid[i][j] = brushType;
+            Game.createCell(i, j, brushType);
           }
         }
       }
@@ -75,8 +74,7 @@ export default class Brush {
         y >= 0 &&
         y < canvasHeight
       ) {
-        Game.delta[x][y] = brushType;
-        Game.pixelGrid[x][y] = brushType;
+        Game.createCell(x, y, brushType);
       }
     };
 
@@ -104,12 +102,12 @@ export default class Brush {
     const rect = canvas.getBoundingClientRect();
     function onMouseMove(e: MouseEvent) {
       mouseX = Math.round(
-        ((e.clientX - rect.left) / (rect.right - rect.left)) * canvas.width
+        ((e.clientX - rect.left) / (rect.right - rect.left)) * canvasWidth
       );
       mouseY = Math.round(
-        ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height
+        ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvasHeight
       );
-      
+
       if (isMouseDown) {
         if (DrawUtils.getDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
           const interpolated = DrawUtils.createIntermediatePoints(

@@ -93,7 +93,7 @@ function updateFireLightMap(
       ) {
         if (
           (a !== i || b !== j) &&
-          Game.pixelGrid[a][b].state !== CellType.states.fire
+          Game.getCell(a, b).state !== CellType.states.fire
         ) {
           const distance = DrawUtils.getDistance(a, b, i, j);
           lightMap[a][b] =
@@ -113,14 +113,14 @@ function propagateFire(
   const a = Math.floor(Math.random() * 3) - 1;
   const b = Math.floor(Math.random() * 3) - 1;
   if (i + a >= 0 && i + a < canvasWidth && j + b >= 0 && j + b < canvasHeight) {
-    const target = Game.pixelGrid[i + a][j + b];
+    const target = Game.getCell(i + a, j + b);
 
     if (target.flammable && Math.random() > target.flammable) {
       Game.createCell(i + a, j + b, target.melt);
       if (
         j + b + 1 < canvasHeight &&
         target.ash &&
-        Game.pixelGrid[i + a][j + b + 1] === CellType.empty
+        Game.getCell(i + a, j + b + 1) === CellType.empty
       ) {
         Game.createCell(i + a, j + b + 1, target.ash);
       }
