@@ -4,9 +4,11 @@ import "./style.scss";
 import * as CellType from "./celltype";
 import * as Display from "./display";
 import * as Game from "./game";
-import * as Liquid from "./engine/liquid";
 import * as Settings from "./settings";
+import * as Fire from "./engine/fire";
+import * as Liquid from "./engine/liquid";
 import * as Solid from "./engine/solid";
+import * as Gas from "./engine/gas";
 import * as Utils from "./utils";
 import Brush from "./brush";
 
@@ -41,7 +43,7 @@ function nextState() {
           Liquid.process(cell, i, j, column, canvas.width, pascalsLaw);
           break;
         case CellType.states.fire:
-          Game.processFire(
+          Fire.process(
             cell,
             i,
             j,
@@ -53,7 +55,7 @@ function nextState() {
           );
           break;
         case CellType.states.gas:
-          Game.processGas(cell, i, j, column, canvas.width);
+          Gas.process(cell, i, j, column, canvas.width);
           break;
       }
     }
