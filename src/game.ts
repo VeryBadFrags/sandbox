@@ -14,6 +14,10 @@ export function getCell(i: number, j: number) {
   return pixelGrid[i][j];
 }
 
+export function getWidth() {
+  return pixelGrid.length;
+}
+
 export function createCell(x: number, y: number, cellType: CellType.Cell) {
   pixelGrid[x][y] = cellType;
   delta[x][y] = cellType;

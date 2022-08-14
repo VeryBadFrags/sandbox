@@ -1,9 +1,8 @@
 export function hexToHSL(hex: string): number[] {
   const parsed = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  let r = parseInt(parsed[1], 16);
-  let g = parseInt(parsed[2], 16);
-  let b = parseInt(parsed[3], 16);
-  (r /= 255), (g /= 255), (b /= 255);
+  const r = parseInt(parsed[1], 16) / 255;
+  const g = parseInt(parsed[2], 16) / 255;
+  const b = parseInt(parsed[3], 16) / 255;
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   let h, s;

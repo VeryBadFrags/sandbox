@@ -1,5 +1,5 @@
 import * as CellType from "./celltype";
-import * as Game from "../game";
+// import * as Game from "./game";
 
 export function wipeMatrix(
   matrix: Array<Array<CellType.Cell | number>>,

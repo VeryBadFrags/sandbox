@@ -6,25 +6,11 @@ export function process(
   cell: CellType.Cell,
   i: number,
   j: number,
-  canvasWidth: number,
   pascalsLaw: boolean
 ) {
   const cellBelow = Game.getCell(i, j + 1);
 
-  // Acid
-  if (
-    cell == CellType.acid &&
-    cellBelow.state === CellType.states.solid &&
-    Math.random() > 0.8
-  ) {
-    Game.createCell(i, j, CellType.smoke);
-    if (Math.random() > 0.999) {
-      Game.createCell(i, j + 1, CellType.acid);
-    } else {
-      Game.createCell(i, j + 1, CellType.empty);
-    }
-    return;
-  }
+  if (processAcid(cell, cellBelow, i, j)) return;
 
   // Fall down
   if (cellBelow === CellType.empty || cellBelow.state === CellType.states.gas) {
@@ -35,11 +21,10 @@ export function process(
   if (cellBelow.state === CellType.states.liquid) {
     const direction = Math.random() >= 0.5 ? 1 : -1;
     // Roll sideways
-    if (!moveLiquidSideways(i, j, direction, canvasWidth)) {
-      if (moveLiquidSideways(i, j, -direction, canvasWidth)) {
-        return;
-      }
-    } else {
+    if (
+      moveLiquidSideways(i, j, direction) ||
+      moveLiquidSideways(i, j, -direction)
+    ) {
       return;
     }
 
@@ -57,7 +42,7 @@ export function process(
       // Swirl in liquids
       if (
         i + direction >= 0 &&
-        i + direction < canvasWidth &&
+        i + direction < Game.getWidth() &&
         Math.random() >= 0.5
       ) {
         // TODO use liquid thickness instead of 0.5
@@ -68,33 +53,59 @@ export function process(
         }
       }
     } else {
-      // Pascal's Law
-      if (
-        pascalsLaw &&
-        j - 1 >= 0 &&
-        Game.getCell(i, j - 1) === CellType.empty &&
-        i - 1 >= 0 &&
-        Game.getCell(i - 1, j) === cell &&
-        i + 1 < canvasWidth &&
-        Game.getCell(i + 1, j) === cell
-      ) {
-        const higherCell = Utils.getHigherCell(cell, i, j, Game.pixelGrid);
-        if (higherCell) {
-          Game.swapCells(i, j - 1, higherCell[0], higherCell[1]);
-          return;
-        }
-      }
+      applyPascalsLaw(pascalsLaw, cell, i, j);
     }
   }
 }
 
-function moveLiquidSideways(
+function processAcid(
+  cell: CellType.Cell,
+  cellBelow: CellType.Cell,
   i: number,
-  j: number,
-  direction: number,
-  canvasWidth: number
-): boolean {
-  if (i + direction >= 0 && i + direction < canvasWidth) {
+  j: number
+) {
+  // Acid
+  if (
+    cell == CellType.acid &&
+    cellBelow.state === CellType.states.solid &&
+    Math.random() > 0.8
+  ) {
+    Game.createCell(i, j, CellType.smoke);
+    if (Math.random() > 0.999) {
+      Game.createCell(i, j + 1, CellType.acid);
+    } else {
+      Game.createCell(i, j + 1, CellType.empty);
+    }
+    return true;
+  }
+  return false;
+}
+
+function applyPascalsLaw(
+  pascalsLaw: boolean,
+  cell: CellType.Cell,
+  i: number,
+  j: number
+) {
+  if (
+    pascalsLaw &&
+    j - 1 >= 0 &&
+    Game.getCell(i, j - 1) === CellType.empty &&
+    i - 1 >= 0 &&
+    Game.getCell(i - 1, j) === cell &&
+    i + 1 < Game.getWidth() &&
+    Game.getCell(i + 1, j) === cell
+  ) {
+    const higherCell = Utils.getHigherCell(cell, i, j, Game.pixelGrid);
+    if (higherCell) {
+      Game.swapCells(i, j - 1, higherCell[0], higherCell[1]);
+      return;
+    }
+  }
+}
+
+function moveLiquidSideways(i: number, j: number, direction: number): boolean {
+  if (i + direction >= 0 && i + direction < Game.getWidth()) {
     if (Game.getCell(i + direction, j + 1) === CellType.empty) {
       Game.swapCells(i, j, i + direction, j + 1);
       return true;

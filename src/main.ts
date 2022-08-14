@@ -43,7 +43,7 @@ function nextState() {
           Solid.process(cell, i, j, canvasWidth, canvasHeight);
           break;
         case CellType.states.liquid:
-          Liquid.process(cell, i, j, canvasWidth, pascalsLaw);
+          Liquid.process(cell, i, j, pascalsLaw);
           break;
         case CellType.states.fire:
           Fire.process(
@@ -117,9 +117,9 @@ let lastTime = 0;
 let dynamicLights = false;
 
 let lightMap: number[][];
-const fpsVal = document.getElementById("fps-val") as HTMLElement;
-const engineVal = document.getElementById("engine-val") as HTMLElement;
-const renderVal = document.getElementById("render-val") as HTMLElement;
+const fpsVal = document.getElementById("fps-val");
+const engineVal = document.getElementById("engine-val");
+const renderVal = document.getElementById("render-val");
 let fpsTimer = 0;
 let engineTimer = 0;
 
@@ -173,23 +173,6 @@ function render(deltaTime: number) {
 
 function init() {
   lightMap = ArrayHelper.initArray(canvasWidth, canvasHeight, 0);
-
-  // Middle box
-  // {
-  // const halfScreen = Math.floor(canvasHeight / 2);
-  // for (
-  //   let i = Math.floor(canvasWidth / 2) - 25;
-  //   i < Math.floor(canvasWidth / 2) + 24;
-  //   i++
-  // ) {
-  //   Game.createCell(i, halfScreen, CellType.concrete);
-  // }
-
-  // for (let j = halfScreen; j >= halfScreen - 15; j--) {
-  //   Game.createCell(Math.floor(canvasWidth / 2) - 25, j, CellType.concrete);
-  //   Game.createCell(Math.floor(canvasWidth / 2 + 24), j, CellType.concrete);
-  // }
-  // }
 
   for (let x = 0; x < canvasWidth; x++) {
     Game.createCell(x, canvasHeight - 2, CellType.concrete);
