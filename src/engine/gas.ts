@@ -10,7 +10,11 @@ export function process(
   // SMOKE
   if (Math.random() > cell.lifetime) {
     Game.destroyCell(i, j);
-  } else if (j > 0 && Game.getCell(i, j - 1) === CellType.empty && Math.random() > 0.7) {
+  } else if (
+    j > 0 &&
+    Game.getCell(i, j - 1) === CellType.empty &&
+    Math.random() > 0.7
+  ) {
     // Go up
     Game.swapCells(i, j, i, j - 1);
   } else {

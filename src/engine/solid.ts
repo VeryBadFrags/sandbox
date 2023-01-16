@@ -236,7 +236,10 @@ function processIce(
     ) {
       Game.createCell(i + 1, j - 1, CellType.ice);
     }
-    if (Game.getCell(i, j - 1) === CellType.water && Math.random() > cell.propagation) {
+    if (
+      Game.getCell(i, j - 1) === CellType.water &&
+      Math.random() > cell.propagation
+    ) {
       Game.createCell(i, j - 1, CellType.ice);
     }
   }

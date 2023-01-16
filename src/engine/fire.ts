@@ -58,14 +58,7 @@ export function process(
 
   propagateFire(i, canvasWidth, j, canvasHeight);
 
-  updateFireLightMap(
-    dynamicLights,
-    j,
-    i,
-    canvasWidth,
-    canvasHeight,
-    lightMap
-  );
+  updateFireLightMap(dynamicLights, j, i, canvasWidth, canvasHeight, lightMap);
 }
 
 function updateFireLightMap(
