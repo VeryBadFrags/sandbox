@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./style.scss";
+import "./style.css";
 
 import * as CellType from "./celltype";
 import * as Display from "./display";
