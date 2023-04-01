@@ -19,7 +19,7 @@ export function drawFull(gameState: CellType.Cell[][], lightMap?: number[][]) {
   const ratioY = gameHeight / canvasHeight;
 
   for (let x = 0; x < canvasWidth; x++) {
-    const gameX = Math.min(Math.ceil(x * ratioX), gameWidth - 1);
+    const gameX = Math.min(Math.round(x * ratioX), gameWidth - 1);
     const column = gameState[gameX];
     for (let y = 0; y < canvasHeight; y++) {
       const gameY = Math.min(Math.round(y * ratioY), gameHeight - 1);

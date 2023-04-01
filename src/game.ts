@@ -1,8 +1,8 @@
 import * as ArrayHelper from "./utils/arrayHelper";
 import * as CellType from "./celltype";
 
-export const gameWidth = 800;
-export const gameHeight = 600;
+export const gameWidth = 600;
+export const gameHeight = 450;
 
 export const pixelGrid = ArrayHelper.initArray(
   gameWidth,
