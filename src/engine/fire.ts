@@ -9,8 +9,6 @@ export function process(
   cell: CellType.Cell,
   i: number,
   j: number,
-  canvasWidth: number,
-  canvasHeight: number,
   lightMap: number[][],
   dynamicLights: boolean
 ) {
@@ -56,28 +54,26 @@ export function process(
     Game.createCell(i, j - 1, Math.random() >= 0.5 ? cell.nextCell : cell);
   }
 
-  propagateFire(i, canvasWidth, j, canvasHeight);
+  propagateFire(i, j);
 
-  updateFireLightMap(dynamicLights, j, i, canvasWidth, canvasHeight, lightMap);
+  updateFireLightMap(dynamicLights, j, i, lightMap);
 }
 
 function updateFireLightMap(
   dynamicLights: boolean,
   j: number,
   i: number,
-  canvasWidth: number,
-  canvasHeight: number,
   lightMap: number[][]
 ) {
   if (dynamicLights && Game.getCell(i, j).state === CellType.states.fire) {
     for (
       let a = Math.max(i - maxLightDistance, 0);
-      a <= Math.min(i + maxLightDistance, canvasWidth - 1);
+      a <= Math.min(i + maxLightDistance, Game.gameWidth - 1);
       a++
     ) {
       for (
         let b = Math.max(j - maxLightDistance, 0);
-        b <= Math.min(j + maxLightDistance, canvasHeight - 1);
+        b <= Math.min(j + maxLightDistance, Game.gameHeight - 1);
         b++
       ) {
         if (
@@ -95,19 +91,17 @@ function updateFireLightMap(
 
 function propagateFire(
   i: number,
-  canvasWidth: number,
-  j: number,
-  canvasHeight: number
+  j: number
 ) {
   const a = Math.floor(Math.random() * 3) - 1;
   const b = Math.floor(Math.random() * 3) - 1;
-  if (i + a >= 0 && i + a < canvasWidth && j + b >= 0 && j + b < canvasHeight) {
+  if (i + a >= 0 && i + a < Game.gameWidth && j + b >= 0 && j + b < Game.gameHeight) {
     const target = Game.getCell(i + a, j + b);
 
     if (target.flammable && Math.random() > target.flammable) {
       Game.createCell(i + a, j + b, target.melt);
       if (
-        j + b + 1 < canvasHeight &&
+        j + b + 1 < Game.gameHeight &&
         target.ash &&
         Game.getCell(i + a, j + b + 1) === CellType.empty
       ) {

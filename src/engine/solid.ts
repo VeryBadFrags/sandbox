@@ -5,12 +5,10 @@ import * as Game from "../game";
 export function process(
   cell: CellType.Cell,
   i: number,
-  j: number,
-  canvasWidth: number,
-  canvasHeight: number
+  j: number
 ) {
   if (cell.static) {
-    processStatic(cell, i, j, canvasWidth, canvasHeight);
+    processStatic(cell, i, j);
     return;
   }
 
@@ -36,7 +34,7 @@ export function process(
         Game.createCell(i, j, CellType.water);
         Game.createCell(i - 1, j + 1, CellType.water);
       }
-      if (i + 1 < canvasWidth && Game.getCell(i + 1, j + 1) === CellType.ice) {
+      if (i + 1 < Game.gameWidth && Game.getCell(i + 1, j + 1) === CellType.ice) {
         Game.createCell(i, j, CellType.water);
         Game.createCell(i + 1, j + 1, CellType.water);
       }
@@ -78,7 +76,7 @@ export function process(
     cellBelow.state === CellType.states.liquid &&
     i - 1 >= 0 &&
     Game.getCell(i - 1, j + 1) === CellType.states.liquid &&
-    i + 1 < canvasWidth &&
+    i + 1 < Game.gameWidth &&
     Game.getCell(i + 1, j + 1) === CellType.states.liquid
   ) {
     if (
@@ -96,8 +94,8 @@ export function process(
   } else if (!cell.sticky) {
     // Fall sideways
     const direction = Math.random() >= 0.5 ? 1 : -1;
-    if (!rollGrainSideways(cell, i, j, direction, canvasWidth)) {
-      rollGrainSideways(cell, i, j, -direction, canvasWidth);
+    if (!rollGrainSideways(cell, i, j, direction)) {
+      rollGrainSideways(cell, i, j, -direction);
     }
   }
 }
@@ -106,10 +104,9 @@ function rollGrainSideways(
   cell: CellType.Cell,
   i: number,
   j: number,
-  direction: number,
-  canvasWidth: number
+  direction: number
 ) {
-  if (i + direction >= 0 && i + direction < canvasWidth) {
+  if (i + direction >= 0 && i + direction < Game.gameWidth) {
     const otherCell = Game.getCell(i + direction, j + 1);
     if (otherCell === CellType.empty && Math.random() > 0.2) {
       // Roll down
@@ -138,16 +135,14 @@ function rollGrainSideways(
 function processStatic(
   cell: CellType.Cell,
   i: number,
-  j: number,
-  canvasWidth: number,
-  canvasHeight: number
+  j: number
 ) {
   switch (cell) {
     case CellType.plant:
-      processPlant(cell, i, j, canvasWidth, canvasHeight);
+      processPlant(cell, i, j);
       break;
     case CellType.ice:
-      processIce(cell, i, j, canvasWidth);
+      processIce(cell, i, j);
       break;
   }
 }
@@ -155,9 +150,7 @@ function processStatic(
 function processPlant(
   cell: CellType.Cell,
   i: number,
-  j: number,
-  canvasWidth: number,
-  canvasHeight: number
+  j: number
 ) {
   const cellBelow = Game.getCell(i, j + 1);
   // Propagate
@@ -179,7 +172,7 @@ function processPlant(
       break;
     case 1:
       if (
-        i < canvasWidth - 1 &&
+        i < Game.gameWidth - 1 &&
         (Game.getCell(i + 1, j) === CellType.water ||
           (Game.getCell(i + 1, j) === CellType.soil &&
             Utils.countNeighbors(i, j, Game.pixelGrid, CellType.plant) <= 2)) &&
@@ -190,7 +183,7 @@ function processPlant(
       break;
     case 2:
       if (
-        j < canvasHeight - 1 &&
+        j < Game.gameHeight - 1 &&
         Game.getCell(i, j + 1) === CellType.water &&
         Math.random() > cell.propagation
       ) {
@@ -223,8 +216,7 @@ function processPlant(
 function processIce(
   cell: CellType.Cell,
   i: number,
-  j: number,
-  canvasWidth: number
+  j: number
 ) {
   const cellBelow = Game.getCell(i, j + 1);
   // Propagate
@@ -242,7 +234,7 @@ function processIce(
       Game.createCell(i - 1, j - 1, CellType.ice);
     }
     if (
-      i < canvasWidth - 1 &&
+      i < Game.gameWidth - 1 &&
       Game.getCell(i + 1, j - 1) === CellType.water &&
       Math.random() > cell.propagation
     ) {

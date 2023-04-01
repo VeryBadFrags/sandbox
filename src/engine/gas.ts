@@ -4,8 +4,7 @@ import * as Game from "../game";
 export function process(
   cell: CellType.Cell,
   i: number,
-  j: number,
-  canvasWidth: number
+  j: number
 ) {
   // SMOKE
   if (Math.random() > cell.lifetime) {
@@ -23,7 +22,7 @@ export function process(
       coinFlip &&
       j > 0 &&
       i + coinFlip >= 0 &&
-      i + coinFlip < canvasWidth &&
+      i + coinFlip < Game.gameWidth &&
       Game.getCell(i + coinFlip, j - 1) === CellType.empty &&
       Math.random() > 0.7
     ) {

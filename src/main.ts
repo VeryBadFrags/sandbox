@@ -36,7 +36,7 @@ function nextState() {
 
       switch (cell.state) {
         case CellType.states.solid:
-          Solid.process(cell, i, j, Game.gameWidth, Game.gameHeight);
+          Solid.process(cell, i, j);
           break;
         case CellType.states.liquid:
           Liquid.process(cell, i, j, pascalsLaw);
@@ -46,14 +46,12 @@ function nextState() {
             cell,
             i,
             j,
-            Game.gameWidth,
-            Game.gameHeight,
             lightMap,
             dynamicLights
           );
           break;
         case CellType.states.gas:
-          Gas.process(cell, i, j, Game.gameWidth);
+          Gas.process(cell, i, j);
           break;
       }
     }
