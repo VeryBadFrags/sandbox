@@ -7,7 +7,7 @@ interface Vector {
 
 export interface Cell {
   color: string;
-  state: states;
+  state?: states;
   density: number;
 
   name?: string;
@@ -28,8 +28,8 @@ export interface Cell {
   drip?: number;
   disolve?: Cell;
   disolveInto?: Cell;
-  vector: Vector;
-  colorSuite: string[];
+  vector?: Vector;
+  colorSuite?: string[];
   sticky?: boolean;
 }
 
