@@ -2,11 +2,7 @@ import * as Utils from "../utils";
 import * as CellType from "../celltype";
 import * as Game from "../game";
 
-export function process(
-  cell: CellType.Cell,
-  i: number,
-  j: number
-) {
+export function process(cell: CellType.Cell, i: number, j: number) {
   if (cell.static) {
     processStatic(cell, i, j);
     return;
@@ -34,7 +30,10 @@ export function process(
         Game.createCell(i, j, CellType.water);
         Game.createCell(i - 1, j + 1, CellType.water);
       }
-      if (i + 1 < Game.gameWidth && Game.getCell(i + 1, j + 1) === CellType.ice) {
+      if (
+        i + 1 < Game.gameWidth &&
+        Game.getCell(i + 1, j + 1) === CellType.ice
+      ) {
         Game.createCell(i, j, CellType.water);
         Game.createCell(i + 1, j + 1, CellType.water);
       }
@@ -61,11 +60,17 @@ export function process(
   }
 
   // If above conveyor
-  if(cellBelow.state === CellType.states.conveyor) {
-    const neighbor = Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y);
-    if(neighbor === CellType.empty) {
+  if (cellBelow.state === CellType.states.conveyor) {
+    const neighbor = Game.getCell(
+      i + cellBelow.vector.x,
+      j + cellBelow.vector.y
+    );
+    if (neighbor === CellType.empty) {
       Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y);
-    } else if (Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y - 1) === CellType.empty) {
+    } else if (
+      Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y - 1) ===
+      CellType.empty
+    ) {
       Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y - 1);
     }
     return;
@@ -132,11 +137,7 @@ function rollGrainSideways(
   return false;
 }
 
-function processStatic(
-  cell: CellType.Cell,
-  i: number,
-  j: number
-) {
+function processStatic(cell: CellType.Cell, i: number, j: number) {
   switch (cell) {
     case CellType.plant:
       processPlant(cell, i, j);
@@ -147,11 +148,7 @@ function processStatic(
   }
 }
 
-function processPlant(
-  cell: CellType.Cell,
-  i: number,
-  j: number
-) {
+function processPlant(cell: CellType.Cell, i: number, j: number) {
   const cellBelow = Game.getCell(i, j + 1);
   // Propagate
   if (Utils.countNeighbors(i, j, Game.pixelGrid, CellType.ice) >= 2) {
@@ -213,11 +210,7 @@ function processPlant(
   }
 }
 
-function processIce(
-  cell: CellType.Cell,
-  i: number,
-  j: number
-) {
+function processIce(cell: CellType.Cell, i: number, j: number) {
   const cellBelow = Game.getCell(i, j + 1);
   // Propagate
   if (

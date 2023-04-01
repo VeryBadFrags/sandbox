@@ -89,13 +89,15 @@ function updateFireLightMap(
   }
 }
 
-function propagateFire(
-  i: number,
-  j: number
-) {
+function propagateFire(i: number, j: number) {
   const a = Math.floor(Math.random() * 3) - 1;
   const b = Math.floor(Math.random() * 3) - 1;
-  if (i + a >= 0 && i + a < Game.gameWidth && j + b >= 0 && j + b < Game.gameHeight) {
+  if (
+    i + a >= 0 &&
+    i + a < Game.gameWidth &&
+    j + b >= 0 &&
+    j + b < Game.gameHeight
+  ) {
     const target = Game.getCell(i + a, j + b);
 
     if (target.flammable && Math.random() > target.flammable) {

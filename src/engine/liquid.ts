@@ -59,16 +59,21 @@ export function process(
   }
 
   // If above conveyor
-  if(cellBelow.state === CellType.states.conveyor) {
-    const neighbor = Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y);
-    if(neighbor === CellType.empty) {
+  if (cellBelow.state === CellType.states.conveyor) {
+    const neighbor = Game.getCell(
+      i + cellBelow.vector.x,
+      j + cellBelow.vector.y
+    );
+    if (neighbor === CellType.empty) {
       Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y);
-    } else if (Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y - 1) === CellType.empty) {
+    } else if (
+      Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y - 1) ===
+      CellType.empty
+    ) {
       Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y - 1);
     }
     return;
   }
-
 }
 
 function processAcid(

@@ -42,13 +42,7 @@ function nextState() {
           Liquid.process(cell, i, j, pascalsLaw);
           break;
         case CellType.states.fire:
-          Fire.process(
-            cell,
-            i,
-            j,
-            lightMap,
-            dynamicLights
-          );
+          Fire.process(cell, i, j, lightMap, dynamicLights);
           break;
         case CellType.states.gas:
           Gas.process(cell, i, j);

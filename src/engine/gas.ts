@@ -1,11 +1,7 @@
 import * as CellType from "../celltype";
 import * as Game from "../game";
 
-export function process(
-  cell: CellType.Cell,
-  i: number,
-  j: number
-) {
+export function process(cell: CellType.Cell, i: number, j: number) {
   // SMOKE
   if (Math.random() > cell.lifetime) {
     Game.destroyCell(i, j);
