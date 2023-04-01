@@ -13,7 +13,6 @@ import * as Utils from "./utils";
 import * as ArrayHelper from "./utils/arrayHelper";
 import Brush from "./brush";
 
-const canvas = document.getElementById("game") as HTMLCanvasElement;
 const pascalsLaw = false;
 const iStart = (ltr: boolean, size: number) => (ltr ? 0 : size - 1);
 const iEnd = (i: number, ltr: boolean, size: number) =>
@@ -21,18 +20,15 @@ const iEnd = (i: number, ltr: boolean, size: number) =>
 
 let mainBrush: Brush;
 
-const canvasHeight = canvas.height;
-const canvasWidth = canvas.width;
-
 function nextState() {
   const leftToRight = Math.random() >= 0.5;
 
   for (
-    let i = iStart(leftToRight, canvasWidth);
-    iEnd(i, leftToRight, canvasWidth);
+    let i = iStart(leftToRight, Game.gameWidth);
+    iEnd(i, leftToRight, Game.gameWidth);
     leftToRight ? i++ : i--
   ) {
-    for (let j = canvasHeight - 2; j >= 0; j--) {
+    for (let j = Game.gameHeight - 2; j >= 0; j--) {
       const cell = Game.getCell(i, j);
       if (cell === CellType.empty) {
         continue;
@@ -40,7 +36,7 @@ function nextState() {
 
       switch (cell.state) {
         case CellType.states.solid:
-          Solid.process(cell, i, j, canvasWidth, canvasHeight);
+          Solid.process(cell, i, j, Game.gameWidth, Game.gameHeight);
           break;
         case CellType.states.liquid:
           Liquid.process(cell, i, j, pascalsLaw);
@@ -50,20 +46,20 @@ function nextState() {
             cell,
             i,
             j,
-            canvasWidth,
-            canvasHeight,
+            Game.gameWidth,
+            Game.gameHeight,
             lightMap,
             dynamicLights
           );
           break;
         case CellType.states.gas:
-          Gas.process(cell, i, j, canvasWidth);
+          Gas.process(cell, i, j, Game.gameWidth);
           break;
       }
     }
 
     // Destroy the last row
-    Game.destroyCell(i, canvasHeight - 1);
+    Game.destroyCell(i, Game.gameHeight - 1);
   }
 
   // Spawn cells at the top
@@ -93,19 +89,19 @@ tap3Select.selectedIndex = 2;
 function createTaps() {
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor(canvasWidth / 4) + i, 0, tap1);
+      Game.createCell(Math.floor(Game.gameWidth / 4) + i, 0, tap1);
     }
   }
 
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor(canvasWidth / 2) + i, 0, tap2);
+      Game.createCell(Math.floor(Game.gameWidth / 2) + i, 0, tap2);
     }
   }
 
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor((3 * canvasWidth) / 4) + i, 0, tap3);
+      Game.createCell(Math.floor((3 * Game.gameWidth) / 4) + i, 0, tap3);
     }
   }
 }
@@ -172,10 +168,10 @@ function render(deltaTime: number) {
 }
 
 function init() {
-  lightMap = ArrayHelper.initArray(canvasWidth, canvasHeight, 0);
+  lightMap = ArrayHelper.initArray(Game.gameWidth, Game.gameHeight, 0);
 
-  for (let x = 0; x < canvasWidth; x++) {
-    Game.createCell(x, canvasHeight - 2, CellType.concrete);
+  for (let x = 0; x < Game.gameWidth; x++) {
+    Game.createCell(x, Game.gameHeight - 2, CellType.concrete);
   }
 
   Display.drawFull(Game.pixelGrid);

@@ -53,11 +53,23 @@ export function process(
     }
   }
 
+  // If above void of gas
   if (
     (cellBelow === CellType.empty || cellBelow.state === CellType.states.gas) &&
     Math.random() >= 1 / (cell.density * 100)
   ) {
     Game.swapCells(i, j, i, j + 1);
+    return;
+  }
+
+  // If above conveyor
+  if(cellBelow.state === CellType.states.conveyor) {
+    const neighbor = Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y);
+    if(neighbor === CellType.empty) {
+      Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y);
+    } else if (Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y - 1) === CellType.empty) {
+      Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y - 1);
+    }
     return;
   }
 
@@ -81,7 +93,7 @@ export function process(
     } else {
       Game.swapCells(i, j, i, j + 1);
     }
-  } else if (cell.granular) {
+  } else if (!cell.sticky) {
     // Fall sideways
     const direction = Math.random() >= 0.5 ? 1 : -1;
     if (!rollGrainSideways(cell, i, j, direction, canvasWidth)) {

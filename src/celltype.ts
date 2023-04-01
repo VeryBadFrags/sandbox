@@ -1,15 +1,21 @@
 import * as ColorUtils from "./utils/colorUtils";
 
+interface Vector {
+  x: number;
+  y: number;
+}
+
 export interface Cell {
-  name?: string;
   color: string;
+  state: states;
+  density: number;
+
+  name?: string;
   hsl?: number[];
   rgb?: number[];
-  density: number;
-  key?: string;
-  state?: states;
+
+  key?: string; // Shortcut
   static?: boolean;
-  granular?: boolean;
   lifetime?: number;
   propagation?: number;
   propTarget?: Cell;
@@ -22,6 +28,9 @@ export interface Cell {
   drip?: number;
   disolve?: Cell;
   disolveInto?: Cell;
+  vector: Vector;
+  colorSuite: string[];
+  sticky?: boolean;
 }
 
 export enum states {
@@ -29,6 +38,7 @@ export enum states {
   solid,
   gas,
   fire,
+  conveyor,
 }
 
 export const empty: Cell = {
@@ -138,7 +148,6 @@ export const soil: Cell = {
   color: "#322110",
   density: 20,
   state: states.solid,
-  granular: true,
   dousing: false,
 };
 export const wood: Cell = {
@@ -160,7 +169,6 @@ export const coal: Cell = {
   state: states.solid,
   flammable: 0.99,
   melt: flame,
-  granular: true,
 };
 export const sand: Cell = {
   name: "🏜️ Sand",
@@ -168,7 +176,6 @@ export const sand: Cell = {
   color: "#c2ff80",
   density: 10,
   state: states.solid,
-  granular: true,
   dousing: true,
 };
 export const salt: Cell = {
@@ -177,7 +184,6 @@ export const salt: Cell = {
   color: "#eeeeee",
   state: states.solid,
   density: 9,
-  granular: true,
   disolve: water,
   disolveInto: saltyWater,
 };
@@ -193,7 +199,6 @@ export const powder: Cell = {
   color: "#555555",
   density: 4,
   state: states.solid,
-  granular: true,
   flammable: 0.001,
   melt: flame,
 };
@@ -203,13 +208,13 @@ export const crystals: Cell = {
   color: "#ff80b6",
   density: 30,
   state: states.solid,
+  sticky: true,
 };
 export const seed: Cell = {
   name: "🌱 Seed",
   key: "z",
   color: "#b5651d",
   density: 5,
-  granular: true,
   flammable: 0.8,
   melt: soil,
   // ash: soil,
@@ -230,6 +235,29 @@ export const plant: Cell = {
   static: true,
 };
 
+export const conveyorLeft: Cell = {
+  name: "⚙️⬅️ Conveyor",
+  color: "#7CB342",
+  colorSuite: ["#AFB42B", "#9E9D24", "#827717"],
+  density: 100,
+  state: states.conveyor,
+  static: true,
+  vector: { x: -1, y: 0 },
+};
+
+export const conveyorRight: Cell = {
+  name: "⚙️➡️ Conveyor",
+  color: "#33691E",
+  colorSuite: ["#AFB42B", "#9E9D24", "#827717"],
+  density: 100,
+  state: states.conveyor,
+  static: true,
+  vector: { x: 1, y: 0 },
+};
+
+/**
+ * Cells that can be picked in the UI dropdown
+ */
 export const CellsMap: Cell[] = [
   empty,
   sand,
@@ -247,8 +275,11 @@ export const CellsMap: Cell[] = [
   crystals,
   flame,
   acid,
+  conveyorLeft,
+  conveyorRight,
 ];
 
+// Must contain all cells
 export const AllCells: Cell[] = [
   empty,
   acid,
@@ -270,6 +301,8 @@ export const AllCells: Cell[] = [
   crystals,
   seed,
   plant,
+  conveyorLeft,
+  conveyorRight,
 ];
 
 export const TapValues: Cell[] = [oil, sand, water, coal, seed, soil];

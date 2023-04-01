@@ -55,7 +55,20 @@ export function process(
     } else {
       applyPascalsLaw(pascalsLaw, cell, i, j);
     }
+    return;
   }
+
+  // If above conveyor
+  if(cellBelow.state === CellType.states.conveyor) {
+    const neighbor = Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y);
+    if(neighbor === CellType.empty) {
+      Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y);
+    } else if (Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y - 1) === CellType.empty) {
+      Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y - 1);
+    }
+    return;
+  }
+
 }
 
 function processAcid(
@@ -64,7 +77,6 @@ function processAcid(
   i: number,
   j: number
 ) {
-  // Acid
   if (
     cell == CellType.acid &&
     cellBelow.state === CellType.states.solid &&

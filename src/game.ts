@@ -1,14 +1,15 @@
 import * as ArrayHelper from "./utils/arrayHelper";
 import * as CellType from "./celltype";
 
-const canvas = document.getElementById("game") as HTMLCanvasElement;
+export const gameWidth = 800;
+export const gameHeight = 600;
 
 export const pixelGrid = ArrayHelper.initArray(
-  canvas.width,
-  canvas.height,
+  gameWidth,
+  gameHeight,
   CellType.empty
 );
-export const delta = ArrayHelper.initArray(canvas.width, canvas.height, null);
+export const delta = ArrayHelper.initArray(gameWidth, gameHeight, null);
 
 export function getCell(i: number, j: number) {
   return pixelGrid[i][j];
