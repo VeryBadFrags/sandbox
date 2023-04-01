@@ -1,25 +1,33 @@
 import * as CellType from "./celltype";
+import * as Game from "./game";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 const context = canvas.getContext("2d", { alpha: false });
+
+const gameWidth = Game.gameWidth;
+const gameHeight = Game.gameHeight;
 
 let imagedata = context.createImageData(canvas.width, canvas.height);
 
 export function drawFull(gameState: CellType.Cell[][], lightMap?: number[][]) {
   // Reset imageData
-  imagedata = context.createImageData(canvas.width, canvas.height);
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  imagedata = context.createImageData(canvasWidth, canvasHeight);
 
-  const gameWidth = gameState.length;
-  const gameHeight = gameState[0].length;
+  const ratioX = gameWidth / canvasWidth;
+  const ratioY = gameHeight / canvasHeight;
 
-  for (let x = 0; x < gameWidth; x++) {
-    const column = gameState[x];
-    for (let y = 0; y < gameHeight; y++) {
-      const cell = column[y];
+  for (let x = 0; x < canvasWidth; x++) {
+    const gameX = Math.min(Math.ceil(x * ratioX), gameWidth - 1);
+    const column = gameState[gameX];
+    for (let y = 0; y < canvasHeight; y++) {
+      const gameY = Math.min(Math.round(y * ratioY), gameHeight - 1);
+      const cell = column[gameY];
       if (cell) {
         // TODO use lightmap to fix dynamic lights
 
-        const pixelindex = (y * gameWidth + x) * 4;
+        const pixelindex = (y * canvasWidth + x) * 4;
         imagedata.data[pixelindex] = cell.rgb[0]; // Red
         imagedata.data[pixelindex + 1] = cell.rgb[1]; // Green
         imagedata.data[pixelindex + 2] = cell.rgb[2]; // Blue
@@ -32,15 +40,19 @@ export function drawFull(gameState: CellType.Cell[][], lightMap?: number[][]) {
 }
 
 export function drawPartial(deltaBoard: CellType.Cell[][]) {
-  const gameWidth = deltaBoard.length;
-  const gameHeight = deltaBoard[0].length;
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  const ratioX = gameWidth / canvasWidth;
+  const ratioY = gameHeight / canvasHeight;
 
-  for (let x = 0; x < gameWidth; x++) {
-    const column = deltaBoard[x];
-    for (let y = 0; y < gameHeight; y++) {
-      const cell = column[y];
+  for (let x = 0; x < canvasWidth; x++) {
+    const gameX = Math.min(Math.round(x * ratioX), gameWidth - 1);
+    const column = deltaBoard[gameX];
+    for (let y = 0; y < canvasHeight; y++) {
+      const gameY = Math.min(Math.round(y * ratioY), gameHeight - 1);
+      const cell = column[gameY];
       if (cell) {
-        const pixelindex = (y * gameWidth + x) * 4;
+        const pixelindex = (y * canvasWidth + x) * 4;
         imagedata.data[pixelindex] = cell.rgb[0]; // Red
         imagedata.data[pixelindex + 1] = cell.rgb[1]; // Green
         imagedata.data[pixelindex + 2] = cell.rgb[2]; // Blue
