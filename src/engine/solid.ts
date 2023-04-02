@@ -1,4 +1,4 @@
-import * as Utils from "../utils";
+import * as EngineUtils from "../utils/engineUtils";
 import * as CellType from "../celltype";
 import * as Game from "../game";
 
@@ -15,7 +15,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
       // Germinate
       if (
         Math.random() > 0.999 &&
-        Utils.countNeighbors(i, j, Game.getFullBoard(), CellType.soil) >= 3
+        EngineUtils.countNeighbors(i, j, Game.getFullBoard(), CellType.soil) >= 3
       ) {
         Game.createCell(i, j, CellType.plant);
         return;
@@ -43,7 +43,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
   if (cell.disolve) {
     if (
       Math.random() > 0.995 &&
-      Utils.countNeighbors(i, j, Game.getFullBoard(), cell.disolve) >= 2
+      EngineUtils.countNeighbors(i, j, Game.getFullBoard(), cell.disolve) >= 2
     ) {
       Game.createCell(i, j, cell.disolveInto);
       return;
@@ -151,7 +151,7 @@ function processStatic(cell: CellType.Cell, i: number, j: number) {
 function processPlant(cell: CellType.Cell, i: number, j: number) {
   const cellBelow = Game.getCell(i, j + 1);
   // Propagate
-  if (Utils.countNeighbors(i, j, Game.getFullBoard(), CellType.ice) >= 2) {
+  if (EngineUtils.countNeighbors(i, j, Game.getFullBoard(), CellType.ice) >= 2) {
     return;
   }
   const direction = Math.floor(Math.random() * 4);
@@ -161,7 +161,7 @@ function processPlant(cell: CellType.Cell, i: number, j: number) {
         j > 0 &&
         (Game.getCell(i, j - 1) === CellType.water ||
           (Game.getCell(i, j - 1) === CellType.soil &&
-            Utils.countNeighbors(i, j, Game.getFullBoard(), CellType.plant) <=
+            EngineUtils.countNeighbors(i, j, Game.getFullBoard(), CellType.plant) <=
               3)) &&
         Math.random() > cell.propagation
       ) {
@@ -173,7 +173,7 @@ function processPlant(cell: CellType.Cell, i: number, j: number) {
         i < Game.getWidth() - 1 &&
         (Game.getCell(i + 1, j) === CellType.water ||
           (Game.getCell(i + 1, j) === CellType.soil &&
-            Utils.countNeighbors(i, j, Game.getFullBoard(), CellType.plant) <=
+            EngineUtils.countNeighbors(i, j, Game.getFullBoard(), CellType.plant) <=
               2)) &&
         Math.random() > cell.propagation
       ) {
@@ -194,7 +194,7 @@ function processPlant(cell: CellType.Cell, i: number, j: number) {
         i > 0 &&
         (Game.getCell(i - 1, j) === CellType.water ||
           (Game.getCell(i - 1, j) === CellType.soil &&
-            Utils.countNeighbors(i, j, Game.getFullBoard(), CellType.plant) <=
+            EngineUtils.countNeighbors(i, j, Game.getFullBoard(), CellType.plant) <=
               2)) &&
         Math.random() > cell.propagation
       ) {
@@ -207,7 +207,7 @@ function processPlant(cell: CellType.Cell, i: number, j: number) {
   if (
     cellBelow === CellType.empty &&
     Math.random() > 0.999 &&
-    Utils.countNeighbors(i, j, Game.getFullBoard(), CellType.plant) > 5
+    EngineUtils.countNeighbors(i, j, Game.getFullBoard(), CellType.plant) > 5
   ) {
     Game.createCell(i, j + 1, CellType.seed);
   }
@@ -218,8 +218,8 @@ function processIce(cell: CellType.Cell, i: number, j: number) {
   // Propagate
   if (
     j > 0 &&
-    Utils.countNeighbors(i, j, Game.getFullBoard(), CellType.water) >= 2 &&
-    Utils.countNeighbors(i, j, Game.getFullBoard(), CellType.ice) <= 4
+    EngineUtils.countNeighbors(i, j, Game.getFullBoard(), CellType.water) >= 2 &&
+    EngineUtils.countNeighbors(i, j, Game.getFullBoard(), CellType.ice) <= 4
   ) {
     // TODO replace with for loop
     if (
@@ -260,8 +260,8 @@ function dripAndMeltIce(
   // Melt
   if (
     (Math.random() > cell.lifetime &&
-      Utils.countNeighbors(i, j, Game.getFullBoard(), CellType.ice) < 6) ||
-    Utils.testNeighbors(
+      EngineUtils.countNeighbors(i, j, Game.getFullBoard(), CellType.ice) < 6) ||
+    EngineUtils.testNeighbors(
       i,
       j,
       Game.getFullBoard(),

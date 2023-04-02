@@ -1,6 +1,6 @@
-import * as Utils from "../utils";
 import * as CellType from "../celltype";
 import * as Game from "../game";
+import { getHigherCell } from "../utils/liquidUtils";
 
 export function process(
   cell: CellType.Cell,
@@ -113,7 +113,7 @@ function applyPascalsLaw(
     i + 1 < Game.getWidth() &&
     Game.getCell(i + 1, j) === cell
   ) {
-    const higherCell = Utils.getHigherCell(cell, i, j, Game.getFullBoard());
+    const higherCell = getHigherCell(cell, i, j);
     if (higherCell) {
       Game.swapCells(i, j - 1, higherCell[0], higherCell[1]);
       return;

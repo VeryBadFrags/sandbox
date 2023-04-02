@@ -1,7 +1,7 @@
 import * as CellType from "../celltype";
 import * as DrawUtils from "../utils/drawUtils";
 import * as Game from "../game";
-import * as Utils from "../utils";
+import * as EngineUtils from "../utils/engineUtils";
 
 const maxLightDistance = 6;
 
@@ -14,7 +14,7 @@ export function process(
 ) {
   // Douse
   if (
-    Utils.testNeighbors(
+    EngineUtils.testNeighbors(
       i,
       j,
       Game.getFullBoard(),
@@ -36,7 +36,7 @@ export function process(
   // Extinguish
   if (
     Math.random() > cell.lifetime &&
-    Utils.testNeighbors(
+    EngineUtils.testNeighbors(
       i,
       j,
       Game.getFullBoard(),

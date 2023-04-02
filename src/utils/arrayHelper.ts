@@ -28,6 +28,24 @@ export function init1DArray(
   return newArray;
 }
 
+export function copyArray(arrayToCopy: Array<[]>) {
+  return arrayToCopy.map((row: []) => row.slice());
+}
+
+export function wipeMatrix(
+  matrix: Array<Array<CellType.Cell | number>>,
+  value?: CellType.Cell | number
+) {
+  const width = matrix.length;
+  const height = matrix[0].length;
+  for (let x = 0; x < width; x++) {
+    const column = matrix[x];
+    for (let y = 0; y < height; y++) {
+      column[y] = value;
+    }
+  }
+}
+
 export function get1DIndex(x: number, y: number, width: number) {
   return y * width + x;
 }

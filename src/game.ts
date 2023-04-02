@@ -1,6 +1,5 @@
 import * as ArrayHelper from "./utils/arrayHelper";
 import * as CellType from "./celltype";
-import * as Utils from "./utils";
 
 const gameWidth = 600;
 const gameHeight = 450;
@@ -53,9 +52,9 @@ export function destroyCell(x: number, y: number) {
 }
 
 export function wipeBoard() {
-  Utils.wipeMatrix(pixelGrid, CellType.empty);
+  ArrayHelper.wipeMatrix(pixelGrid, CellType.empty);
 }
 
 export function wipeDelta() {
-  Utils.wipeMatrix(delta, null);
+  ArrayHelper.wipeMatrix(delta, null);
 }

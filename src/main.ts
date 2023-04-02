@@ -9,7 +9,6 @@ import * as Fire from "./engine/fire";
 import * as Liquid from "./engine/liquid";
 import * as Solid from "./engine/solid";
 import * as Gas from "./engine/gas";
-import * as Utils from "./utils";
 import * as ArrayHelper from "./utils/arrayHelper";
 import Brush from "./brush";
 
@@ -123,7 +122,7 @@ function update(time = 0) {
     const engineStart = performance.now();
     if (Settings.play) {
       if (dynamicLights) {
-        Utils.wipeMatrix(lightMap, 0);
+        ArrayHelper.wipeMatrix(lightMap, 0);
       }
       nextState();
     }
