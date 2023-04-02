@@ -145,7 +145,7 @@ export const ice: Cell = {
 export const soil: Cell = {
   name: "🍂 Soil",
   key: "l",
-  color: "#322110",
+  color: "#6D4C41",
   density: 20,
   state: states.solid,
   dousing: false,
@@ -307,7 +307,7 @@ export const AllCells: Cell[] = [
   conveyorRight,
 ];
 
-export const TapValues: Cell[] = [oil, sand, water, coal, seed, soil];
+export const TapValues: Cell[] = [oil, sand, water, coal, seed, soil, salt];
 
 function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
   const opt = document.createElement("option");
