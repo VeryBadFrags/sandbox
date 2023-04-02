@@ -17,7 +17,6 @@ export function process(
     EngineUtils.testNeighbors(
       i,
       j,
-      Game.getFullBoard(),
       (test: CellType.Cell) => test.dousing,
       (current: CellType.Cell, x: number, y: number) =>
         current.melt && Math.random() > 0.5
@@ -39,7 +38,6 @@ export function process(
     EngineUtils.testNeighbors(
       i,
       j,
-      Game.getFullBoard(),
       (test: CellType.Cell) => test.flammable > 0
     ) < 1
   ) {
