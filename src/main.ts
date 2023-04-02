@@ -21,7 +21,6 @@ const iEnd = (i: number, ltr: boolean, size: number) =>
 let mainBrush: Brush;
 
 function nextState() {
-  Game.wipeDelta();
   const leftToRight = Math.random() >= 0.5;
 
   for (
@@ -157,6 +156,7 @@ function render(deltaTime: number) {
     renderVal.innerText = Math.round(renderEnd - renderStart).toString();
     fpsTimer = 0;
   }
+  Game.wipeDelta(); // Needs to be called here because of the brush
 }
 
 function init() {
