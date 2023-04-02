@@ -161,8 +161,7 @@ function processPlant(cell: CellType.Cell, i: number, j: number) {
         j > 0 &&
         (Game.getCell(i, j - 1) === CellType.water ||
           (Game.getCell(i, j - 1) === CellType.soil &&
-            EngineUtils.countNeighbors(i, j, CellType.plant) <=
-              3)) &&
+            EngineUtils.countNeighbors(i, j, CellType.plant) <= 3)) &&
         Math.random() > cell.propagation
       ) {
         Game.createCell(i, j - 1, CellType.plant);
@@ -173,8 +172,7 @@ function processPlant(cell: CellType.Cell, i: number, j: number) {
         i < Game.getWidth() - 1 &&
         (Game.getCell(i + 1, j) === CellType.water ||
           (Game.getCell(i + 1, j) === CellType.soil &&
-            EngineUtils.countNeighbors(i, j, CellType.plant) <=
-              2)) &&
+            EngineUtils.countNeighbors(i, j, CellType.plant) <= 2)) &&
         Math.random() > cell.propagation
       ) {
         Game.createCell(i + 1, j, CellType.plant);
@@ -194,8 +192,7 @@ function processPlant(cell: CellType.Cell, i: number, j: number) {
         i > 0 &&
         (Game.getCell(i - 1, j) === CellType.water ||
           (Game.getCell(i - 1, j) === CellType.soil &&
-            EngineUtils.countNeighbors(i, j, CellType.plant) <=
-              2)) &&
+            EngineUtils.countNeighbors(i, j, CellType.plant) <= 2)) &&
         Math.random() > cell.propagation
       ) {
         Game.createCell(i - 1, j, CellType.plant);

@@ -14,18 +14,14 @@ export function isFuelAround(x: number, y: number) {
   return false;
 }
 
-export function countNeighbors(
-  x: number,
-  y: number,
-  neighType: CellType.Cell
-) {
+export function countNeighbors(x: number, y: number, neighType: CellType.Cell) {
   let count = 0;
   const xMax = Math.min(x + 1, Game.getWidth() - 1);
   const yMax = Math.min(y + 1, Game.getHeight() - 1);
   for (let i = Math.max(x - 1, 0); i <= xMax; i++) {
     for (let j = Math.max(y - 1, 0); j <= yMax; j++) {
       if (i !== x || j !== y) {
-        if (Game.getCell(i,j) === neighType) {
+        if (Game.getCell(i, j) === neighType) {
           count++;
         }
       }
@@ -46,7 +42,7 @@ export function testNeighbors(
   for (let i = Math.max(x - 1, 0); i <= xMax; i++) {
     for (let j = Math.max(y - 1, 0); j <= yMax; j++) {
       if (i !== x || j !== y) {
-        const neighbor = Game.getCell(i,j);
+        const neighbor = Game.getCell(i, j);
         if (testFunction(neighbor)) {
           count++;
           action ? action(neighbor, i, j) : null;

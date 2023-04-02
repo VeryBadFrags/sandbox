@@ -11,8 +11,12 @@ const pixelGrid = ArrayHelper.init2DArray(
 );
 const delta = ArrayHelper.init2DArray(gameWidth, gameHeight, null);
 
-export function getCell(i: number, j: number) {
-  return pixelGrid[i][j];
+export function getCell(x: number, y: number) {
+  return pixelGrid[x][y];
+}
+
+export function getDeltaCell(x: number, y: number) {
+  return delta[x][y];
 }
 
 export function getFullBoard() {

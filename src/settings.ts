@@ -26,5 +26,5 @@ const eraseButton = document.getElementById(
 ) as HTMLButtonElement;
 eraseButton.addEventListener("click", () => {
   Game.wipeBoard();
-  Display.drawFull(Game.getFullBoard());
+  Display.drawFull();
 });

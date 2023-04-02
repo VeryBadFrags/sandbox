@@ -7,7 +7,7 @@ const context = canvas.getContext("2d", { alpha: false });
 
 let imagedata = context.createImageData(canvas.width, canvas.height);
 
-export function drawFull(gameState: CellType.Cell[][], lightMap?: number[][]) {
+export function drawFull(lightMap?: number[][]) {
   // Reset imageData
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
@@ -18,10 +18,9 @@ export function drawFull(gameState: CellType.Cell[][], lightMap?: number[][]) {
 
   for (let x = 0; x < canvasWidth; x++) {
     const gameX = Math.min(Math.round(x * ratioX), Game.getWidth() - 1);
-    const column = gameState[gameX];
     for (let y = 0; y < canvasHeight; y++) {
       const gameY = Math.min(Math.round(y * ratioY), Game.getHeight() - 1);
-      const cell = column[gameY];
+      const cell = Game.getCell(gameX, gameY);
       if (cell) {
         // TODO use lightmap to fix dynamic lights
 
@@ -37,28 +36,17 @@ export function drawFull(gameState: CellType.Cell[][], lightMap?: number[][]) {
   context.putImageData(imagedata, 0, 0);
 }
 
-export function drawPartial(deltaBoard: CellType.Cell[][]) {
+export function drawPartial() {
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
   const ratioX = Game.getWidth() / canvasWidth;
   const ratioY = Game.getHeight() / canvasHeight;
 
-  // for (let x = 0; x < Game.getWidth(); x++) {
-  //   const column = deltaBoard[x];
-  //   for (let y = 0; y < Game.getHeight(); y++) {
-  //     const cell = column[y];
-  //     if (cell) {
-
-  //     }
-  //   }
-  // }
-
   for (let x = 0; x < canvasWidth; x++) {
     const gameX = Math.min(Math.round(x * ratioX), Game.getWidth() - 1);
-    const column = deltaBoard[gameX];
     for (let y = 0; y < canvasHeight; y++) {
       const gameY = Math.min(Math.round(y * ratioY), Game.getHeight() - 1);
-      const cell = column[gameY];
+      const cell = Game.getDeltaCell(gameX, gameY);
       if (cell) {
         const pixelindex = get1DIndex(x, y, canvasWidth) * 4;
         imagedata.data[pixelindex] = cell.rgb[0]; // Red

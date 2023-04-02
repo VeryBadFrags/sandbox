@@ -146,7 +146,7 @@ function render(deltaTime: number) {
   if (dynamicLights) {
     Display.drawPartialDynamic(Game.getFullBoard(), lightMap);
   } else {
-    Display.drawPartial(Game.getDeltaBoard());
+    Display.drawPartial();
   }
   const renderEnd = performance.now();
 
@@ -165,7 +165,7 @@ function init() {
     Game.createCell(x, Game.getHeight() - 2, CellType.concrete);
   }
 
-  Display.drawFull(Game.getFullBoard());
+  Display.drawFull();
 
   // Brush
   mainBrush = new Brush();
