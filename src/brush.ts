@@ -48,8 +48,8 @@ export default class Brush {
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
-    const ratioX = Game.gameWidth / canvasWidth;
-    const ratioY = Game.gameHeight / canvasHeight;
+    const ratioX = Game.getWidth() / canvasWidth;
+    const ratioY = Game.getHeight() / canvasHeight;
 
     let intervalId: number;
 
@@ -66,8 +66,11 @@ export default class Brush {
           j++
         ) {
           if (Math.random() <= brushOpacity / 100) {
-            const boardX = Math.min(Math.ceil(i * ratioX), Game.gameWidth - 1);
-            const boardY = Math.min(Math.ceil(j * ratioY), Game.gameHeight - 1);
+            const boardX = Math.min(Math.ceil(i * ratioX), Game.getWidth() - 1);
+            const boardY = Math.min(
+              Math.ceil(j * ratioY),
+              Game.getHeight() - 1
+            );
             Game.createCell(boardX, boardY, brushType);
           }
         }
@@ -79,8 +82,8 @@ export default class Brush {
         y >= 0 &&
         y < canvasHeight
       ) {
-        const boardX = Math.min(Math.ceil(x * ratioX), Game.gameWidth - 1);
-        const boardY = Math.min(Math.ceil(y * ratioY), Game.gameHeight - 1);
+        const boardX = Math.min(Math.ceil(x * ratioX), Game.getWidth() - 1);
+        const boardY = Math.min(Math.ceil(y * ratioY), Game.getHeight() - 1);
         Game.createCell(boardX, boardY, brushType);
       }
     };

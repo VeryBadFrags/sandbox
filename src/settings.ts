@@ -1,6 +1,4 @@
-import * as CellType from "./celltype";
 import * as Display from "./display";
-import * as Utils from "./utils";
 import * as Game from "./game";
 
 export let play = true;
@@ -27,6 +25,6 @@ const eraseButton = document.getElementById(
   "erase-button"
 ) as HTMLButtonElement;
 eraseButton.addEventListener("click", () => {
-  Utils.wipeMatrix(Game.pixelGrid, CellType.empty);
-  Display.drawFull(Game.pixelGrid);
+  Game.wipeBoard();
+  Display.drawFull(Game.getFullBoard());
 });

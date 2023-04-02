@@ -237,7 +237,8 @@ export const plant: Cell = {
 
 export const conveyorLeft: Cell = {
   name: "⚙️⬅️ Conveyor",
-  color: "#7CB342",
+  key: "r",
+  color: "#00ACC1",
   colorSuite: ["#AFB42B", "#9E9D24", "#827717"],
   density: 100,
   state: states.conveyor,
@@ -247,7 +248,8 @@ export const conveyorLeft: Cell = {
 
 export const conveyorRight: Cell = {
   name: "⚙️➡️ Conveyor",
-  color: "#33691E",
+  key: "t",
+  color: "#006064",
   colorSuite: ["#AFB42B", "#9E9D24", "#827717"],
   density: 100,
   state: states.conveyor,

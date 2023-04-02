@@ -14,6 +14,7 @@ import * as ArrayHelper from "./utils/arrayHelper";
 import Brush from "./brush";
 
 const pascalsLaw = false;
+
 const iStart = (ltr: boolean, size: number) => (ltr ? 0 : size - 1);
 const iEnd = (i: number, ltr: boolean, size: number) =>
   ltr ? i < size : i >= 0;
@@ -24,11 +25,11 @@ function nextState() {
   const leftToRight = Math.random() >= 0.5;
 
   for (
-    let i = iStart(leftToRight, Game.gameWidth);
-    iEnd(i, leftToRight, Game.gameWidth);
+    let i = iStart(leftToRight, Game.getWidth());
+    iEnd(i, leftToRight, Game.getWidth());
     leftToRight ? i++ : i--
   ) {
-    for (let j = Game.gameHeight - 2; j >= 0; j--) {
+    for (let j = Game.getHeight() - 2; j >= 0; j--) {
       const cell = Game.getCell(i, j);
       if (cell === CellType.empty) {
         continue;
@@ -51,7 +52,7 @@ function nextState() {
     }
 
     // Destroy the last row
-    Game.destroyCell(i, Game.gameHeight - 1);
+    Game.destroyCell(i, Game.getHeight() - 1);
   }
 
   // Spawn cells at the top
@@ -81,25 +82,24 @@ tap3Select.selectedIndex = 2;
 function createTaps() {
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor(Game.gameWidth / 4) + i, 0, tap1);
+      Game.createCell(Math.floor(Game.getWidth() / 4) + i, 0, tap1);
     }
   }
 
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor(Game.gameWidth / 2) + i, 0, tap2);
+      Game.createCell(Math.floor(Game.getWidth() / 2) + i, 0, tap2);
     }
   }
 
   for (let i = -3; i <= 3; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor((3 * Game.gameWidth) / 4) + i, 0, tap3);
+      Game.createCell(Math.floor((3 * Game.getWidth()) / 4) + i, 0, tap3);
     }
   }
 }
 
 const gameCyclesInterval = 1000 / 80; // Game Hz
-const fpsDisplayInterval = 1000;
 let timer = 0;
 let lastTime = 0;
 let dynamicLights = false;
@@ -114,10 +114,11 @@ let engineTimer = 0;
 function update(time = 0) {
   const deltaTime = time - lastTime;
   lastTime = time;
-  fpsTimer += deltaTime;
 
+  fpsTimer += deltaTime;
   timer += deltaTime;
   engineTimer += deltaTime;
+
   while (timer > gameCyclesInterval) {
     const engineStart = performance.now();
     if (Settings.play) {
@@ -128,13 +129,12 @@ function update(time = 0) {
     }
     const engineEnd = performance.now();
 
-    if (engineTimer > fpsDisplayInterval) {
+    if (engineTimer > 1000) {
       engineVal.innerText = Math.round(engineEnd - engineStart).toString();
       engineTimer = 0;
     }
 
-    // TODO add no-frame skip setting
-    // timer %= gameCyclesInterval;
+    // timer %= gameCyclesInterval; // no-frame skip
     timer -= gameCyclesInterval; // skip frames if necessary
   }
 
@@ -145,28 +145,28 @@ function update(time = 0) {
 function render(deltaTime: number) {
   const renderStart = performance.now();
   if (dynamicLights) {
-    Display.drawPartialDynamic(Game.delta, Game.pixelGrid, lightMap);
+    Display.drawPartialDynamic(Game.getFullBoard(), lightMap);
   } else {
-    Display.drawPartial(Game.delta);
+    Display.drawPartial(Game.getDeltaBoard());
   }
   const renderEnd = performance.now();
 
-  if (fpsTimer > fpsDisplayInterval) {
-    fpsVal.innerText = Math.round(fpsDisplayInterval / deltaTime).toString();
+  if (fpsTimer > 1000) {
+    fpsVal.innerText = Math.round(1000 / deltaTime).toString();
     renderVal.innerText = Math.round(renderEnd - renderStart).toString();
     fpsTimer = 0;
   }
-  Utils.wipeMatrix(Game.delta, null);
+  Game.wipeDelta();
 }
 
 function init() {
-  lightMap = ArrayHelper.initArray(Game.gameWidth, Game.gameHeight, 0);
+  lightMap = ArrayHelper.init2DArray(Game.getWidth(), Game.getHeight(), 0);
 
-  for (let x = 0; x < Game.gameWidth; x++) {
-    Game.createCell(x, Game.gameHeight - 2, CellType.concrete);
+  for (let x = 0; x < Game.getWidth(); x++) {
+    Game.createCell(x, Game.getHeight() - 2, CellType.concrete);
   }
 
-  Display.drawFull(Game.pixelGrid);
+  Display.drawFull(Game.getFullBoard());
 
   // Brush
   mainBrush = new Brush();

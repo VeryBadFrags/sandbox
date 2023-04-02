@@ -1,22 +1,35 @@
 import * as ArrayHelper from "./utils/arrayHelper";
 import * as CellType from "./celltype";
+import * as Utils from "./utils";
 
-export const gameWidth = 600;
-export const gameHeight = 450;
+const gameWidth = 600;
+const gameHeight = 450;
 
-export const pixelGrid = ArrayHelper.initArray(
+const pixelGrid = ArrayHelper.init2DArray(
   gameWidth,
   gameHeight,
   CellType.empty
 );
-export const delta = ArrayHelper.initArray(gameWidth, gameHeight, null);
+const delta = ArrayHelper.init2DArray(gameWidth, gameHeight, null);
 
 export function getCell(i: number, j: number) {
   return pixelGrid[i][j];
 }
 
+export function getFullBoard() {
+  return pixelGrid;
+}
+
+export function getDeltaBoard() {
+  return delta;
+}
+
 export function getWidth() {
-  return pixelGrid.length;
+  return gameWidth;
+}
+
+export function getHeight() {
+  return gameHeight;
 }
 
 export function createCell(x: number, y: number, cellType: CellType.Cell) {
@@ -37,4 +50,12 @@ export function swapCells(x1: number, y1: number, x2: number, y2: number) {
 export function destroyCell(x: number, y: number) {
   pixelGrid[x][y] = CellType.empty;
   delta[x][y] = CellType.empty;
+}
+
+export function wipeBoard() {
+  Utils.wipeMatrix(pixelGrid, CellType.empty);
+}
+
+export function wipeDelta() {
+  Utils.wipeMatrix(delta, null);
 }

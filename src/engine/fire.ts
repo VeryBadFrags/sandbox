@@ -17,7 +17,7 @@ export function process(
     Utils.testNeighbors(
       i,
       j,
-      Game.pixelGrid,
+      Game.getFullBoard(),
       (test: CellType.Cell) => test.dousing,
       (current: CellType.Cell, x: number, y: number) =>
         current.melt && Math.random() > 0.5
@@ -39,7 +39,7 @@ export function process(
     Utils.testNeighbors(
       i,
       j,
-      Game.pixelGrid,
+      Game.getFullBoard(),
       (test: CellType.Cell) => test.flammable > 0
     ) < 1
   ) {
@@ -68,12 +68,12 @@ function updateFireLightMap(
   if (dynamicLights && Game.getCell(i, j).state === CellType.states.fire) {
     for (
       let a = Math.max(i - maxLightDistance, 0);
-      a <= Math.min(i + maxLightDistance, Game.gameWidth - 1);
+      a <= Math.min(i + maxLightDistance, Game.getWidth() - 1);
       a++
     ) {
       for (
         let b = Math.max(j - maxLightDistance, 0);
-        b <= Math.min(j + maxLightDistance, Game.gameHeight - 1);
+        b <= Math.min(j + maxLightDistance, Game.getHeight() - 1);
         b++
       ) {
         if (
@@ -94,16 +94,16 @@ function propagateFire(i: number, j: number) {
   const b = Math.floor(Math.random() * 3) - 1;
   if (
     i + a >= 0 &&
-    i + a < Game.gameWidth &&
+    i + a < Game.getWidth() &&
     j + b >= 0 &&
-    j + b < Game.gameHeight
+    j + b < Game.getHeight()
   ) {
     const target = Game.getCell(i + a, j + b);
 
     if (target.flammable && Math.random() > target.flammable) {
       Game.createCell(i + a, j + b, target.melt);
       if (
-        j + b + 1 < Game.gameHeight &&
+        j + b + 1 < Game.getHeight() &&
         target.ash &&
         Game.getCell(i + a, j + b + 1) === CellType.empty
       ) {

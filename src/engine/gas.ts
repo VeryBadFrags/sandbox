@@ -18,7 +18,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
       coinFlip &&
       j > 0 &&
       i + coinFlip >= 0 &&
-      i + coinFlip < Game.gameWidth &&
+      i + coinFlip < Game.getWidth() &&
       Game.getCell(i + coinFlip, j - 1) === CellType.empty &&
       Math.random() > 0.7
     ) {
