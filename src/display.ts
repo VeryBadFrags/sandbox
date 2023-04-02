@@ -23,7 +23,6 @@ export function drawFull(lightMap?: number[][]) {
       const cell = Game.getCell(gameX, gameY);
       if (cell) {
         // TODO use lightmap to fix dynamic lights
-
         const pixelindex = (y * canvasWidth + x) * 4;
         imagedata.data[pixelindex] = cell.rgb[0]; // Red
         imagedata.data[pixelindex + 1] = cell.rgb[1]; // Green
@@ -61,22 +60,18 @@ export function drawPartial() {
 }
 
 export function drawPartialDynamic(
-  fullBoard: CellType.Cell[][],
   lightMap: number[][]
 ) {
-  const deltaBoard = Game.getDeltaBoard();
-
-  const gameWidth = deltaBoard.length;
-  const gameHeight = deltaBoard[0].length;
+  const gameWidth = Game.getWidth();
+  const gameHeight = Game.getHeight();
   for (let i = 0; i < gameWidth; i++) {
-    const column = deltaBoard[i];
     for (let j = 0; j < gameHeight; j++) {
-      let cell = column[j];
+      let cell = Game.getDeltaCell(i, j);
       if (cell) {
         context.fillStyle = getHexColor(cell, lightMap ? lightMap[i][j] : 0);
         context.fillRect(i, j, 1, 1);
       } else if (lightMap && lightMap[i][j] > 0) {
-        cell = fullBoard[i][j];
+        cell = Game.getCell(i, j);
         context.fillStyle = getHexColor(cell, lightMap[i][j]);
         context.fillRect(i, j, 1, 1);
       }

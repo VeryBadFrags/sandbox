@@ -21,6 +21,7 @@ const iEnd = (i: number, ltr: boolean, size: number) =>
 let mainBrush: Brush;
 
 function nextState() {
+  Game.wipeDelta();
   const leftToRight = Math.random() >= 0.5;
 
   for (
@@ -56,6 +57,7 @@ function nextState() {
 
   // Spawn cells at the top
   createTaps();
+  Game.updateFullBoard();
 }
 
 let tap1 = CellType.oil;
@@ -122,7 +124,7 @@ function update(time = 0) {
     const engineStart = performance.now();
     if (Settings.play) {
       if (dynamicLights) {
-        ArrayHelper.wipeMatrix(lightMap, 0);
+        ArrayHelper.wipe2DMatrix(lightMap, 0);
       }
       nextState();
     }
@@ -144,7 +146,7 @@ function update(time = 0) {
 function render(deltaTime: number) {
   const renderStart = performance.now();
   if (dynamicLights) {
-    Display.drawPartialDynamic(Game.getFullBoard(), lightMap);
+    Display.drawPartialDynamic(lightMap);
   } else {
     Display.drawPartial();
   }
@@ -155,11 +157,10 @@ function render(deltaTime: number) {
     renderVal.innerText = Math.round(renderEnd - renderStart).toString();
     fpsTimer = 0;
   }
-  Game.wipeDelta();
 }
 
 function init() {
-  lightMap = ArrayHelper.init2DArray(Game.getWidth(), Game.getHeight(), 0);
+  lightMap = ArrayHelper.initMatrix(Game.getWidth(), Game.getHeight(), 0);
 
   for (let x = 0; x < Game.getWidth(); x++) {
     Game.createCell(x, Game.getHeight() - 2, CellType.concrete);

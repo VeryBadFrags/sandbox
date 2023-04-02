@@ -1,6 +1,6 @@
 import * as CellType from "../celltype";
 
-export function init2DArray(
+export function initMatrix(
   width: number,
   height: number,
   cell: CellType.Cell | number
@@ -16,7 +16,7 @@ export function init2DArray(
   return newArray;
 }
 
-export function init1DArray(
+export function initArray(
   width: number,
   height: number,
   cell: CellType.Cell | number
@@ -28,11 +28,18 @@ export function init1DArray(
   return newArray;
 }
 
-export function copyArray(arrayToCopy: Array<[]>) {
+export function copyMatrix(arrayToCopy: Array<[]>) {
   return arrayToCopy.map((row: []) => row.slice());
 }
 
-export function wipeMatrix(
+export function wipe1DArray(array: Array<CellType.Cell | number>,
+  value?: CellType.Cell | number) {
+    for (let i = 0; i < array.length; i++) {
+      array[i] = value;
+    }
+}
+
+export function wipe2DMatrix(
   matrix: Array<Array<CellType.Cell | number>>,
   value?: CellType.Cell | number
 ) {
