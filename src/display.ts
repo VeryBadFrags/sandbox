@@ -59,9 +59,7 @@ export function drawPartial() {
   context.putImageData(imagedata, 0, 0);
 }
 
-export function drawPartialDynamic(
-  lightMap: number[][]
-) {
+export function drawPartialDynamic(lightMap: number[][]) {
   const gameWidth = Game.getWidth();
   const gameHeight = Game.getHeight();
   for (let i = 0; i < gameWidth; i++) {

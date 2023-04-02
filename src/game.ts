@@ -4,20 +4,16 @@ import * as CellType from "./celltype";
 const gameWidth = 600;
 const gameHeight = 450;
 
-const pixelGrid = ArrayHelper.initArray(
-  gameWidth,
-  gameHeight,
-  CellType.empty
-);
+const pixelGrid = ArrayHelper.initArray(gameWidth, gameHeight, CellType.empty);
 const delta = ArrayHelper.initArray(gameWidth, gameHeight, null);
 
 export function getCell(x: number, y: number) {
-  const index = ArrayHelper.get1DIndex(x,y, gameWidth);
+  const index = ArrayHelper.get1DIndex(x, y, gameWidth);
   return pixelGrid[index];
 }
 
 export function getDeltaCell(x: number, y: number) {
-  const index = ArrayHelper.get1DIndex(x,y, gameWidth);
+  const index = ArrayHelper.get1DIndex(x, y, gameWidth);
   return delta[index];
 }
 
@@ -38,14 +34,14 @@ export function getHeight() {
 }
 
 export function createCell(x: number, y: number, cellType: CellType.Cell) {
-  const index = ArrayHelper.get1DIndex(x,y, gameWidth);
+  const index = ArrayHelper.get1DIndex(x, y, gameWidth);
   pixelGrid[index] = cellType;
   delta[index] = cellType;
 }
 
 export function swapCells(x1: number, y1: number, x2: number, y2: number) {
-  const index1 = ArrayHelper.get1DIndex(x1,y1, gameWidth);
-  const index2 = ArrayHelper.get1DIndex(x2,y2, gameWidth);
+  const index1 = ArrayHelper.get1DIndex(x1, y1, gameWidth);
+  const index2 = ArrayHelper.get1DIndex(x2, y2, gameWidth);
   const originCell = pixelGrid[index1];
   const destinationCell = pixelGrid[index2];
 
@@ -56,7 +52,7 @@ export function swapCells(x1: number, y1: number, x2: number, y2: number) {
 }
 
 export function destroyCell(x: number, y: number) {
-  const index = ArrayHelper.get1DIndex(x,y, gameWidth);
+  const index = ArrayHelper.get1DIndex(x, y, gameWidth);
   pixelGrid[index] = CellType.empty;
   delta[index] = CellType.empty;
 }

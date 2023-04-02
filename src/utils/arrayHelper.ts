@@ -32,11 +32,13 @@ export function copyMatrix(arrayToCopy: Array<[]>) {
   return arrayToCopy.map((row: []) => row.slice());
 }
 
-export function wipe1DArray(array: Array<CellType.Cell | number>,
-  value?: CellType.Cell | number) {
-    for (let i = 0; i < array.length; i++) {
-      array[i] = value;
-    }
+export function wipe1DArray(
+  array: Array<CellType.Cell | number>,
+  value?: CellType.Cell | number
+) {
+  for (let i = 0; i < array.length; i++) {
+    array[i] = value;
+  }
 }
 
 export function wipe2DMatrix(
