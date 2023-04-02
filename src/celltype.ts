@@ -5,6 +5,12 @@ interface Vector {
   y: number;
 }
 
+// interface flammable {
+//   chance: number;
+//   melt: Cell;
+//   ash?: Cell;
+// }
+
 export interface Cell {
   color: string;
   state?: states;
@@ -257,6 +263,20 @@ export const conveyorRight: Cell = {
   vector: { x: 1, y: 0 },
 };
 
+export const wax: Cell = {
+  name: "🕯️ Wax",
+  key: "x",
+  color: "#A7FFEB",
+  flammable: 0.995,
+  melt: flame,
+  density: 10,
+  state: states.solid,
+  sticky: true,
+};
+{
+  wax.ash = wax;
+}
+
 /**
  * Cells that can be picked in the UI dropdown
  */
@@ -279,7 +299,16 @@ export const CellsMap: Cell[] = [
   acid,
   conveyorLeft,
   conveyorRight,
+  wax,
 ];
+
+// {
+//   CellsMap.sort((a, b) => {
+//     if (a.name < b.name) {
+//       return 1;
+//     } else return -1;
+//   });
+// }
 
 // Must contain all cells
 export const AllCells: Cell[] = [
@@ -305,6 +334,7 @@ export const AllCells: Cell[] = [
   plant,
   conveyorLeft,
   conveyorRight,
+  wax,
 ];
 
 export const TapValues: Cell[] = [oil, sand, water, coal, seed, soil, salt];
