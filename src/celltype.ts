@@ -341,11 +341,12 @@ export const TapValues: Cell[] = [
   oil,
   sand,
   water,
+  acid,
   coal,
   gunPowder,
+  salt,
   seed,
   soil,
-  salt,
   wax,
 ];
 
