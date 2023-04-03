@@ -50,8 +50,9 @@ function nextState() {
       }
     }
 
+    Game.createCell(i, Game.getHeight() - 1, CellType.concrete);
     // Destroy the last row
-    Game.destroyCell(i, Game.getHeight() - 1);
+    // Game.destroyCell(i, Game.getHeight() - 1);
   }
 
   // Spawn cells at the top
@@ -134,8 +135,9 @@ function update(time = 0) {
       engineTimer = 0;
     }
 
-    // timer %= gameCyclesInterval; // no-frame skip
-    timer -= gameCyclesInterval; // skip frames if necessary
+    // timer = 0;
+    // timer %= gameCyclesInterval;
+    timer -= gameCyclesInterval;
   }
 
   render(deltaTime);
@@ -162,9 +164,9 @@ function render(deltaTime: number) {
 function init() {
   lightMap = ArrayHelper.initMatrix(Game.getWidth(), Game.getHeight(), 0);
 
-  for (let x = 0; x < Game.getWidth(); x++) {
-    Game.createCell(x, Game.getHeight() - 2, CellType.concrete);
-  }
+  // for (let x = 0; x < Game.getWidth(); x++) {
+  //   Game.createCell(x, Game.getHeight() - 2, CellType.concrete);
+  // }
 
   Display.drawFull();
 
