@@ -142,7 +142,7 @@ export default class Brush {
 
     brushTypeSelector.addEventListener("change", function (e) {
       brushType =
-        CellType.CellsMap[(<HTMLSelectElement>e.target).selectedIndex];
+        CellType.brushCells[(<HTMLSelectElement>e.target).selectedIndex];
     });
 
     brushSizeInput.addEventListener("input", function (e) {

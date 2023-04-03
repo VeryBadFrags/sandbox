@@ -170,7 +170,7 @@ export const wood: Cell = {
 export const coal: Cell = {
   name: "♨️ Coal",
   key: "h",
-  color: "#202020",
+  color: "#303030",
   density: 30,
   state: states.solid,
   flammable: 0.99,
@@ -199,7 +199,7 @@ export const salt: Cell = {
   saltyWater.melt = salt;
 }
 
-export const powder: Cell = {
+export const gunPowder: Cell = {
   name: "💣 Gunpowder",
   key: "g",
   color: "#555555",
@@ -280,7 +280,7 @@ export const wax: Cell = {
 /**
  * Cells that can be picked in the UI dropdown
  */
-export const CellsMap: Cell[] = [
+export const brushCells: Cell[] = [
   empty,
   sand,
   concrete,
@@ -288,7 +288,7 @@ export const CellsMap: Cell[] = [
   water,
   ice,
   salt,
-  powder,
+  gunPowder,
   oil,
   coal,
   plant,
@@ -328,7 +328,7 @@ export const AllCells: Cell[] = [
   coal,
   sand,
   salt,
-  powder,
+  gunPowder,
   crystals,
   seed,
   plant,
@@ -337,7 +337,17 @@ export const AllCells: Cell[] = [
   wax,
 ];
 
-export const TapValues: Cell[] = [oil, sand, water, coal, seed, soil, salt];
+export const TapValues: Cell[] = [
+  oil,
+  sand,
+  water,
+  coal,
+  gunPowder,
+  seed,
+  soil,
+  salt,
+  wax,
+];
 
 function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
   const opt = document.createElement("option");
@@ -357,7 +367,7 @@ function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
     "brush-type"
   ) as HTMLSelectElement;
 
-  CellsMap.forEach((cell) => addElementToSelect(cell, brushTypeSelector));
+  brushCells.forEach((cell) => addElementToSelect(cell, brushTypeSelector));
 
   for (let i = 1; i <= 3; i++) {
     const tap1Select = document.getElementById(

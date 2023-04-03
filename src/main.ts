@@ -119,7 +119,7 @@ function update(time = 0) {
   timer += deltaTime;
   engineTimer += deltaTime;
 
-  while (timer > gameCyclesInterval) {
+  if (timer > gameCyclesInterval) {
     const engineStart = performance.now();
     if (Settings.play) {
       if (dynamicLights) {
@@ -173,7 +173,7 @@ function init() {
   mainBrush.init();
 
   const keyToCell = new Map<string, CellType.Cell>();
-  CellType.CellsMap.filter((cell) => cell.key).forEach((cell) => {
+  CellType.brushCells.filter((cell) => cell.key).forEach((cell) => {
     keyToCell.set(cell.key, cell);
   });
 
