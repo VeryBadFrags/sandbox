@@ -80,19 +80,20 @@ tap3Select.addEventListener("change", function (e) {
 tap3Select.selectedIndex = 2;
 
 function createTaps() {
-  for (let i = -3; i <= 3; i++) {
+  const tapSize = 3;
+  for (let i = -tapSize; i <= tapSize; i++) {
     if (Math.random() > 0.9) {
       Game.createCell(Math.floor(Game.getWidth() / 4) + i, 0, tap1);
     }
   }
 
-  for (let i = -3; i <= 3; i++) {
+  for (let i = -tapSize; i <= tapSize; i++) {
     if (Math.random() > 0.9) {
       Game.createCell(Math.floor(Game.getWidth() / 2) + i, 0, tap2);
     }
   }
 
-  for (let i = -3; i <= 3; i++) {
+  for (let i = -tapSize; i <= tapSize; i++) {
     if (Math.random() > 0.9) {
       Game.createCell(Math.floor((3 * Game.getWidth()) / 4) + i, 0, tap3);
     }

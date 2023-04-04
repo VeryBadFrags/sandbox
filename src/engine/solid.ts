@@ -79,6 +79,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
   // Sink in liquids
   if (
     cellBelow.state === CellType.States.liquid &&
+    cell.density > cellBelow.density &&
     i - 1 >= 0 &&
     Game.getCell(i - 1, j + 1).state === CellType.States.liquid &&
     i + 1 < Game.getWidth() &&
@@ -110,16 +111,16 @@ function rollGrainSideways(
   i: number,
   j: number,
   direction: number
-) {
+): boolean {
   if (i + direction >= 0 && i + direction < Game.getWidth()) {
-    const otherCell = Game.getCell(i + direction, j + 1);
-    if (otherCell === CellType.empty && Math.random() > 0.2) {
+    const diagonalCell = Game.getCell(i + direction, j + 1);
+    if (diagonalCell === CellType.empty && Math.random() > 0.2) {
       // Roll down
       Game.swapCells(i, j, i + direction, j + 1);
       return true;
     }
 
-    if (otherCell.state === CellType.States.fire && Math.random() > 0.9) {
+    if (diagonalCell.state === CellType.States.fire && Math.random() > 0.9) {
       if (Math.random() > cell.flammable) {
         Game.createCell(i, j, CellType.flame);
       } else {
@@ -128,9 +129,9 @@ function rollGrainSideways(
       return true;
     }
 
-    if (otherCell.state === CellType.States.liquid && Math.random() > 0.9) {
+    if (diagonalCell.state === CellType.States.liquid && Math.random() > 0.9) {
       // Swirl in liquid
-      Game.swapCells(i, j, i + direction, j + 1);
+      Game.swapCells(i, j, i + direction, j);
       return true;
     }
   }

@@ -180,7 +180,7 @@ export const sand: Cell = {
   name: "🏜️ Sand",
   key: "s",
   color: "#c2ff80",
-  density: 10,
+  density: 20,
   state: States.solid,
   dousing: true,
 };
@@ -220,7 +220,7 @@ export const seed: Cell = {
   name: "🌱 Seed",
   key: "z",
   color: "#b5651d",
-  density: 5,
+  density: 12,
   flammable: 0.8,
   melt: soil,
   // ash: soil,
@@ -269,7 +269,7 @@ export const wax: Cell = {
   color: "#A7FFEB",
   flammable: 0.995,
   melt: flame,
-  density: 10,
+  density: 30,
   state: States.solid,
   sticky: true,
 };

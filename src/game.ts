@@ -69,6 +69,11 @@ export function swapCells(
   delta[index2].cell = originCell;
 }
 
+export function destroyCellByIndex(index: number) {
+  pixelGrid[index].cell = CellType.empty;
+  delta[index].cell = CellType.empty;
+}
+
 export function destroyCell(x: number, y: number) {
   const index = ArrayHelper.get1DIndex(x, y, gameWidth);
   pixelGrid[index].cell = CellType.empty;

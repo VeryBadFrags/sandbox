@@ -7,7 +7,7 @@ export function process(
   i: number,
   j: number,
   pascalsLaw: boolean
-) {
+): void {
   const cellBelow = Game.getCell(i, j + 1);
 
   if (processAcid(cell, cellBelow, i, j)) return;
@@ -58,6 +58,16 @@ export function process(
     return;
   }
 
+  if (
+    cellBelow.state === CellType.States.solid &&
+    !cellBelow.static &&
+    cell.density > cellBelow.density &&
+    Math.random() > 0.999
+  ) {
+    Game.swapCells(i, j, i, j + 1);
+    return;
+  }
+
   // If above conveyor
   if (cellBelow.state === CellType.States.conveyor) {
     const neighbor = Game.getCell(
@@ -81,7 +91,7 @@ function processAcid(
   cellBelow: CellType.Cell,
   i: number,
   j: number
-) {
+): boolean {
   if (
     cell == CellType.acid &&
     cellBelow.state === CellType.States.solid &&
@@ -103,7 +113,7 @@ function applyPascalsLaw(
   cell: CellType.Cell,
   i: number,
   j: number
-) {
+): void {
   if (
     pascalsLaw &&
     j - 1 >= 0 &&
@@ -138,7 +148,11 @@ function moveLiquidSideways(i: number, j: number, direction: number): boolean {
     }
 
     const current = Game.getCell(i, j); // TODO get it in params
-    if (neighbor !== current && Math.random() > 0.9) {
+    if (
+      neighbor !== current &&
+      neighbor.state === CellType.States.liquid &&
+      Math.random() > 0.9
+    ) {
       Game.swapCells(i, j, i + direction, j);
     }
   }
