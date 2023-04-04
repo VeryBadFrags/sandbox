@@ -1,5 +1,5 @@
 import * as EngineUtils from "../utils/engineUtils";
-import * as CellType from "../celltype";
+import * as CellType from "../type/Cell";
 import * as Game from "../game";
 
 export function process(cell: CellType.Cell, i: number, j: number) {
@@ -52,7 +52,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
 
   // If above void of gas
   if (
-    (cellBelow === CellType.empty || cellBelow.state === CellType.states.gas) &&
+    (cellBelow === CellType.empty || cellBelow.state === CellType.States.gas) &&
     Math.random() >= 1 / (cell.density * 100)
   ) {
     Game.swapCells(i, j, i, j + 1);
@@ -60,7 +60,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
   }
 
   // If above conveyor
-  if (cellBelow.state === CellType.states.conveyor) {
+  if (cellBelow.state === CellType.States.conveyor) {
     const neighbor = Game.getCell(
       i + cellBelow.vector.x,
       j + cellBelow.vector.y
@@ -78,11 +78,11 @@ export function process(cell: CellType.Cell, i: number, j: number) {
 
   // Sink in liquids
   if (
-    cellBelow.state === CellType.states.liquid &&
+    cellBelow.state === CellType.States.liquid &&
     i - 1 >= 0 &&
-    Game.getCell(i - 1, j + 1) === CellType.states.liquid &&
+    Game.getCell(i - 1, j + 1).state === CellType.States.liquid &&
     i + 1 < Game.getWidth() &&
-    Game.getCell(i + 1, j + 1) === CellType.states.liquid
+    Game.getCell(i + 1, j + 1).state === CellType.States.liquid
   ) {
     if (
       Math.random() <=
@@ -90,7 +90,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
     ) {
       Game.swapCells(i, j, i, j + 1);
     }
-  } else if (cellBelow.state === CellType.states.fire && Math.random() > 0.9) {
+  } else if (cellBelow.state === CellType.States.fire && Math.random() > 0.9) {
     if (Math.random() > cell.flammable) {
       Game.createCell(i, j, CellType.flame);
     } else {
@@ -119,7 +119,7 @@ function rollGrainSideways(
       return true;
     }
 
-    if (otherCell.state === CellType.states.fire && Math.random() > 0.9) {
+    if (otherCell.state === CellType.States.fire && Math.random() > 0.9) {
       if (Math.random() > cell.flammable) {
         Game.createCell(i, j, CellType.flame);
       } else {
@@ -128,7 +128,7 @@ function rollGrainSideways(
       return true;
     }
 
-    if (otherCell.state === CellType.states.liquid && Math.random() > 0.9) {
+    if (otherCell.state === CellType.States.liquid && Math.random() > 0.9) {
       // Swirl in liquid
       Game.swapCells(i, j, i + direction, j + 1);
       return true;
@@ -261,7 +261,7 @@ function dripAndMeltIce(
     EngineUtils.testNeighbors(
       i,
       j,
-      (c: CellType.Cell) => c.state === CellType.states.fire
+      (c: CellType.Cell) => c.state === CellType.States.fire
     ) > 0
   ) {
     Game.createCell(i, j, cell.melt);

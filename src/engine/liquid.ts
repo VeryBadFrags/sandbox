@@ -1,4 +1,4 @@
-import * as CellType from "../celltype";
+import * as CellType from "../type/Cell";
 import * as Game from "../game";
 import { getHigherCell } from "../utils/liquidUtils";
 
@@ -13,12 +13,12 @@ export function process(
   if (processAcid(cell, cellBelow, i, j)) return;
 
   // Fall down
-  if (cellBelow === CellType.empty || cellBelow.state === CellType.states.gas) {
+  if (cellBelow === CellType.empty || cellBelow.state === CellType.States.gas) {
     Game.swapCells(i, j, i, j + 1);
     return;
   }
 
-  if (cellBelow.state === CellType.states.liquid) {
+  if (cellBelow.state === CellType.States.liquid) {
     const direction = Math.random() >= 0.5 ? 1 : -1;
     // Roll sideways
     if (
@@ -47,7 +47,7 @@ export function process(
       ) {
         // TODO use liquid thickness instead of 0.5
         const nextCell = Game.getCell(i + direction, j);
-        if (nextCell !== cell && nextCell.state === CellType.states.liquid) {
+        if (nextCell !== cell && nextCell.state === CellType.States.liquid) {
           Game.swapCells(i, j, i + direction, j);
           return;
         }
@@ -59,7 +59,7 @@ export function process(
   }
 
   // If above conveyor
-  if (cellBelow.state === CellType.states.conveyor) {
+  if (cellBelow.state === CellType.States.conveyor) {
     const neighbor = Game.getCell(
       i + cellBelow.vector.x,
       j + cellBelow.vector.y
@@ -84,7 +84,7 @@ function processAcid(
 ) {
   if (
     cell == CellType.acid &&
-    cellBelow.state === CellType.states.solid &&
+    cellBelow.state === CellType.States.solid &&
     Math.random() > 0.8
   ) {
     Game.createCell(i, j, CellType.smoke);
@@ -128,12 +128,18 @@ function moveLiquidSideways(i: number, j: number, direction: number): boolean {
       return true;
     }
 
+    const neighbor = Game.getCell(i + direction, j);
     if (
-      Game.getCell(i + direction, j) === CellType.empty &&
-      Game.getCell(i, j + 1) !== CellType.states.solid
+      neighbor === CellType.empty &&
+      Game.getCell(i, j + 1).state !== CellType.States.solid
     ) {
       Game.swapCells(i, j, i + direction, j);
       return true;
+    }
+
+    const current = Game.getCell(i, j); // TODO get it in params
+    if (neighbor !== current && Math.random() > 0.9) {
+      Game.swapCells(i, j, i + direction, j);
     }
   }
 

@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
-import * as CellType from "./celltype";
+import * as CellType from "./type/Cell";
 import * as Display from "./display";
 import * as Game from "./game";
 import * as Settings from "./settings";
@@ -35,16 +35,16 @@ function nextState() {
       }
 
       switch (cell.state) {
-        case CellType.states.solid:
+        case CellType.States.solid:
           Solid.process(cell, i, j);
           break;
-        case CellType.states.liquid:
+        case CellType.States.liquid:
           Liquid.process(cell, i, j, pascalsLaw);
           break;
-        case CellType.states.fire:
+        case CellType.States.fire:
           Fire.process(cell, i, j, lightMap, dynamicLights);
           break;
-        case CellType.states.gas:
+        case CellType.States.gas:
           Gas.process(cell, i, j);
           break;
       }
@@ -57,7 +57,6 @@ function nextState() {
 
   // Spawn cells at the top
   createTaps();
-  Game.updateFullBoard();
 }
 
 let tap1 = CellType.oil;
@@ -175,9 +174,11 @@ function init() {
   mainBrush.init();
 
   const keyToCell = new Map<string, CellType.Cell>();
-  CellType.brushCells.filter((cell) => cell.key).forEach((cell) => {
-    keyToCell.set(cell.key, cell);
-  });
+  CellType.brushCells
+    .filter((cell) => cell.key)
+    .forEach((cell) => {
+      keyToCell.set(cell.key, cell);
+    });
 
   document.addEventListener("keydown", (e) => {
     if (keyToCell.has(e.key)) {

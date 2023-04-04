@@ -1,4 +1,4 @@
-import * as CellType from "./celltype";
+import * as CellType from "./type/Cell";
 import * as Game from "./game";
 import { get1DIndex } from "./utils/arrayHelper";
 
@@ -38,23 +38,26 @@ export function drawFull(lightMap?: number[][]) {
 export function drawPartial() {
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
-  const ratioX = Game.getWidth() / canvasWidth;
-  const ratioY = Game.getHeight() / canvasHeight;
+  const ratioX = canvasWidth / Game.getWidth();
+  const ratioY = canvasHeight / Game.getHeight();
 
-  for (let x = 0; x < canvasWidth; x++) {
-    const gameX = Math.min(Math.round(x * ratioX), Game.getWidth() - 1);
-    for (let y = 0; y < canvasHeight; y++) {
-      const gameY = Math.min(Math.round(y * ratioY), Game.getHeight() - 1);
-      const cell = Game.getDeltaCell(gameX, gameY);
-      if (cell) {
-        const pixelindex = get1DIndex(x, y, canvasWidth) * 4;
-        imagedata.data[pixelindex] = cell.rgb[0]; // Red
-        imagedata.data[pixelindex + 1] = cell.rgb[1]; // Green
-        imagedata.data[pixelindex + 2] = cell.rgb[2]; // Blue
-        imagedata.data[pixelindex + 3] = 255; // Alpha
+  Game.getDeltaBoard()
+    .filter((cell) => cell.cell)
+    .forEach((gameCell) => {
+      const cell = gameCell.cell;
+      for (let a = 0; a < Math.floor(ratioX); a++) {
+        for (let b = 0; b < Math.floor(ratioY); b++) {
+          const imageX = (gameCell.x * ratioX + a) * 4;
+          const imageY = (gameCell.y * ratioY + b) * 4;
+          const pixelIndex = get1DIndex(imageX, imageY, canvasWidth);
+
+          imagedata.data[pixelIndex] = cell.rgb[0]; // Red
+          imagedata.data[pixelIndex + 1] = cell.rgb[1]; // Green
+          imagedata.data[pixelIndex + 2] = cell.rgb[2]; // Blue
+          imagedata.data[pixelIndex + 3] = 255; // Alpha
+        }
       }
-    }
-  }
+    });
 
   context.putImageData(imagedata, 0, 0);
 }

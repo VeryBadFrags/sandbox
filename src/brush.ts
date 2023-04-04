@@ -1,4 +1,4 @@
-import * as CellType from "./celltype";
+import * as CellType from "./type/Cell";
 import * as Game from "./game";
 import * as DrawUtils from "./utils/drawUtils";
 

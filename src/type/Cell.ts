@@ -1,4 +1,4 @@
-import * as ColorUtils from "./utils/colorUtils";
+import * as ColorUtils from "../utils/colorUtils";
 
 interface Vector {
   x: number;
@@ -13,7 +13,7 @@ interface Vector {
 
 export interface Cell {
   color: string;
-  state?: states;
+  state?: States;
   density: number;
 
   name?: string;
@@ -39,7 +39,7 @@ export interface Cell {
   sticky?: boolean;
 }
 
-export enum states {
+export enum States {
   liquid,
   solid,
   gas,
@@ -58,14 +58,14 @@ export const empty: Cell = {
 export const smoke: Cell = {
   color: "#333333",
   density: 0.1,
-  state: states.gas,
+  state: States.gas,
   lifetime: 0.98,
   nextCell: empty,
 };
 export const flame3: Cell = {
   color: "#ff8800",
   density: 0.1,
-  state: states.fire,
+  state: States.fire,
   lifetime: 0.885,
   propagation: 0.8,
   nextCell: smoke,
@@ -73,7 +73,7 @@ export const flame3: Cell = {
 export const flame2: Cell = {
   color: "#ff4400",
   density: 0.1,
-  state: states.fire,
+  state: States.fire,
   lifetime: 0.89,
   propagation: 0.77,
   nextCell: flame3,
@@ -83,7 +83,7 @@ export const flame: Cell = {
   key: "f",
   color: "#e00000",
   density: 0.2,
-  state: states.fire,
+  state: States.fire,
   lifetime: 0.9,
   propagation: 0.75,
   nextCell: flame2,
@@ -95,7 +95,7 @@ export const water: Cell = {
   key: "w",
   color: "#2222ff",
   density: 1,
-  state: states.liquid,
+  state: States.liquid,
   dousing: true,
   melt: smoke,
 };
@@ -104,7 +104,7 @@ export const saltyWater: Cell = {
   name: "Salty Water",
   color: "#22A2ff",
   density: 2,
-  state: states.liquid,
+  state: States.liquid,
   dousing: true,
 };
 
@@ -113,7 +113,7 @@ export const oil: Cell = {
   key: "o",
   color: "#963e48",
   density: 0.5,
-  state: states.liquid,
+  state: States.liquid,
   flammable: 0.2,
   melt: flame,
 };
@@ -123,7 +123,7 @@ export const acid: Cell = {
   key: "a",
   color: "#00ff00",
   density: 3,
-  state: states.liquid,
+  state: States.liquid,
 };
 
 // SOLIDS
@@ -132,7 +132,7 @@ export const concrete: Cell = {
   key: "c",
   color: "#aaaaaa",
   density: 100,
-  state: states.solid,
+  state: States.solid,
   static: true,
 };
 export const ice: Cell = {
@@ -140,7 +140,7 @@ export const ice: Cell = {
   key: "i",
   color: "#00eeee",
   density: 0.9,
-  state: states.solid,
+  state: States.solid,
   propagation: 0.996,
   lifetime: 0.999,
   drip: 0.999,
@@ -153,7 +153,7 @@ export const soil: Cell = {
   key: "l",
   color: "#6D4C41",
   density: 20,
-  state: states.solid,
+  state: States.solid,
   dousing: false,
 };
 export const wood: Cell = {
@@ -161,7 +161,7 @@ export const wood: Cell = {
   key: "d",
   color: "#654321",
   density: 20,
-  state: states.solid,
+  state: States.solid,
   flammable: 0.9,
   melt: flame,
   ash: soil,
@@ -172,7 +172,7 @@ export const coal: Cell = {
   key: "h",
   color: "#303030",
   density: 30,
-  state: states.solid,
+  state: States.solid,
   flammable: 0.99,
   melt: flame,
 };
@@ -181,14 +181,14 @@ export const sand: Cell = {
   key: "s",
   color: "#c2ff80",
   density: 10,
-  state: states.solid,
+  state: States.solid,
   dousing: true,
 };
 export const salt: Cell = {
   name: "🧂 Salt",
   key: "m",
   color: "#eeeeee",
-  state: states.solid,
+  state: States.solid,
   density: 9,
   disolve: water,
   disolveInto: saltyWater,
@@ -204,7 +204,7 @@ export const gunPowder: Cell = {
   key: "g",
   color: "#555555",
   density: 4,
-  state: states.solid,
+  state: States.solid,
   flammable: 0.001,
   melt: flame,
 };
@@ -213,7 +213,7 @@ export const crystals: Cell = {
   key: "y",
   color: "#ff80b6",
   density: 30,
-  state: states.solid,
+  state: States.solid,
   sticky: true,
 };
 export const seed: Cell = {
@@ -224,13 +224,13 @@ export const seed: Cell = {
   flammable: 0.8,
   melt: soil,
   // ash: soil,
-  state: states.solid,
+  state: States.solid,
 };
 export const plant: Cell = {
   name: "🌿 Plant",
   key: "p",
   color: "#00bf00",
-  state: states.solid,
+  state: States.solid,
   density: 10,
   propagation: 0.5,
   propTarget: water,
@@ -247,7 +247,7 @@ export const conveyorLeft: Cell = {
   color: "#00ACC1",
   colorSuite: ["#AFB42B", "#9E9D24", "#827717"],
   density: 100,
-  state: states.conveyor,
+  state: States.conveyor,
   static: true,
   vector: { x: -1, y: 0 },
 };
@@ -258,7 +258,7 @@ export const conveyorRight: Cell = {
   color: "#006064",
   colorSuite: ["#AFB42B", "#9E9D24", "#827717"],
   density: 100,
-  state: states.conveyor,
+  state: States.conveyor,
   static: true,
   vector: { x: 1, y: 0 },
 };
@@ -270,7 +270,7 @@ export const wax: Cell = {
   flammable: 0.995,
   melt: flame,
   density: 10,
-  state: states.solid,
+  state: States.solid,
   sticky: true,
 };
 {

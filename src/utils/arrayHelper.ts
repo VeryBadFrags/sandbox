@@ -1,4 +1,5 @@
-import * as CellType from "../celltype";
+import * as CellType from "../type/Cell";
+import { GameCell } from "../type/GameCell";
 
 export function initMatrix(
   width: number,
@@ -19,11 +20,17 @@ export function initMatrix(
 export function initArray(
   width: number,
   height: number,
-  cell: CellType.Cell | number
-) {
-  const newArray = new Array(width);
-  for (let x = 0; x < width * height; x++) {
-    newArray[x] = cell;
+  cell: CellType.Cell
+): Array<GameCell> {
+  const newArray = new Array(width * height);
+  for (let i = 0; i < width * height; i++) {
+    const coords = getCoordsFromIndex(i, width);
+    newArray[i] = {
+      index: i,
+      x: coords[0],
+      y: coords[1],
+      cell: cell,
+    } as GameCell;
   }
   return newArray;
 }
@@ -32,12 +39,9 @@ export function copyMatrix(arrayToCopy: Array<[]>) {
   return arrayToCopy.map((row: []) => row.slice());
 }
 
-export function wipe1DArray(
-  array: Array<CellType.Cell | number>,
-  value?: CellType.Cell | number
-) {
+export function wipe1DArray(array: Array<GameCell>, value?: CellType.Cell) {
   for (let i = 0; i < array.length; i++) {
-    array[i] = value;
+    array[i].cell = value;
   }
 }
 
@@ -57,4 +61,10 @@ export function wipe2DMatrix(
 
 export function get1DIndex(x: number, y: number, width: number) {
   return y * width + x;
+}
+
+export function getCoordsFromIndex(i: number, width: number): number[] {
+  const x = i % width;
+  const y = Math.floor(i / width);
+  return [x, y];
 }
