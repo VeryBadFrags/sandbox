@@ -18,7 +18,7 @@ const iStart = (ltr: boolean, size: number) => (ltr ? 0 : size - 1);
 const iEnd = (i: number, ltr: boolean, size: number) =>
   ltr ? i < size : i >= 0;
 
-let mainBrush: Brush;
+//let mainBrush: Brush;
 
 function nextState() {
   const leftToRight = Math.random() >= 0.5;
@@ -172,7 +172,7 @@ function init() {
   Display.drawFull();
 
   // Brush
-  mainBrush = new Brush();
+  const mainBrush = new Brush();
   mainBrush.init();
 
   const keyToCell = new Map<string, CellType.Cell>();
