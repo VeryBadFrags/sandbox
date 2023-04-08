@@ -12,10 +12,11 @@ import * as Gas from "./engine/gas";
 import * as ArrayHelper from "./utils/arrayUtils";
 import Brush from "./brush";
 
-import Plausible from 'plausible-tracker'
-Plausible({
-  domain: 'sand.verybadfrags.com'
-})
+import Plausible from "plausible-tracker";
+const plausible = Plausible({
+  domain: "sand.verybadfrags.com",
+});
+plausible.trackPageview();
 
 const pascalsLaw = false;
 
