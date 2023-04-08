@@ -25,10 +25,12 @@ export function process(cell: CellType.Cell, i: number, j: number) {
       if (cellBelow === CellType.ice) {
         Game.createCell(i, j, CellType.water);
         Game.createCell(i, j + 1, CellType.water);
+        return;
       }
       if (i - 1 >= 0 && Game.getCell(i - 1, j + 1) === CellType.ice) {
         Game.createCell(i, j, CellType.water);
         Game.createCell(i - 1, j + 1, CellType.water);
+        return;
       }
       if (
         i + 1 < Game.getWidth() &&
@@ -36,6 +38,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
       ) {
         Game.createCell(i, j, CellType.water);
         Game.createCell(i + 1, j + 1, CellType.water);
+        return;
       }
       break;
   }
@@ -79,30 +82,33 @@ export function process(cell: CellType.Cell, i: number, j: number) {
   // Sink in liquids
   if (
     cellBelow.state === CellType.States.liquid &&
-    cell.density > cellBelow.density &&
-    i - 1 >= 0 &&
-    Game.getCell(i - 1, j + 1).state === CellType.States.liquid &&
-    i + 1 < Game.getWidth() &&
-    Game.getCell(i + 1, j + 1).state === CellType.States.liquid
+    cell.density > cellBelow.density
   ) {
     if (
       Math.random() <=
       (cell.density - cellBelow.density) / cellBelow.density / 50
     ) {
       Game.swapCells(i, j, i, j + 1);
+      return;
     }
-  } else if (cellBelow.state === CellType.States.fire && Math.random() > 0.9) {
+  }
+  
+  if (cellBelow.state === CellType.States.fire && Math.random() > 0.9) {
     if (Math.random() > cell.flammable) {
       Game.createCell(i, j, CellType.flame);
     } else {
       Game.swapCells(i, j, i, j + 1);
     }
-  } else if (!cell.sticky) {
+    return;
+  }
+  
+  if (!cell.sticky) {
     // Fall sideways
     const direction = Math.random() >= 0.5 ? 1 : -1;
     if (!rollGrainSideways(cell, i, j, direction)) {
       rollGrainSideways(cell, i, j, -direction);
     }
+    return;
   }
 }
 
@@ -120,7 +126,7 @@ function rollGrainSideways(
       return true;
     }
 
-    if (diagonalCell.state === CellType.States.fire && Math.random() > 0.9) {
+    if (diagonalCell.state === CellType.States.fire && Math.random() > 0.7) {
       if (Math.random() > cell.flammable) {
         Game.createCell(i, j, CellType.flame);
       } else {

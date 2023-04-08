@@ -18,16 +18,16 @@ export function process(
     return;
   }
 
-  if (cellBelow.state === CellType.States.liquid) {
-    const direction = Math.random() >= 0.5 ? 1 : -1;
-    // Roll sideways
-    if (
-      moveLiquidSideways(i, j, direction) ||
-      moveLiquidSideways(i, j, -direction)
-    ) {
-      return;
-    }
+  const direction = Math.random() >= 0.5 ? 1 : -1;
+  // Roll sideways
+  if (
+    moveLiquidSideways(i, j, direction, cell) ||
+    moveLiquidSideways(i, j, -direction, cell)
+  ) {
+    return;
+  }
 
+  if (cellBelow.state === CellType.States.liquid) {
     // Interract with other liquids
     if (cellBelow !== cell) {
       // Settle in less dense liquids
@@ -131,23 +131,28 @@ function applyPascalsLaw(
   }
 }
 
-function moveLiquidSideways(i: number, j: number, direction: number): boolean {
+function moveLiquidSideways(
+  i: number,
+  j: number,
+  direction: number,
+  current: CellType.Cell
+): boolean {
   if (i + direction >= 0 && i + direction < Game.getWidth()) {
-    if (Game.getCell(i + direction, j + 1) === CellType.empty) {
-      Game.swapCells(i, j, i + direction, j + 1);
-      return true;
-    }
 
     const neighbor = Game.getCell(i + direction, j);
     if (
-      neighbor === CellType.empty &&
-      Game.getCell(i, j + 1).state !== CellType.States.solid
+      neighbor === CellType.empty
+      && !Game.getCell(i, j + 1).static
     ) {
       Game.swapCells(i, j, i + direction, j);
       return true;
     }
 
-    const current = Game.getCell(i, j); // TODO get it in params
+    if (Game.getCell(i + direction, j + 1) === CellType.empty) {
+      Game.swapCells(i, j, i + direction, j + 1);
+      return true;
+    }
+
     if (
       neighbor !== current &&
       neighbor.state === CellType.States.liquid &&
