@@ -55,16 +55,12 @@ export default class Brush {
 
     const spawnCell = (x: number, y: number): void => {
       const actualBrushSize = brushSize - 1;
-      for (
-        let i = Math.max(0, x - actualBrushSize);
-        i < Math.min(x + actualBrushSize, canvasWidth);
-        i++
-      ) {
-        for (
-          let j = Math.max(0, y - actualBrushSize);
-          j < Math.min(y + actualBrushSize, canvasHeight);
-          j++
-        ) {
+      const minI = Math.max(0, x - actualBrushSize);
+      const maxI = Math.min(x + actualBrushSize, canvasWidth);
+      const minJ = Math.max(0, y - actualBrushSize);
+      const maxJ = Math.min(y + actualBrushSize, canvasHeight);
+      for (let i = minI; i < maxI; i++) {
+        for (let j = minJ; j < maxJ; j++) {
           if (Math.random() <= brushOpacity / 100) {
             const boardX = Math.min(Math.ceil(i * ratioX), Game.getWidth() - 1);
             const boardY = Math.min(
