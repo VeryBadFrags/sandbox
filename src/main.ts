@@ -12,6 +12,11 @@ import * as Gas from "./engine/gas";
 import * as ArrayHelper from "./utils/arrayUtils";
 import Brush from "./brush";
 
+import Plausible from 'plausible-tracker'
+Plausible({
+  domain: 'sand.verybadfrags.com'
+})
+
 const pascalsLaw = false;
 
 const iStart = (ltr: boolean, size: number) => (ltr ? 0 : size - 1);
