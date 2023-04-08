@@ -9,7 +9,7 @@ import * as Fire from "./engine/fire";
 import * as Liquid from "./engine/liquid";
 import * as Solid from "./engine/solid";
 import * as Gas from "./engine/gas";
-import * as ArrayHelper from "./utils/arrayHelper";
+import * as ArrayHelper from "./utils/arrayUtils";
 import Brush from "./brush";
 
 const pascalsLaw = false;
@@ -120,6 +120,7 @@ function update(time = 0) {
   timer += deltaTime;
   engineTimer += deltaTime;
 
+  let updatedState = false;
   if (timer > gameCyclesInterval) {
     const engineStart = performance.now();
     if (Settings.play) {
@@ -138,9 +139,14 @@ function update(time = 0) {
     // timer = 0;
     // timer %= gameCyclesInterval;
     timer -= gameCyclesInterval;
+    updatedState = true;
   }
 
   render(deltaTime);
+  if (updatedState) {
+    Game.wipeDelta();
+  }
+
   requestAnimationFrame(update);
 }
 
@@ -158,15 +164,10 @@ function render(deltaTime: number) {
     renderVal.innerText = Math.round(renderEnd - renderStart).toString();
     fpsTimer = 0;
   }
-  Game.wipeDelta(); // Needs to be called here because of the brush
 }
 
 function init() {
   lightMap = ArrayHelper.initMatrix(Game.getWidth(), Game.getHeight(), 0);
-
-  // for (let x = 0; x < Game.getWidth(); x++) {
-  //   Game.createCell(x, Game.getHeight() - 2, CellType.concrete);
-  // }
 
   Display.drawFull();
 

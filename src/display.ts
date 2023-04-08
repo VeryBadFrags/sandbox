@@ -1,6 +1,6 @@
 import * as CellType from "./type/Cell";
 import * as Game from "./game";
-import { get1DIndex } from "./utils/arrayHelper";
+import { get1DIndex, getCoordsFromIndex } from "./utils/arrayUtils";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 const context = canvas.getContext("2d", { alpha: false });
@@ -42,19 +42,21 @@ export function drawPartial() {
   const ratioY = canvasHeight / Game.getHeight();
 
   Game.getDeltaBoard()
-    .filter((cell) => cell.cell)
-    .forEach((gameCell) => {
-      const cell = gameCell.cell;
-      for (let a = 0; a < Math.floor(ratioX); a++) {
-        for (let b = 0; b < Math.floor(ratioY); b++) {
-          const imageX = (gameCell.x * ratioX + a) * 4;
-          const imageY = (gameCell.y * ratioY + b) * 4;
-          const pixelIndex = get1DIndex(imageX, imageY, canvasWidth);
+    // .filter((cell) => cell)
+    .forEach((cell, index) => {
+      if (cell) { // needed to keep index correct
+        const coords = getCoordsFromIndex(index, Game.getWidth());
+        for (let a = 0; a < Math.floor(ratioX); a++) {
+          for (let b = 0; b < Math.floor(ratioY); b++) {
+            const imageX = (coords[0] * ratioX + a) * 4;
+            const imageY = (coords[1] * ratioY + b) * 4;
+            const pixelIndex = get1DIndex(imageX, imageY, canvasWidth);
 
-          imagedata.data[pixelIndex] = cell.rgb[0]; // Red
-          imagedata.data[pixelIndex + 1] = cell.rgb[1]; // Green
-          imagedata.data[pixelIndex + 2] = cell.rgb[2]; // Blue
-          imagedata.data[pixelIndex + 3] = 255; // Alpha
+            imagedata.data[pixelIndex] = cell.rgb[0]; // Red
+            imagedata.data[pixelIndex + 1] = cell.rgb[1]; // Green
+            imagedata.data[pixelIndex + 2] = cell.rgb[2]; // Blue
+            imagedata.data[pixelIndex + 3] = 255; // Alpha
+          }
         }
       }
     });

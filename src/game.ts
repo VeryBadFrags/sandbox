@@ -1,6 +1,5 @@
-import * as ArrayHelper from "./utils/arrayHelper";
+import * as ArrayHelper from "./utils/arrayUtils";
 import * as CellType from "./type/Cell";
-import { GameCell } from "./type/GameCell";
 
 const gameWidth = 400;
 const gameHeight = 400;
@@ -10,23 +9,19 @@ const delta = ArrayHelper.initArray(gameWidth, gameHeight, null);
 
 export function getCell(x: number, y: number): CellType.Cell {
   const index = ArrayHelper.get1DIndex(x, y, gameWidth);
-  return pixelGrid[index].cell;
+  return pixelGrid[index];
 }
 
 export function getCellByIndex(i: number): CellType.Cell {
-  return pixelGrid[i].cell;
+  return pixelGrid[i];
 }
 
 export function getDeltaCell(x: number, y: number): CellType.Cell {
   const index = ArrayHelper.get1DIndex(x, y, gameWidth);
-  return delta[index].cell;
+  return delta[index];
 }
 
-export function getDeltaCellByIndex(i: number): CellType.Cell {
-  return delta[i].cell;
-}
-
-export function getFullBoard(): Array<GameCell> {
+export function getFullBoard(): Array<CellType.Cell> {
   return pixelGrid;
 }
 
@@ -48,8 +43,8 @@ export function createCell(
   cellType: CellType.Cell
 ): void {
   const index = ArrayHelper.get1DIndex(x, y, gameWidth);
-  pixelGrid[index].cell = cellType;
-  delta[index].cell = cellType;
+  pixelGrid[index] = cellType;
+  delta[index] = cellType;
 }
 
 export function swapCells(
@@ -60,24 +55,24 @@ export function swapCells(
 ): void {
   const index1 = ArrayHelper.get1DIndex(x1, y1, gameWidth);
   const index2 = ArrayHelper.get1DIndex(x2, y2, gameWidth);
-  const originCell: CellType.Cell = pixelGrid[index1].cell;
-  const destinationCell: CellType.Cell = pixelGrid[index2].cell;
+  const originCell: CellType.Cell = pixelGrid[index1];
+  const destinationCell: CellType.Cell = pixelGrid[index2];
 
-  pixelGrid[index1].cell = destinationCell;
-  pixelGrid[index2].cell = originCell;
-  delta[index1].cell = destinationCell;
-  delta[index2].cell = originCell;
+  pixelGrid[index1] = destinationCell;
+  pixelGrid[index2] = originCell;
+  delta[index1] = destinationCell;
+  delta[index2] = originCell;
 }
 
 export function destroyCellByIndex(index: number) {
-  pixelGrid[index].cell = CellType.empty;
-  delta[index].cell = CellType.empty;
+  pixelGrid[index] = CellType.empty;
+  delta[index] = CellType.empty;
 }
 
 export function destroyCell(x: number, y: number) {
   const index = ArrayHelper.get1DIndex(x, y, gameWidth);
-  pixelGrid[index].cell = CellType.empty;
-  delta[index].cell = CellType.empty;
+  pixelGrid[index] = CellType.empty;
+  delta[index] = CellType.empty;
 }
 
 export function wipeBoard() {

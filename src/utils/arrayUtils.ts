@@ -1,5 +1,4 @@
 import * as CellType from "../type/Cell";
-import { GameCell } from "../type/GameCell";
 
 export function initMatrix(
   width: number,
@@ -21,17 +20,9 @@ export function initArray(
   width: number,
   height: number,
   cell: CellType.Cell
-): Array<GameCell> {
+): Array<CellType.Cell> {
   const newArray = new Array(width * height);
-  for (let i = 0; i < width * height; i++) {
-    const coords = getCoordsFromIndex(i, width);
-    newArray[i] = {
-      index: i,
-      x: coords[0],
-      y: coords[1],
-      cell: cell,
-    } as GameCell;
-  }
+  newArray.fill(cell);
   return newArray;
 }
 
@@ -39,10 +30,12 @@ export function copyMatrix(arrayToCopy: Array<[]>) {
   return arrayToCopy.map((row: []) => row.slice());
 }
 
-export function wipe1DArray(array: Array<GameCell>, value?: CellType.Cell) {
-  for (let i = 0; i < array.length; i++) {
-    array[i].cell = value;
-  }
+export function wipe1DArray(
+  array: Array<CellType.Cell>,
+  value: CellType.Cell
+): void {
+  array.fill(value);
+  // array.forEach((cell) => (cell = value));
 }
 
 export function wipe2DMatrix(
