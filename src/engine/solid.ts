@@ -92,7 +92,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
       return;
     }
   }
-  
+
   if (cellBelow.state === CellType.States.fire && Math.random() > 0.9) {
     if (Math.random() > cell.flammable) {
       Game.createCell(i, j, CellType.flame);
@@ -101,7 +101,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
     }
     return;
   }
-  
+
   if (!cell.sticky) {
     // Fall sideways
     const direction = Math.random() >= 0.5 ? 1 : -1;

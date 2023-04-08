@@ -138,12 +138,8 @@ function moveLiquidSideways(
   current: CellType.Cell
 ): boolean {
   if (i + direction >= 0 && i + direction < Game.getWidth()) {
-
     const neighbor = Game.getCell(i + direction, j);
-    if (
-      neighbor === CellType.empty
-      && !Game.getCell(i, j + 1).static
-    ) {
+    if (neighbor === CellType.empty && !Game.getCell(i, j + 1).static) {
       Game.swapCells(i, j, i + direction, j);
       return true;
     }

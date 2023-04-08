@@ -44,7 +44,8 @@ export function drawPartial() {
   Game.getDeltaBoard()
     // .filter((cell) => cell)
     .forEach((cell, index) => {
-      if (cell) { // needed to keep index correct
+      if (cell) {
+        // needed to keep index correct
         const coords = getCoordsFromIndex(index, Game.getWidth());
         for (let a = 0; a < Math.floor(ratioX); a++) {
           for (let b = 0; b < Math.floor(ratioY); b++) {
