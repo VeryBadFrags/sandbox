@@ -29,6 +29,7 @@
     "vite": "^2.9.15"
   },
   "devDependencies": {
+    "netlify-cli": "^15.6.0",
     "prettier": "2.8.3"
   }
 }
