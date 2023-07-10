@@ -15,6 +15,8 @@ import Brush from "./brush";
 import Plausible from "plausible-tracker";
 const plausible = Plausible({
   domain: "sand.verybadfrags.com",
+  apiHost: "/ps",
+  hashMode: false,
 });
 plausible.trackPageview();
 
