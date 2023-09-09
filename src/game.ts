@@ -12,17 +12,9 @@ export function getCell(x: number, y: number): CellType.Cell {
   return pixelGrid[index];
 }
 
-export function getCellByIndex(i: number): CellType.Cell {
-  return pixelGrid[i];
-}
-
 export function getDeltaCell(x: number, y: number): CellType.Cell {
   const index = ArrayHelper.get1DIndex(x, y, gameWidth);
   return delta[index];
-}
-
-export function getFullBoard(): Array<CellType.Cell> {
-  return pixelGrid;
 }
 
 export function getDeltaBoard() {
@@ -62,11 +54,6 @@ export function swapCells(
   pixelGrid[index2] = originCell;
   delta[index1] = destinationCell;
   delta[index2] = originCell;
-}
-
-export function destroyCellByIndex(index: number) {
-  pixelGrid[index] = CellType.empty;
-  delta[index] = CellType.empty;
 }
 
 export function destroyCell(x: number, y: number) {

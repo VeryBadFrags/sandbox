@@ -15,3 +15,9 @@ npm run build
 ```sh
 ln -s .gitignore .prettierignore
 ```
+
+## Netlify
+
+```shell
+netlify link
+```

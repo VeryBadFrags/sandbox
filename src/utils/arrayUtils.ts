@@ -26,10 +26,6 @@ export function initArray(
   return newArray;
 }
 
-export function copyMatrix(arrayToCopy: Array<[]>) {
-  return arrayToCopy.map((row: []) => row.slice());
-}
-
 export function wipe1DArray(
   array: Array<CellType.Cell>,
   value: CellType.Cell
