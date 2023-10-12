@@ -7,7 +7,8 @@ help:
 	@echo "Available targets:"
 	@echo "  make build   - Run build"
 	@echo "  make dev     - Run dev"
-	@echo "  make clean   - Clean up project"
+	@echo "  make format  - Format project with Prettier"
+	@echo "  make clean   - Clean up output folder"
 	@echo "  make help    - Display this help message"
 
 .PHONY: build
@@ -21,6 +22,10 @@ dev: node_modules
 .PHONY: clean
 clean:
 	pnpm run clean
+
+.PHONY: format
+format:
+	pnpm run format
 
 # Install dependencies if 'node_modules' is missing
 node_modules: pnpm-lock.yaml
