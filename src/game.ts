@@ -32,7 +32,7 @@ export function getHeight(): number {
 export function createCell(
   x: number,
   y: number,
-  cellType: CellType.Cell
+  cellType: CellType.Cell,
 ): void {
   const index = ArrayHelper.get1DIndex(x, y, gameWidth);
   pixelGrid[index] = cellType;
@@ -43,7 +43,7 @@ export function swapCells(
   x1: number,
   y1: number,
   x2: number,
-  y2: number
+  y2: number,
 ): void {
   const index1 = ArrayHelper.get1DIndex(x1, y1, gameWidth);
   const index2 = ArrayHelper.get1DIndex(x2, y2, gameWidth);

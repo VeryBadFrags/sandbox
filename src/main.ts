@@ -207,7 +207,7 @@ function init() {
   });
 
   const lightsCheck = document.getElementById(
-    "dynamic-lights"
+    "dynamic-lights",
   ) as HTMLInputElement;
   lightsCheck.addEventListener("click", (e) => {
     dynamicLights = (<HTMLInputElement>e.target).checked;

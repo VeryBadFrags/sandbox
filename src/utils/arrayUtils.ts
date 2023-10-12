@@ -3,7 +3,7 @@ import * as CellType from "../type/Cell";
 export function initMatrix(
   width: number,
   height: number,
-  cell: CellType.Cell | number
+  cell: CellType.Cell | number,
 ) {
   const newArray = new Array(width);
   for (let x = 0; x < width; x++) {
@@ -19,7 +19,7 @@ export function initMatrix(
 export function initArray(
   width: number,
   height: number,
-  cell: CellType.Cell
+  cell: CellType.Cell,
 ): Array<CellType.Cell> {
   const newArray = new Array(width * height);
   newArray.fill(cell);
@@ -28,7 +28,7 @@ export function initArray(
 
 export function wipe1DArray(
   array: Array<CellType.Cell>,
-  value: CellType.Cell
+  value: CellType.Cell,
 ): void {
   array.fill(value);
   // array.forEach((cell) => (cell = value));
@@ -36,7 +36,7 @@ export function wipe1DArray(
 
 export function wipe2DMatrix(
   matrix: Array<Array<CellType.Cell | number>>,
-  value?: CellType.Cell | number
+  value?: CellType.Cell | number,
 ) {
   const width = matrix.length;
   const height = matrix[0].length;

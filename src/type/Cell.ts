@@ -365,14 +365,14 @@ function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
 
   // Set Brush selector menu values
   const brushTypeSelector = document.getElementById(
-    "brush-type"
+    "brush-type",
   ) as HTMLSelectElement;
 
   brushCells.forEach((cell) => addElementToSelect(cell, brushTypeSelector));
 
   for (let i = 1; i <= 3; i++) {
     const tap1Select = document.getElementById(
-      "select-tap" + i
+      "select-tap" + i,
     ) as HTMLSelectElement;
     TapValues.forEach((cell) => addElementToSelect(cell, tap1Select));
   }

@@ -34,7 +34,7 @@ export function testNeighbors(
   x: number,
   y: number,
   testFunction: (c: CellType.Cell) => boolean,
-  action?: (c: CellType.Cell, x: number, y: number) => void
+  action?: (c: CellType.Cell, x: number, y: number) => void,
 ): number {
   let count = 0;
   const xMin = Math.max(x - 1, 0);

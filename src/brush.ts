@@ -3,16 +3,16 @@ import * as Game from "./game";
 import * as DrawUtils from "./utils/drawUtils";
 
 const brushTypeSelector = document.getElementById(
-  "brush-type"
+  "brush-type",
 ) as HTMLSelectElement;
 const brushSizeInput = document.getElementById(
-  "brush-size"
+  "brush-size",
 ) as HTMLInputElement;
 const brushSizeSlider = document.getElementById(
-  "brush-size-slider"
+  "brush-size-slider",
 ) as HTMLInputElement;
 const brushOpacitySlider = document.getElementById(
-  "brush-opacity"
+  "brush-opacity",
 ) as HTMLInputElement;
 
 let brushType = CellType.concrete;
@@ -65,7 +65,7 @@ export default class Brush {
             const boardX = Math.min(Math.ceil(i * ratioX), Game.getWidth() - 1);
             const boardY = Math.min(
               Math.ceil(j * ratioY),
-              Game.getHeight() - 1
+              Game.getHeight() - 1,
             );
             Game.createCell(boardX, boardY, brushType);
           }
@@ -97,7 +97,7 @@ export default class Brush {
         function () {
           spawnCell(mouseX, mouseY);
         },
-        brushType === CellType.concrete ? 1 : 20
+        brushType === CellType.concrete ? 1 : 20,
       );
     }
 
@@ -108,10 +108,10 @@ export default class Brush {
     const rect = canvas.getBoundingClientRect();
     function onMouseMove(e: MouseEvent) {
       mouseX = Math.round(
-        ((e.clientX - rect.left) / (rect.right - rect.left)) * canvasWidth
+        ((e.clientX - rect.left) / (rect.right - rect.left)) * canvasWidth,
       );
       mouseY = Math.round(
-        ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvasHeight
+        ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvasHeight,
       );
 
       if (isMouseDown) {
@@ -120,7 +120,7 @@ export default class Brush {
             mouseX,
             mouseY,
             prevMouseX,
-            prevMouseY
+            prevMouseY,
           );
           interpolated.forEach((point) => spawnCell(point[0], point[1]));
         }
@@ -193,7 +193,7 @@ export default class Brush {
           e.preventDefault();
         }
       },
-      false
+      false,
     );
     document.body.addEventListener(
       "touchend",
@@ -202,7 +202,7 @@ export default class Brush {
           e.preventDefault();
         }
       },
-      false
+      false,
     );
     document.body.addEventListener(
       "touchmove",
@@ -211,7 +211,7 @@ export default class Brush {
           e.preventDefault();
         }
       },
-      false
+      false,
     );
   }
 }

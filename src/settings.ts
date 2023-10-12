@@ -17,12 +17,12 @@ export const togglePlay = () => {
 // Listeners
 
 const playPauseButton = document.getElementById(
-  "play-pause"
+  "play-pause",
 ) as HTMLButtonElement;
 playPauseButton.addEventListener("click", togglePlay);
 
 const eraseButton = document.getElementById(
-  "erase-button"
+  "erase-button",
 ) as HTMLButtonElement;
 eraseButton.addEventListener("click", () => {
   Game.wipeBoard();

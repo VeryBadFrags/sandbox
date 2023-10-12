@@ -6,7 +6,7 @@ export function createIntermediatePoints(
   a1: number,
   b1: number,
   a2: number,
-  b2: number
+  b2: number,
 ) {
   const points = [];
   const aDistance = Math.abs(a2 - a1);

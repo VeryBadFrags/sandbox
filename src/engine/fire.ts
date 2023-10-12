@@ -10,7 +10,7 @@ export function process(
   i: number,
   j: number,
   lightMap: number[][],
-  dynamicLights: boolean
+  dynamicLights: boolean,
 ) {
   // Douse
   if (
@@ -21,7 +21,7 @@ export function process(
       (current: CellType.Cell, x: number, y: number) =>
         current.melt && Math.random() > 0.5
           ? Game.createCell(x, y, current.melt)
-          : null
+          : null,
     ) > 0
   ) {
     const lastCell =
@@ -38,7 +38,7 @@ export function process(
     EngineUtils.testNeighbors(
       i,
       j,
-      (test: CellType.Cell) => test.flammable > 0
+      (test: CellType.Cell) => test.flammable > 0,
     ) < 1
   ) {
     Game.createCell(i, j, cell.nextCell);
@@ -61,7 +61,7 @@ function updateFireLightMap(
   dynamicLights: boolean,
   j: number,
   i: number,
-  lightMap: number[][]
+  lightMap: number[][],
 ) {
   if (dynamicLights && Game.getCell(i, j).state === CellType.States.fire) {
     for (

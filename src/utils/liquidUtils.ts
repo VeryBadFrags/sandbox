@@ -20,7 +20,7 @@ function findHigherCell(
   x: number,
   y: number,
   explored: number[],
-  inputHeight: number
+  inputHeight: number,
 ): number[] {
   {
     const upCoordinates = hashCoordinates(x, y - 1);
@@ -38,7 +38,7 @@ function findHigherCell(
         x,
         y - 1,
         explored,
-        inputHeight
+        inputHeight,
       );
       if (newHeight) return newHeight;
     }
@@ -56,7 +56,7 @@ function findHigherCell(
       x - 1,
       y,
       explored,
-      inputHeight
+      inputHeight,
     );
     if (newHeight) return newHeight;
   }
@@ -73,7 +73,7 @@ function findHigherCell(
       x + 1,
       y,
       explored,
-      inputHeight
+      inputHeight,
     );
     if (newHeight) return newHeight;
   }

@@ -66,7 +66,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
   if (cellBelow.state === CellType.States.conveyor) {
     const neighbor = Game.getCell(
       i + cellBelow.vector.x,
-      j + cellBelow.vector.y
+      j + cellBelow.vector.y,
     );
     if (neighbor === CellType.empty) {
       Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y);
@@ -116,7 +116,7 @@ function rollGrainSideways(
   cell: CellType.Cell,
   i: number,
   j: number,
-  direction: number
+  direction: number,
 ): boolean {
   if (i + direction >= 0 && i + direction < Game.getWidth()) {
     const diagonalCell = Game.getCell(i + direction, j + 1);
@@ -256,7 +256,7 @@ function dripAndMeltIce(
   cellBelow: CellType.Cell,
   cell: CellType.Cell,
   i: number,
-  j: number
+  j: number,
 ) {
   if (cellBelow === CellType.empty && Math.random() > cell.drip) {
     Game.createCell(i, j + 1, CellType.water);
@@ -268,7 +268,7 @@ function dripAndMeltIce(
     EngineUtils.testNeighbors(
       i,
       j,
-      (c: CellType.Cell) => c.state === CellType.States.fire
+      (c: CellType.Cell) => c.state === CellType.States.fire,
     ) > 0
   ) {
     Game.createCell(i, j, cell.melt);
