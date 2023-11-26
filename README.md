@@ -9,4 +9,21 @@ A falling sand game.
 
 ---
 
-🛠️ Built with HTML Canvas, [Typescript](https://www.typescriptlang.org) and [Vite](https://vitejs.dev)
+🛠️ Built with [HTML Canvas](https://www.w3schools.com/html/html5_canvas.asp), [Typescript](https://www.typescriptlang.org), and [Vite](https://vitejs.dev)
+
+## Run locally
+
+### With [pnpm](https://pnpm.io)
+
+```sh
+make dev
+```
+
+Run `make` to view available commands.
+
+### With [npm](https://www.npmjs.com)
+
+```sh
+npm i
+npm run dev
+```
