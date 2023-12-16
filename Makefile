@@ -19,13 +19,17 @@ build: node_modules
 dev: node_modules
 	pnpm run dev
 
-.PHONY: clean
-clean:
-	pnpm run clean
+.PHONY: lint
+lint:
+	pnpm run lint
 
 .PHONY: format
 format:
 	pnpm run format
+
+.PHONY: clean
+clean:
+	pnpm run clean
 
 # Install dependencies if 'node_modules' is missing
 node_modules: pnpm-lock.yaml

@@ -2,7 +2,7 @@ import * as Game from "../game";
 import * as CellType from "../type/Cell";
 
 interface Level {
-  taps: Array<Object>;
+  taps: Array<unknown>;
   tiles: Array<gameCell>;
 }
 
