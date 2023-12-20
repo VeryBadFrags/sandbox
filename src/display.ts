@@ -7,9 +7,8 @@ const context = canvas.getContext("2d", { alpha: false });
 
 let imagedata = context.createImageData(canvas.width, canvas.height);
 
-export function drawFull(
-  // lightMap?: number[][] TODO resume usage of Lightmap once performances are fixed
-  ) {
+export function drawFull() {
+// lightMap?: number[][] TODO resume usage of Lightmap once performances are fixed
   // Reset imageData
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
