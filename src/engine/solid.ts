@@ -6,7 +6,7 @@ import {
   getGameWidth,
   swapCells,
 } from "../game";
-import { States } from "../types/states";
+import { States } from "../types/states.enum";
 import {
   emptyCell,
   flame,

@@ -10,7 +10,7 @@ import * as Solid from "./engine/solid";
 import * as Gas from "./engine/gas";
 import * as ArrayHelper from "./utils/arrayUtils";
 import Brush from "./controls/brush";
-import { States } from "./types/states";
+import { States } from "./types/states.enum";
 import { concrete, emptyCell, oil, sand, water } from "./content/CellValues";
 import { tapValues } from "./content/CellGroups";
 

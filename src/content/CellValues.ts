@@ -1,5 +1,5 @@
 import type { Cell } from "../types/cell.type";
-import { States } from "../types/states";
+import { States } from "../types/states.enum";
 
 export const emptyCell: Cell = {
   name: "✏️ Eraser",

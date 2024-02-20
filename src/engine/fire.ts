@@ -1,5 +1,5 @@
 import * as Game from "../game";
-import { States } from "../types/states";
+import { States } from "../types/states.enum";
 import { emptyCell } from "../content/CellValues";
 import { testNeighbors } from "../utils/engineUtils";
 import type { Cell } from "../types/cell.type";
