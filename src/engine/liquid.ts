@@ -1,6 +1,6 @@
 import * as Game from "../game";
 import { getHigherCell } from "../utils/liquidUtils";
-import { States } from "../types/States";
+import { States } from "../types/states";
 import { acid, emptyCell, smoke } from "../content/CellValues";
 import type { Cell } from "../types/cell.type";
 

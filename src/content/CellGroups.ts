@@ -36,7 +36,7 @@ export const brushCells: Cell[] = [
 // }
 
 // Must contain all cells
-export const AllCells: Cell[] = [
+export const allCells: Cell[] = [
   CellValue.emptyCell,
   CellValue.acid,
   CellValue.smoke,
@@ -65,7 +65,7 @@ export const AllCells: Cell[] = [
 /**
  * Choices for picking a tap
  */
-export const TapValues: Cell[] = [
+export const tapValues: Cell[] = [
   CellValue.oil,
   CellValue.sand,
   CellValue.water,
@@ -78,8 +78,36 @@ export const TapValues: Cell[] = [
   CellValue.wax,
 ];
 
+function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
+  const opt = document.createElement("option");
+  opt.value = cell.name;
+  opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
+  if (cell === CellValue.concrete) {
+    opt.selected = true;
+  }
+  select.appendChild(opt);
+}
+
+{
+  // INIT
+
+  // Set Brush selector menu values
+  const brushTypeSelector = document.getElementById(
+    "brush-type",
+  ) as HTMLSelectElement;
+
+  brushCells.forEach((cell) => addElementToSelect(cell, brushTypeSelector));
+
+  for (let i = 1; i <= 3; i++) {
+    const tap1Select = document.getElementById(
+      "select-tap" + i,
+    ) as HTMLSelectElement;
+    tapValues.forEach((cell) => addElementToSelect(cell, tap1Select));
+  }
+}
+
 {
   // Set RGB values
-  AllCells.forEach((c) => (c.rgb = hexToRgb(c.color)));
-  AllCells.forEach((c) => (c.hsl = hexToHSL(c.color)));
+  allCells.forEach((c) => (c.rgb = hexToRgb(c.color)));
+  allCells.forEach((c) => (c.hsl = hexToHSL(c.color)));
 }

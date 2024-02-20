@@ -1,6 +1,4 @@
-import { TapValues, brushCells } from "../content/CellGroups";
-import { concrete } from "../content/CellValues";
-import { States } from "./States";
+import { States } from "./states";
 
 export type Cell = {
   color: string;
@@ -11,7 +9,10 @@ export type Cell = {
   hsl?: number[];
   rgb?: number[];
 
-  key?: string; // Shortcut
+  /**
+   * Keyboard shortcut
+   */
+  key?: string;
   static?: boolean;
   lifetime?: number;
   propagation?: number;
@@ -26,6 +27,9 @@ export type Cell = {
   disolve?: Cell;
   disolveInto?: Cell;
   vector?: Vector;
+  /**
+   * Some elements like conveyors cycle through multiple colors
+   */
   colorSuite?: string[];
   sticky?: boolean;
 };
@@ -40,31 +44,3 @@ interface Vector {
 //   melt: Cell;
 //   ash?: Cell;
 // }
-
-function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
-  const opt = document.createElement("option");
-  opt.value = cell.name;
-  opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
-  if (cell === concrete) {
-    opt.selected = true;
-  }
-  select.appendChild(opt);
-}
-
-{
-  // INIT
-
-  // Set Brush selector menu values
-  const brushTypeSelector = document.getElementById(
-    "brush-type",
-  ) as HTMLSelectElement;
-
-  brushCells.forEach((cell) => addElementToSelect(cell, brushTypeSelector));
-
-  for (let i = 1; i <= 3; i++) {
-    const tap1Select = document.getElementById(
-      "select-tap" + i,
-    ) as HTMLSelectElement;
-    TapValues.forEach((cell) => addElementToSelect(cell, tap1Select));
-  }
-}

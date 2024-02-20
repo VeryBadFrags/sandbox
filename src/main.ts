@@ -10,9 +10,9 @@ import * as Solid from "./engine/solid";
 import * as Gas from "./engine/gas";
 import * as ArrayHelper from "./utils/arrayUtils";
 import Brush from "./brush";
-import { States } from "./types/States";
+import { States } from "./types/states";
 import { concrete, emptyCell, oil, sand, water } from "./content/CellValues";
-import { TapValues, brushCells } from "./content/CellGroups";
+import { tapValues, brushCells } from "./content/CellGroups";
 import type { Cell } from "./types/cell.type";
 
 import Plausible from "plausible-tracker";
@@ -77,16 +77,16 @@ let tap3 = water;
 // Tap listeners
 const tapSelect = document.getElementById("select-tap1") as HTMLSelectElement;
 tapSelect.addEventListener("change", function (e) {
-  tap1 = TapValues[(<HTMLSelectElement>e.target).selectedIndex];
+  tap1 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 const tap2Select = document.getElementById("select-tap2") as HTMLSelectElement;
 tap2Select.addEventListener("change", function (e) {
-  tap2 = TapValues[(<HTMLSelectElement>e.target).selectedIndex];
+  tap2 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 tap2Select.selectedIndex = 1;
 const tap3Select = document.getElementById("select-tap3") as HTMLSelectElement;
 tap3Select.addEventListener("change", function (e) {
-  tap3 = TapValues[(<HTMLSelectElement>e.target).selectedIndex];
+  tap3 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 tap3Select.selectedIndex = 2;
 
