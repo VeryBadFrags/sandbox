@@ -19,7 +19,7 @@ export function process(cell: CellType.Cell, i: number, j: number): void {
   if (
     j > 0 &&
     i + direction >= 0 &&
-    i + direction < Game.getWidth() &&
+    i + direction < Game.getGameWidth() &&
     Game.getCell(i + direction, j - 1) === CellType.empty &&
     Math.random() > 0.7
   ) {

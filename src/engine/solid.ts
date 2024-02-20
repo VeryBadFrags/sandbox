@@ -1,6 +1,6 @@
 import * as EngineUtils from "../utils/engineUtils";
 import * as CellType from "../type/Cell";
-import * as Game from "../game";
+import { createCell, getCell, getGameHeight, getGameWidth, swapCells } from "../game";
 
 export function process(cell: CellType.Cell, i: number, j: number) {
   if (cell.static) {
@@ -8,7 +8,7 @@ export function process(cell: CellType.Cell, i: number, j: number) {
     return;
   }
 
-  const cellBelow = Game.getCell(i, j + 1);
+  const cellBelow = getCell(i, j + 1);
 
   switch (cell) {
     case CellType.seed:
@@ -17,27 +17,27 @@ export function process(cell: CellType.Cell, i: number, j: number) {
         Math.random() > 0.999 &&
         EngineUtils.countNeighbors(i, j, CellType.soil) >= 3
       ) {
-        Game.createCell(i, j, CellType.plant);
+        createCell(i, j, CellType.plant);
         return;
       }
       break;
     case CellType.salt:
       if (cellBelow === CellType.ice) {
-        Game.createCell(i, j, CellType.water);
-        Game.createCell(i, j + 1, CellType.water);
+        createCell(i, j, CellType.water);
+        createCell(i, j + 1, CellType.water);
         return;
       }
-      if (i - 1 >= 0 && Game.getCell(i - 1, j + 1) === CellType.ice) {
-        Game.createCell(i, j, CellType.water);
-        Game.createCell(i - 1, j + 1, CellType.water);
+      if (i - 1 >= 0 && getCell(i - 1, j + 1) === CellType.ice) {
+        createCell(i, j, CellType.water);
+        createCell(i - 1, j + 1, CellType.water);
         return;
       }
       if (
-        i + 1 < Game.getWidth() &&
-        Game.getCell(i + 1, j + 1) === CellType.ice
+        i + 1 < getGameWidth() &&
+        getCell(i + 1, j + 1) === CellType.ice
       ) {
-        Game.createCell(i, j, CellType.water);
-        Game.createCell(i + 1, j + 1, CellType.water);
+        createCell(i, j, CellType.water);
+        createCell(i + 1, j + 1, CellType.water);
         return;
       }
       break;
@@ -48,33 +48,33 @@ export function process(cell: CellType.Cell, i: number, j: number) {
       Math.random() > 0.995 &&
       EngineUtils.countNeighbors(i, j, cell.disolve) >= 2
     ) {
-      Game.createCell(i, j, cell.disolveInto);
+      createCell(i, j, cell.disolveInto);
       return;
     }
   }
 
-  // If above void of gas
+  // If above void or gas
   if (
     (cellBelow === CellType.empty || cellBelow.state === CellType.States.gas) &&
     Math.random() >= 1 / (cell.density * 100)
   ) {
-    Game.swapCells(i, j, i, j + 1);
+    swapCells(i, j, i, j + 1);
     return;
   }
 
   // If above conveyor
   if (cellBelow.state === CellType.States.conveyor) {
-    const neighbor = Game.getCell(
+    const neighbor = getCell(
       i + cellBelow.vector.x,
       j + cellBelow.vector.y,
     );
     if (neighbor === CellType.empty) {
-      Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y);
+      swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y);
     } else if (
-      Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y - 1) ===
+      getCell(i + cellBelow.vector.x, j + cellBelow.vector.y - 1) ===
       CellType.empty
     ) {
-      Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y - 1);
+      swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y - 1);
     }
     return;
   }
@@ -88,16 +88,16 @@ export function process(cell: CellType.Cell, i: number, j: number) {
       Math.random() <=
       (cell.density - cellBelow.density) / cellBelow.density / 50
     ) {
-      Game.swapCells(i, j, i, j + 1);
+      swapCells(i, j, i, j + 1);
       return;
     }
   }
 
   if (cellBelow.state === CellType.States.fire && Math.random() > 0.9) {
     if (Math.random() > cell.flammable) {
-      Game.createCell(i, j, CellType.flame);
+      createCell(i, j, CellType.flame);
     } else {
-      Game.swapCells(i, j, i, j + 1);
+      swapCells(i, j, i, j + 1);
     }
     return;
   }
@@ -118,26 +118,26 @@ function rollGrainSideways(
   j: number,
   direction: number,
 ): boolean {
-  if (i + direction >= 0 && i + direction < Game.getWidth()) {
-    const diagonalCell = Game.getCell(i + direction, j + 1);
+  if (i + direction >= 0 && i + direction < getGameWidth()) {
+    const diagonalCell = getCell(i + direction, j + 1);
     if (diagonalCell === CellType.empty && Math.random() > 0.2) {
       // Roll down
-      Game.swapCells(i, j, i + direction, j + 1);
+      swapCells(i, j, i + direction, j + 1);
       return true;
     }
 
     if (diagonalCell.state === CellType.States.fire && Math.random() > 0.7) {
       if (Math.random() > cell.flammable) {
-        Game.createCell(i, j, CellType.flame);
+        createCell(i, j, CellType.flame);
       } else {
-        Game.swapCells(i, j, i + direction, j + 1);
+        swapCells(i, j, i + direction, j + 1);
       }
       return true;
     }
 
     if (diagonalCell.state === CellType.States.liquid && Math.random() > 0.9) {
       // Swirl in liquid
-      Game.swapCells(i, j, i + direction, j);
+      swapCells(i, j, i + direction, j);
       return true;
     }
   }
@@ -156,7 +156,7 @@ function processStatic(cell: CellType.Cell, i: number, j: number) {
 }
 
 function processPlant(cell: CellType.Cell, i: number, j: number) {
-  const cellBelow = Game.getCell(i, j + 1);
+  const cellBelow = getCell(i, j + 1);
   // Propagate
   if (EngineUtils.countNeighbors(i, j, CellType.ice) >= 2) {
     return;
@@ -166,43 +166,43 @@ function processPlant(cell: CellType.Cell, i: number, j: number) {
     case 0:
       if (
         j > 0 &&
-        (Game.getCell(i, j - 1) === CellType.water ||
-          (Game.getCell(i, j - 1) === CellType.soil &&
+        (getCell(i, j - 1) === CellType.water ||
+          (getCell(i, j - 1) === CellType.soil &&
             EngineUtils.countNeighbors(i, j, CellType.plant) <= 3)) &&
         Math.random() > cell.propagation
       ) {
-        Game.createCell(i, j - 1, CellType.plant);
+        createCell(i, j - 1, CellType.plant);
       }
       break;
     case 1:
       if (
-        i < Game.getWidth() - 1 &&
-        (Game.getCell(i + 1, j) === CellType.water ||
-          (Game.getCell(i + 1, j) === CellType.soil &&
+        i < getGameWidth() - 1 &&
+        (getCell(i + 1, j) === CellType.water ||
+          (getCell(i + 1, j) === CellType.soil &&
             EngineUtils.countNeighbors(i, j, CellType.plant) <= 2)) &&
         Math.random() > cell.propagation
       ) {
-        Game.createCell(i + 1, j, CellType.plant);
+        createCell(i + 1, j, CellType.plant);
       }
       break;
     case 2:
       if (
-        j < Game.getHeight() - 1 &&
-        Game.getCell(i, j + 1) === CellType.water &&
+        j < getGameHeight() - 1 &&
+        getCell(i, j + 1) === CellType.water &&
         Math.random() > cell.propagation
       ) {
-        Game.createCell(i, j + 1, CellType.plant);
+        createCell(i, j + 1, CellType.plant);
       }
       break;
     case 3:
       if (
         i > 0 &&
-        (Game.getCell(i - 1, j) === CellType.water ||
-          (Game.getCell(i - 1, j) === CellType.soil &&
+        (getCell(i - 1, j) === CellType.water ||
+          (getCell(i - 1, j) === CellType.soil &&
             EngineUtils.countNeighbors(i, j, CellType.plant) <= 2)) &&
         Math.random() > cell.propagation
       ) {
-        Game.createCell(i - 1, j, CellType.plant);
+        createCell(i - 1, j, CellType.plant);
       }
       break;
   }
@@ -213,12 +213,12 @@ function processPlant(cell: CellType.Cell, i: number, j: number) {
     Math.random() > 0.999 &&
     EngineUtils.countNeighbors(i, j, CellType.plant) > 5
   ) {
-    Game.createCell(i, j + 1, CellType.seed);
+    createCell(i, j + 1, CellType.seed);
   }
 }
 
 function processIce(cell: CellType.Cell, i: number, j: number) {
-  const cellBelow = Game.getCell(i, j + 1);
+  const cellBelow = getCell(i, j + 1);
   // Propagate
   if (
     j > 0 &&
@@ -228,23 +228,23 @@ function processIce(cell: CellType.Cell, i: number, j: number) {
     // TODO replace with for loop
     if (
       i > 0 &&
-      Game.getCell(i - 1, j - 1) === CellType.water &&
+      getCell(i - 1, j - 1) === CellType.water &&
       Math.random() > cell.propagation
     ) {
-      Game.createCell(i - 1, j - 1, CellType.ice);
+      createCell(i - 1, j - 1, CellType.ice);
     }
     if (
-      i < Game.getWidth() - 1 &&
-      Game.getCell(i + 1, j - 1) === CellType.water &&
+      i < getGameWidth() - 1 &&
+      getCell(i + 1, j - 1) === CellType.water &&
       Math.random() > cell.propagation
     ) {
-      Game.createCell(i + 1, j - 1, CellType.ice);
+      createCell(i + 1, j - 1, CellType.ice);
     }
     if (
-      Game.getCell(i, j - 1) === CellType.water &&
+      getCell(i, j - 1) === CellType.water &&
       Math.random() > cell.propagation
     ) {
-      Game.createCell(i, j - 1, CellType.ice);
+      createCell(i, j - 1, CellType.ice);
     }
   }
 
@@ -259,7 +259,7 @@ function dripAndMeltIce(
   j: number,
 ) {
   if (cellBelow === CellType.empty && Math.random() > cell.drip) {
-    Game.createCell(i, j + 1, CellType.water);
+    createCell(i, j + 1, CellType.water);
   }
   // Melt
   if (
@@ -271,6 +271,6 @@ function dripAndMeltIce(
       (c: CellType.Cell) => c.state === CellType.States.fire,
     ) > 0
   ) {
-    Game.createCell(i, j, cell.melt);
+    createCell(i, j, cell.melt);
   }
 }

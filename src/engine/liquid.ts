@@ -42,7 +42,7 @@ export function process(
       // Swirl in liquids
       if (
         i + direction >= 0 &&
-        i + direction < Game.getWidth() &&
+        i + direction < Game.getGameWidth() &&
         Math.random() >= 0.5
       ) {
         // TODO use liquid thickness instead of 0.5
@@ -120,7 +120,7 @@ function applyPascalsLaw(
     Game.getCell(i, j - 1) === CellType.empty &&
     i - 1 >= 0 &&
     Game.getCell(i - 1, j) === cell &&
-    i + 1 < Game.getWidth() &&
+    i + 1 < Game.getGameWidth() &&
     Game.getCell(i + 1, j) === cell
   ) {
     const higherCell = getHigherCell(cell, i, j);
@@ -137,7 +137,7 @@ function moveLiquidSideways(
   direction: number,
   current: CellType.Cell,
 ): boolean {
-  if (i + direction >= 0 && i + direction < Game.getWidth()) {
+  if (i + direction >= 0 && i + direction < Game.getGameWidth()) {
     const neighbor = Game.getCell(i + direction, j);
     if (neighbor === CellType.empty && !Game.getCell(i, j + 1).static) {
       Game.swapCells(i, j, i + direction, j);

@@ -63,7 +63,7 @@ function findHigherCell(
 
   const rightCoordinates = hashCoordinates(x + 1, y);
   if (
-    x + 1 < Game.getWidth() &&
+    x + 1 < Game.getGameWidth() &&
     Game.getCell(x + 1, y) === cell &&
     !explored.includes(rightCoordinates)
   ) {
@@ -80,7 +80,7 @@ function findHigherCell(
 
   const downCoordinates = hashCoordinates(x, y + 1);
   if (
-    y + 1 < Game.getHeight() &&
+    y + 1 < Game.getGameHeight() &&
     Game.getCell(x, y + 1) === cell &&
     !explored.includes(downCoordinates)
   ) {

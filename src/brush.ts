@@ -1,6 +1,6 @@
 import * as CellType from "./type/Cell";
 import * as Game from "./game";
-import * as DrawUtils from "./utils/drawUtils";
+import { createIntermediatePoints, getPointsDistance } from "./utils/drawUtils";
 
 const brushTypeSelector = document.getElementById(
   "brush-type",
@@ -48,8 +48,8 @@ export default class Brush {
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
-    const ratioX = Game.getWidth() / canvasWidth;
-    const ratioY = Game.getHeight() / canvasHeight;
+    const ratioX = Game.getGameWidth() / canvasWidth;
+    const ratioY = Game.getGameHeight() / canvasHeight;
 
     let intervalId: number;
 
@@ -62,10 +62,10 @@ export default class Brush {
       for (let i = minI; i < maxI; i++) {
         for (let j = minJ; j < maxJ; j++) {
           if (Math.random() <= brushOpacity / 100) {
-            const boardX = Math.min(Math.ceil(i * ratioX), Game.getWidth() - 1);
+            const boardX = Math.min(Math.ceil(i * ratioX), Game.getGameWidth() - 1);
             const boardY = Math.min(
               Math.ceil(j * ratioY),
-              Game.getHeight() - 1,
+              Game.getGameHeight() - 1,
             );
             Game.createCell(boardX, boardY, brushType);
           }
@@ -78,8 +78,8 @@ export default class Brush {
         y >= 0 &&
         y < canvasHeight
       ) {
-        const boardX = Math.min(Math.ceil(x * ratioX), Game.getWidth() - 1);
-        const boardY = Math.min(Math.ceil(y * ratioY), Game.getHeight() - 1);
+        const boardX = Math.min(Math.ceil(x * ratioX), Game.getGameWidth() - 1);
+        const boardY = Math.min(Math.ceil(y * ratioY), Game.getGameHeight() - 1);
         Game.createCell(boardX, boardY, brushType);
       }
     };
@@ -115,8 +115,8 @@ export default class Brush {
       );
 
       if (isMouseDown) {
-        if (DrawUtils.getDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
-          const interpolated = DrawUtils.createIntermediatePoints(
+        if (getPointsDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
+          const interpolated = createIntermediatePoints(
             mouseX,
             mouseY,
             prevMouseX,

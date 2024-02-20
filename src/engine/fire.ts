@@ -66,19 +66,19 @@ function updateFireLightMap(
   if (dynamicLights && Game.getCell(i, j).state === CellType.States.fire) {
     for (
       let a = Math.max(i - maxLightDistance, 0);
-      a <= Math.min(i + maxLightDistance, Game.getWidth() - 1);
+      a <= Math.min(i + maxLightDistance, Game.getGameWidth() - 1);
       a++
     ) {
       for (
         let b = Math.max(j - maxLightDistance, 0);
-        b <= Math.min(j + maxLightDistance, Game.getHeight() - 1);
+        b <= Math.min(j + maxLightDistance, Game.getGameHeight() - 1);
         b++
       ) {
         if (
           (a !== i || b !== j) &&
           Game.getCell(a, b).state !== CellType.States.fire
         ) {
-          const distance = DrawUtils.getDistance(a, b, i, j);
+          const distance = DrawUtils.getPointsDistance(a, b, i, j);
           lightMap[a][b] =
             lightMap[a][b] + Math.max(0, maxLightDistance - distance);
         }
@@ -92,16 +92,16 @@ function propagateFire(i: number, j: number) {
   const b = Math.floor(Math.random() * 3) - 1;
   if (
     i + a >= 0 &&
-    i + a < Game.getWidth() &&
+    i + a < Game.getGameWidth() &&
     j + b >= 0 &&
-    j + b < Game.getHeight()
+    j + b < Game.getGameHeight()
   ) {
     const target = Game.getCell(i + a, j + b);
 
     if (target.flammable && Math.random() > target.flammable) {
       Game.createCell(i + a, j + b, target.melt);
       if (
-        j + b + 1 < Game.getHeight() &&
+        j + b + 1 < Game.getGameHeight() &&
         target.ash &&
         Game.getCell(i + a, j + b + 1) === CellType.empty
       ) {

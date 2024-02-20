@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
 import * as CellType from "./type/Cell";
-import * as Display from "./display";
+import { drawPartialDynamic, drawPartial, drawFull } from "./display";
 import * as Game from "./game";
 import * as Settings from "./settings";
 import * as Fire from "./engine/fire";
@@ -32,11 +32,11 @@ function nextState() {
   const leftToRight = Math.random() >= 0.5;
 
   for (
-    let i = iStart(leftToRight, Game.getWidth());
-    iEnd(i, leftToRight, Game.getWidth());
+    let i = iStart(leftToRight, Game.getGameWidth());
+    iEnd(i, leftToRight, Game.getGameWidth());
     leftToRight ? i++ : i--
   ) {
-    for (let j = Game.getHeight() - 2; j >= 0; j--) {
+    for (let j = Game.getGameHeight() - 2; j >= 0; j--) {
       const cell = Game.getCell(i, j);
       if (cell === CellType.empty) {
         continue;
@@ -58,7 +58,7 @@ function nextState() {
       }
     }
 
-    Game.createCell(i, Game.getHeight() - 1, CellType.concrete);
+    Game.createCell(i, Game.getGameHeight() - 1, CellType.concrete);
     // Destroy the last row
     // Game.destroyCell(i, Game.getHeight() - 1);
   }
@@ -91,19 +91,19 @@ function createTaps() {
   const tapSize = 3;
   for (let i = -tapSize; i <= tapSize; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor(Game.getWidth() / 4) + i, 0, tap1);
+      Game.createCell(Math.floor(Game.getGameWidth() / 4) + i, 0, tap1);
     }
   }
 
   for (let i = -tapSize; i <= tapSize; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor(Game.getWidth() / 2) + i, 0, tap2);
+      Game.createCell(Math.floor(Game.getGameWidth() / 2) + i, 0, tap2);
     }
   }
 
   for (let i = -tapSize; i <= tapSize; i++) {
     if (Math.random() > 0.9) {
-      Game.createCell(Math.floor((3 * Game.getWidth()) / 4) + i, 0, tap3);
+      Game.createCell(Math.floor((3 * Game.getGameWidth()) / 4) + i, 0, tap3);
     }
   }
 }
@@ -161,9 +161,9 @@ function update(time = 0) {
 function render(deltaTime: number) {
   const renderStart = performance.now();
   if (dynamicLights) {
-    Display.drawPartialDynamic(lightMap);
+    drawPartialDynamic(lightMap);
   } else {
-    Display.drawPartial();
+    drawPartial();
   }
   const renderEnd = performance.now();
 
@@ -175,9 +175,9 @@ function render(deltaTime: number) {
 }
 
 function init() {
-  lightMap = ArrayHelper.initMatrix(Game.getWidth(), Game.getHeight(), 0);
+  lightMap = ArrayHelper.initMatrix(Game.getGameWidth(), Game.getGameHeight(), 0);
 
-  Display.drawFull();
+  drawFull();
 
   // Brush
   const mainBrush = new Brush();

@@ -14,13 +14,13 @@ export function drawFull() {
   const canvasHeight = canvas.height;
   imagedata = context.createImageData(canvasWidth, canvasHeight);
 
-  const ratioX = Game.getWidth() / canvasWidth;
-  const ratioY = Game.getHeight() / canvasHeight;
+  const ratioX = Game.getGameWidth() / canvasWidth;
+  const ratioY = Game.getGameHeight() / canvasHeight;
 
   for (let x = 0; x < canvasWidth; x++) {
-    const gameX = Math.min(Math.round(x * ratioX), Game.getWidth() - 1);
+    const gameX = Math.min(Math.round(x * ratioX), Game.getGameWidth() - 1);
     for (let y = 0; y < canvasHeight; y++) {
-      const gameY = Math.min(Math.round(y * ratioY), Game.getHeight() - 1);
+      const gameY = Math.min(Math.round(y * ratioY), Game.getGameHeight() - 1);
       const cell = Game.getCell(gameX, gameY);
       if (cell) {
         // TODO use lightmap to fix dynamic lights
@@ -39,15 +39,15 @@ export function drawFull() {
 export function drawPartial() {
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
-  const ratioX = canvasWidth / Game.getWidth();
-  const ratioY = canvasHeight / Game.getHeight();
+  const ratioX = canvasWidth / Game.getGameWidth();
+  const ratioY = canvasHeight / Game.getGameHeight();
 
   Game.getDeltaBoard()
     // .filter((cell) => cell)
     .forEach((cell, index) => {
       if (cell) {
         // needed to keep index correct
-        const coords = getCoordsFromIndex(index, Game.getWidth());
+        const coords = getCoordsFromIndex(index, Game.getGameWidth());
         for (let a = 0; a < Math.floor(ratioX); a++) {
           for (let b = 0; b < Math.floor(ratioY); b++) {
             const imageX = (coords[0] * ratioX + a) * 4;
@@ -67,8 +67,8 @@ export function drawPartial() {
 }
 
 export function drawPartialDynamic(lightMap: number[][]) {
-  const gameWidth = Game.getWidth();
-  const gameHeight = Game.getHeight();
+  const gameWidth = Game.getGameWidth();
+  const gameHeight = Game.getGameHeight();
   for (let i = 0; i < gameWidth; i++) {
     for (let j = 0; j < gameHeight; j++) {
       let cell = Game.getDeltaCell(i, j);

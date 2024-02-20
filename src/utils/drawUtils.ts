@@ -1,41 +1,54 @@
-export function getDistance(a1: number, b1: number, a2: number, b2: number) {
-  return Math.sqrt((a2 - a1) ** 2 + (b2 - b1) ** 2);
+export function getPointsDistance(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+) {
+  return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 }
 
+/**
+ * Returns an array of points located between the start and end points
+ * @param x1 x coordinate of the start point
+ * @param y1 y coordinate of the start point
+ * @param x2 x coordinate of the end point
+ * @param y2 y coordinate of the end point
+ * @returns
+ */
 export function createIntermediatePoints(
-  a1: number,
-  b1: number,
-  a2: number,
-  b2: number,
-) {
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+): number[][] {
   const points = [];
-  const aDistance = Math.abs(a2 - a1);
-  const bDistance = Math.abs(b2 - b1);
+  const aDistance = Math.abs(x2 - x1);
+  const bDistance = Math.abs(y2 - y1);
   if (aDistance > bDistance) {
-    const leftToRight = a1 < a2;
-    for (let i = a1; leftToRight ? i <= a2 : i >= a2; leftToRight ? i++ : i--) {
-      const progress = (i - Math.min(a1, a2)) / aDistance;
+    const leftToRight = x1 < x2;
+    for (let i = x1; leftToRight ? i <= x2 : i >= x2; leftToRight ? i++ : i--) {
+      const progress = (i - Math.min(x1, x2)) / aDistance;
       let j: number;
       if (leftToRight) {
-        j = Math.round((b2 - b1) * progress + b1);
+        j = Math.round((y2 - y1) * progress + y1);
       } else {
-        j = Math.round((b1 - b2) * progress + b2);
+        j = Math.round((y1 - y2) * progress + y2);
       }
       points.push([i, j]);
     }
   } else {
-    const upToDown = b1 < b2;
+    const upToDown = y1 < y2;
     for (
-      let j = upToDown ? b1 + 1 : b1 - 1;
-      upToDown ? j < b2 : j > b2;
+      let j = upToDown ? y1 + 1 : y1 - 1;
+      upToDown ? j < y2 : j > y2;
       upToDown ? j++ : j--
     ) {
-      const progress = (j - Math.min(b1, b2)) / bDistance;
+      const progress = (j - Math.min(y1, y2)) / bDistance;
       let i: number;
       if (upToDown) {
-        i = Math.round((a2 - a1) * progress + a1);
+        i = Math.round((x2 - x1) * progress + x1);
       } else {
-        i = Math.round((a1 - a2) * progress + a2);
+        i = Math.round((x1 - x2) * progress + x2);
       }
       points.push([i, j]);
     }
