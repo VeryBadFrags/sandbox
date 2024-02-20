@@ -1,8 +1,11 @@
-import { brushCells } from "./content/CellGroups";
-import * as Game from "./game";
-import { concrete } from "./content/CellValues";
-import { createIntermediatePoints, getPointsDistance } from "./utils/drawUtils";
-import type { Cell } from "./types/cell.type";
+import { brushCells } from "../content/CellGroups";
+import * as Game from "../game";
+import { concrete } from "../content/CellValues";
+import {
+  createIntermediatePoints,
+  getPointsDistance,
+} from "../utils/drawUtils";
+import type { Cell } from "../types/cell.type";
 
 const brushTypeSelector = document.getElementById(
   "brush-type",

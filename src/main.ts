@@ -3,19 +3,19 @@ import "./style.css";
 
 import { drawPartialDynamic, drawPartial, drawFull } from "./display";
 import * as Game from "./game";
-import * as Settings from "./settings";
+import * as Settings from "./controls/settings";
 import * as Fire from "./engine/fire";
 import * as Liquid from "./engine/liquid";
 import * as Solid from "./engine/solid";
 import * as Gas from "./engine/gas";
 import * as ArrayHelper from "./utils/arrayUtils";
-import Brush from "./brush";
+import Brush from "./controls/brush";
 import { States } from "./types/states";
 import { concrete, emptyCell, oil, sand, water } from "./content/CellValues";
-import { tapValues, brushCells } from "./content/CellGroups";
-import type { Cell } from "./types/cell.type";
+import { tapValues } from "./content/CellGroups";
 
 import Plausible from "plausible-tracker";
+import { initKeyboardListeners } from "./controls/keyboard";
 const plausible = Plausible({
   domain: "sand.verybadfrags.com",
   apiHost: "/ps",
@@ -190,28 +190,7 @@ function init() {
   const mainBrush = new Brush();
   mainBrush.init();
 
-  const keyToCell = new Map<string, Cell>();
-  brushCells
-    .filter((cell) => cell.key)
-    .forEach((cell) => {
-      keyToCell.set(cell.key, cell);
-    });
-
-  document.addEventListener("keydown", (e) => {
-    if (keyToCell.has(e.key)) {
-      mainBrush.setBrushType(keyToCell.get(e.key));
-    } else if (e.key === "+" || e.key === "=") {
-      mainBrush.increaseBrushSize(1);
-    } else if (e.key === "-" || e.key === "_") {
-      mainBrush.increaseBrushSize(-1);
-    } else if (e.key === "{") {
-      mainBrush.increaseOpacity(-10);
-    } else if (e.key === "}") {
-      mainBrush.increaseOpacity(10);
-    } else if (e.key === " ") {
-      Settings.togglePlay();
-    }
-  });
+  initKeyboardListeners(mainBrush);
 
   const lightsCheck = document.getElementById(
     "dynamic-lights",
