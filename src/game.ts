@@ -1,5 +1,5 @@
 import { get1DIndex, initArray, wipe1DArray } from "./utils/arrayUtils";
-import * as CellType from "./type/Cell";
+import * as CellType from "./types/Cell";
 
 const gameWidth = 400;
 const gameHeight = 400;

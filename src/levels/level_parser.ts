@@ -1,5 +1,5 @@
 import * as Game from "../game";
-import * as CellType from "../type/Cell";
+import * as CellType from "../types/Cell";
 
 interface Level {
   taps: Array<unknown>;

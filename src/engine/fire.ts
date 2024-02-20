@@ -1,7 +1,8 @@
-import * as CellType from "../type/Cell";
+import * as CellType from "../types/Cell";
 import * as DrawUtils from "../utils/drawUtils";
 import * as Game from "../game";
 import * as EngineUtils from "../utils/engineUtils";
+import { States } from "../types/States";
 
 const maxLightDistance = 6;
 
@@ -25,7 +26,7 @@ export function process(
     ) > 0
   ) {
     const lastCell =
-      cell.nextCell.state === CellType.States.fire
+      cell.nextCell.state === States.fire
         ? cell.nextCell.nextCell
         : cell.nextCell;
     Game.createCell(i, j, lastCell);
@@ -63,7 +64,7 @@ function updateFireLightMap(
   i: number,
   lightMap: number[][],
 ) {
-  if (dynamicLights && Game.getCell(i, j).state === CellType.States.fire) {
+  if (dynamicLights && Game.getCell(i, j).state === States.fire) {
     for (
       let a = Math.max(i - maxLightDistance, 0);
       a <= Math.min(i + maxLightDistance, Game.getGameWidth() - 1);
@@ -76,7 +77,7 @@ function updateFireLightMap(
       ) {
         if (
           (a !== i || b !== j) &&
-          Game.getCell(a, b).state !== CellType.States.fire
+          Game.getCell(a, b).state !== States.fire
         ) {
           const distance = DrawUtils.getPointsDistance(a, b, i, j);
           lightMap[a][b] =

@@ -1,4 +1,4 @@
-import * as CellType from "./type/Cell";
+import * as CellType from "./types/Cell";
 import * as Game from "./game";
 import { createIntermediatePoints, getPointsDistance } from "./utils/drawUtils";
 

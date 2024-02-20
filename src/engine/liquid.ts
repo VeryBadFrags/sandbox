@@ -1,6 +1,7 @@
-import * as CellType from "../type/Cell";
+import * as CellType from "../types/Cell";
 import * as Game from "../game";
 import { getHigherCell } from "../utils/liquidUtils";
+import { States } from "../types/States";
 
 export function process(
   cell: CellType.Cell,
@@ -13,7 +14,7 @@ export function process(
   if (processAcid(cell, cellBelow, i, j)) return;
 
   // Fall down
-  if (cellBelow === CellType.empty || cellBelow.state === CellType.States.gas) {
+  if (cellBelow === CellType.empty || cellBelow.state === States.gas) {
     Game.swapCells(i, j, i, j + 1);
     return;
   }
@@ -27,7 +28,7 @@ export function process(
     return;
   }
 
-  if (cellBelow.state === CellType.States.liquid) {
+  if (cellBelow.state === States.liquid) {
     // Interract with other liquids
     if (cellBelow !== cell) {
       // Settle in less dense liquids
@@ -47,7 +48,7 @@ export function process(
       ) {
         // TODO use liquid thickness instead of 0.5
         const nextCell = Game.getCell(i + direction, j);
-        if (nextCell !== cell && nextCell.state === CellType.States.liquid) {
+        if (nextCell !== cell && nextCell.state === States.liquid) {
           Game.swapCells(i, j, i + direction, j);
           return;
         }
@@ -59,7 +60,7 @@ export function process(
   }
 
   if (
-    cellBelow.state === CellType.States.solid &&
+    cellBelow.state === States.solid &&
     !cellBelow.static &&
     cell.density > cellBelow.density &&
     Math.random() > 0.999
@@ -69,7 +70,7 @@ export function process(
   }
 
   // If above conveyor
-  if (cellBelow.state === CellType.States.conveyor) {
+  if (cellBelow.state === States.conveyor) {
     const neighbor = Game.getCell(
       i + cellBelow.vector.x,
       j + cellBelow.vector.y,
@@ -94,7 +95,7 @@ function processAcid(
 ): boolean {
   if (
     cell == CellType.acid &&
-    cellBelow.state === CellType.States.solid &&
+    cellBelow.state === States.solid &&
     Math.random() > 0.8
   ) {
     Game.createCell(i, j, CellType.smoke);
@@ -151,7 +152,7 @@ function moveLiquidSideways(
 
     if (
       neighbor !== current &&
-      neighbor.state === CellType.States.liquid &&
+      neighbor.state === States.liquid &&
       Math.random() > 0.9
     ) {
       Game.swapCells(i, j, i + direction, j);

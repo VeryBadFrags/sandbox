@@ -1,4 +1,4 @@
-import * as CellType from "../type/Cell";
+import * as CellType from "../types/Cell";
 
 export function initMatrix(
   width: number,

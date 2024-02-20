@@ -1,4 +1,5 @@
 import * as ColorUtils from "../utils/colorUtils";
+import { States } from "./States";
 
 interface Vector {
   x: number;
@@ -37,14 +38,6 @@ export interface Cell {
   vector?: Vector;
   colorSuite?: string[];
   sticky?: boolean;
-}
-
-export enum States {
-  liquid,
-  solid,
-  gas,
-  fire,
-  conveyor,
 }
 
 export const empty: Cell = {
@@ -337,6 +330,9 @@ export const AllCells: Cell[] = [
   wax,
 ];
 
+/**
+ * Choices for picking a tap
+ */
 export const TapValues: Cell[] = [
   oil,
   sand,

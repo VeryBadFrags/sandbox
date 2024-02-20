@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
-import * as CellType from "./type/Cell";
+import * as CellType from "./types/Cell";
 import { drawPartialDynamic, drawPartial, drawFull } from "./display";
 import * as Game from "./game";
 import * as Settings from "./settings";
@@ -13,6 +13,7 @@ import * as ArrayHelper from "./utils/arrayUtils";
 import Brush from "./brush";
 
 import Plausible from "plausible-tracker";
+import { States } from "./types/States";
 const plausible = Plausible({
   domain: "sand.verybadfrags.com",
   apiHost: "/ps",
@@ -43,16 +44,16 @@ function nextState() {
       }
 
       switch (cell.state) {
-        case CellType.States.solid:
+        case States.solid:
           Solid.process(cell, i, j);
           break;
-        case CellType.States.liquid:
+        case States.liquid:
           Liquid.process(cell, i, j, pascalsLaw);
           break;
-        case CellType.States.fire:
+        case States.fire:
           Fire.process(cell, i, j, lightMap, dynamicLights);
           break;
-        case CellType.States.gas:
+        case States.gas:
           Gas.process(cell, i, j);
           break;
       }

@@ -1,4 +1,4 @@
-import * as CellType from "./type/Cell";
+import * as CellType from "./types/Cell";
 import * as Game from "./game";
 import { get1DIndex, getCoordsFromIndex } from "./utils/arrayUtils";
 
