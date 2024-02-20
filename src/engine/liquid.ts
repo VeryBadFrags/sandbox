@@ -1,10 +1,11 @@
-import * as CellType from "../types/Cell";
 import * as Game from "../game";
 import { getHigherCell } from "../utils/liquidUtils";
 import { States } from "../types/States";
+import { acid, emptyCell, smoke } from "../content/CellValues";
+import type { Cell } from "../types/cell.type";
 
 export function process(
-  cell: CellType.Cell,
+  cell: Cell,
   i: number,
   j: number,
   pascalsLaw: boolean,
@@ -14,7 +15,7 @@ export function process(
   if (processAcid(cell, cellBelow, i, j)) return;
 
   // Fall down
-  if (cellBelow === CellType.empty || cellBelow.state === States.gas) {
+  if (cellBelow === emptyCell || cellBelow.state === States.gas) {
     Game.swapCells(i, j, i, j + 1);
     return;
   }
@@ -75,11 +76,11 @@ export function process(
       i + cellBelow.vector.x,
       j + cellBelow.vector.y,
     );
-    if (neighbor === CellType.empty) {
+    if (neighbor === emptyCell) {
       Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y);
     } else if (
       Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y - 1) ===
-      CellType.empty
+      emptyCell
     ) {
       Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y - 1);
     }
@@ -88,21 +89,17 @@ export function process(
 }
 
 function processAcid(
-  cell: CellType.Cell,
-  cellBelow: CellType.Cell,
+  cell: Cell,
+  cellBelow: Cell,
   i: number,
   j: number,
 ): boolean {
-  if (
-    cell == CellType.acid &&
-    cellBelow.state === States.solid &&
-    Math.random() > 0.8
-  ) {
-    Game.createCell(i, j, CellType.smoke);
+  if (cell == acid && cellBelow.state === States.solid && Math.random() > 0.8) {
+    Game.createCell(i, j, smoke);
     if (Math.random() > 0.999) {
-      Game.createCell(i, j + 1, CellType.acid);
+      Game.createCell(i, j + 1, acid);
     } else {
-      Game.createCell(i, j + 1, CellType.empty);
+      Game.createCell(i, j + 1, emptyCell);
     }
     return true;
   }
@@ -111,14 +108,14 @@ function processAcid(
 
 function applyPascalsLaw(
   pascalsLaw: boolean,
-  cell: CellType.Cell,
+  cell: Cell,
   i: number,
   j: number,
 ): void {
   if (
     pascalsLaw &&
     j - 1 >= 0 &&
-    Game.getCell(i, j - 1) === CellType.empty &&
+    Game.getCell(i, j - 1) === emptyCell &&
     i - 1 >= 0 &&
     Game.getCell(i - 1, j) === cell &&
     i + 1 < Game.getGameWidth() &&
@@ -136,16 +133,16 @@ function moveLiquidSideways(
   i: number,
   j: number,
   direction: number,
-  current: CellType.Cell,
+  current: Cell,
 ): boolean {
   if (i + direction >= 0 && i + direction < Game.getGameWidth()) {
     const neighbor = Game.getCell(i + direction, j);
-    if (neighbor === CellType.empty && !Game.getCell(i, j + 1).static) {
+    if (neighbor === emptyCell && !Game.getCell(i, j + 1).static) {
       Game.swapCells(i, j, i + direction, j);
       return true;
     }
 
-    if (Game.getCell(i + direction, j + 1) === CellType.empty) {
+    if (Game.getCell(i + direction, j + 1) === emptyCell) {
       Game.swapCells(i, j, i + direction, j + 1);
       return true;
     }

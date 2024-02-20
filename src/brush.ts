@@ -1,6 +1,8 @@
-import * as CellType from "./types/Cell";
+import { brushCells } from "./content/CellGroups";
 import * as Game from "./game";
+import { concrete } from "./content/CellValues";
 import { createIntermediatePoints, getPointsDistance } from "./utils/drawUtils";
+import type { Cell } from "./types/cell.type";
 
 const brushTypeSelector = document.getElementById(
   "brush-type",
@@ -15,12 +17,12 @@ const brushOpacitySlider = document.getElementById(
   "brush-opacity",
 ) as HTMLInputElement;
 
-let brushType = CellType.concrete;
+let brushType = concrete;
 let brushSize = 2;
 let brushOpacity = 100;
 
 export default class Brush {
-  setBrushType(brush: CellType.Cell): void {
+  setBrushType(brush: Cell): void {
     brushType = brush;
     brushTypeSelector.value = brush.name;
   }
@@ -62,7 +64,10 @@ export default class Brush {
       for (let i = minI; i < maxI; i++) {
         for (let j = minJ; j < maxJ; j++) {
           if (Math.random() <= brushOpacity / 100) {
-            const boardX = Math.min(Math.ceil(i * ratioX), Game.getGameWidth() - 1);
+            const boardX = Math.min(
+              Math.ceil(i * ratioX),
+              Game.getGameWidth() - 1,
+            );
             const boardY = Math.min(
               Math.ceil(j * ratioY),
               Game.getGameHeight() - 1,
@@ -79,7 +84,10 @@ export default class Brush {
         y < canvasHeight
       ) {
         const boardX = Math.min(Math.ceil(x * ratioX), Game.getGameWidth() - 1);
-        const boardY = Math.min(Math.ceil(y * ratioY), Game.getGameHeight() - 1);
+        const boardY = Math.min(
+          Math.ceil(y * ratioY),
+          Game.getGameHeight() - 1,
+        );
         Game.createCell(boardX, boardY, brushType);
       }
     };
@@ -97,7 +105,7 @@ export default class Brush {
         function () {
           spawnCell(mouseX, mouseY);
         },
-        brushType === CellType.concrete ? 1 : 20,
+        brushType === concrete ? 1 : 20, // TODO is this needed?
       );
     }
 
@@ -137,8 +145,7 @@ export default class Brush {
     }
 
     brushTypeSelector.addEventListener("change", function (e) {
-      brushType =
-        CellType.brushCells[(<HTMLSelectElement>e.target).selectedIndex];
+      brushType = brushCells[(<HTMLSelectElement>e.target).selectedIndex];
     });
 
     brushSizeInput.addEventListener("input", function (e) {

@@ -1,5 +1,5 @@
-import * as CellType from "./types/Cell";
 import * as Game from "./game";
+import type { Cell } from "./types/cell.type";
 import { get1DIndex, getCoordsFromIndex } from "./utils/arrayUtils";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
@@ -84,7 +84,7 @@ export function drawPartialDynamic(lightMap: number[][]) {
   }
 }
 
-function getHexColor(cell: CellType.Cell, lightValue: number) {
+function getHexColor(cell: Cell, lightValue: number) {
   if (lightValue > 0) {
     const hsl = cell.hsl;
     const newL = Math.min(hsl[2] + Math.floor(lightValue * 0.4), 100);

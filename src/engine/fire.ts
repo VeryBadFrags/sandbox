@@ -1,13 +1,14 @@
-import * as CellType from "../types/Cell";
-import * as DrawUtils from "../utils/drawUtils";
 import * as Game from "../game";
-import * as EngineUtils from "../utils/engineUtils";
 import { States } from "../types/States";
+import { emptyCell } from "../content/CellValues";
+import { testNeighbors } from "../utils/engineUtils";
+import type { Cell } from "../types/cell.type";
+import { getPointsDistance } from "../utils/drawUtils";
 
 const maxLightDistance = 6;
 
 export function process(
-  cell: CellType.Cell,
+  cell: Cell,
   i: number,
   j: number,
   lightMap: number[][],
@@ -15,11 +16,11 @@ export function process(
 ) {
   // Douse
   if (
-    EngineUtils.testNeighbors(
+    testNeighbors(
       i,
       j,
-      (test: CellType.Cell) => test.dousing,
-      (current: CellType.Cell, x: number, y: number) =>
+      (test: Cell) => test.dousing,
+      (current: Cell, x: number, y: number) =>
         current.melt && Math.random() > 0.5
           ? Game.createCell(x, y, current.melt)
           : null,
@@ -36,17 +37,13 @@ export function process(
   // Extinguish
   if (
     Math.random() > cell.lifetime &&
-    EngineUtils.testNeighbors(
-      i,
-      j,
-      (test: CellType.Cell) => test.flammable > 0,
-    ) < 1
+    testNeighbors(i, j, (test: Cell) => test.flammable > 0) < 1
   ) {
     Game.createCell(i, j, cell.nextCell);
   } else if (
     j > 0 &&
     Math.random() > 0.8 &&
-    Game.getCell(i, j - 1) === CellType.empty
+    Game.getCell(i, j - 1) === emptyCell
     // || Game.getCell(i, j - 1).flammable
   ) {
     // Evolve
@@ -75,11 +72,8 @@ function updateFireLightMap(
         b <= Math.min(j + maxLightDistance, Game.getGameHeight() - 1);
         b++
       ) {
-        if (
-          (a !== i || b !== j) &&
-          Game.getCell(a, b).state !== States.fire
-        ) {
-          const distance = DrawUtils.getPointsDistance(a, b, i, j);
+        if ((a !== i || b !== j) && Game.getCell(a, b).state !== States.fire) {
+          const distance = getPointsDistance(a, b, i, j);
           lightMap[a][b] =
             lightMap[a][b] + Math.max(0, maxLightDistance - distance);
         }
@@ -104,7 +98,7 @@ function propagateFire(i: number, j: number) {
       if (
         j + b + 1 < Game.getGameHeight() &&
         target.ash &&
-        Game.getCell(i + a, j + b + 1) === CellType.empty
+        Game.getCell(i + a, j + b + 1) === emptyCell
       ) {
         Game.createCell(i + a, j + b + 1, target.ash);
       }

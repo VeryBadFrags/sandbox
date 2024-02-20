@@ -1,13 +1,14 @@
-import * as CellType from "../types/Cell";
 import * as Game from "../game";
+import { emptyCell } from "../content/CellValues";
+import type { Cell } from "../types/cell.type";
 
-export function process(cell: CellType.Cell, i: number, j: number): void {
+export function process(cell: Cell, i: number, j: number): void {
   // SMOKE
   if (Math.random() > cell.lifetime) {
     Game.destroyCell(i, j);
   } else if (
     j > 0 &&
-    Game.getCell(i, j - 1) === CellType.empty &&
+    Game.getCell(i, j - 1) === emptyCell &&
     Math.random() > 0.7
   ) {
     // Go up
@@ -20,7 +21,7 @@ export function process(cell: CellType.Cell, i: number, j: number): void {
     j > 0 &&
     i + direction >= 0 &&
     i + direction < Game.getGameWidth() &&
-    Game.getCell(i + direction, j - 1) === CellType.empty &&
+    Game.getCell(i + direction, j - 1) === emptyCell &&
     Math.random() > 0.7
   ) {
     Game.swapCells(i, j, i + direction, j - 1);

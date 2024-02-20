@@ -1,5 +1,5 @@
 import * as Game from "../game";
-import * as CellType from "../types/Cell";
+import type { Cell } from "../types/cell.type";
 
 interface Level {
   taps: Array<unknown>;
@@ -9,7 +9,7 @@ interface Level {
 interface gameCell {
   x: number;
   y: number;
-  cell: CellType.Cell;
+  cell: Cell;
 }
 
 export function parseLevel(level: Level) {

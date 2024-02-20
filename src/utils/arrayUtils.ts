@@ -1,10 +1,6 @@
-import * as CellType from "../types/Cell";
+import type { Cell } from "../types/cell.type";
 
-export function initMatrix(
-  width: number,
-  height: number,
-  cell: CellType.Cell | number,
-) {
+export function initMatrix(width: number, height: number, cell: Cell | number) {
   const newArray = new Array(width);
   for (let x = 0; x < width; x++) {
     const newRow = new Array(height);
@@ -19,24 +15,21 @@ export function initMatrix(
 export function initArray(
   width: number,
   height: number,
-  cell: CellType.Cell,
-): Array<CellType.Cell> {
+  cell: Cell,
+): Array<Cell> {
   const newArray = new Array(width * height);
   newArray.fill(cell);
   return newArray;
 }
 
-export function wipe1DArray(
-  array: Array<CellType.Cell>,
-  value: CellType.Cell,
-): void {
+export function wipe1DArray(array: Array<Cell>, value: Cell): void {
   array.fill(value);
   // array.forEach((cell) => (cell = value));
 }
 
 export function wipe2DMatrix(
-  matrix: Array<Array<CellType.Cell | number>>,
-  value?: CellType.Cell | number,
+  matrix: Array<Array<Cell | number>>,
+  value?: Cell | number,
 ) {
   const width = matrix.length;
   const height = matrix[0].length;

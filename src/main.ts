@@ -1,7 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
-import * as CellType from "./types/Cell";
 import { drawPartialDynamic, drawPartial, drawFull } from "./display";
 import * as Game from "./game";
 import * as Settings from "./settings";
@@ -11,9 +10,12 @@ import * as Solid from "./engine/solid";
 import * as Gas from "./engine/gas";
 import * as ArrayHelper from "./utils/arrayUtils";
 import Brush from "./brush";
+import { States } from "./types/States";
+import { concrete, emptyCell, oil, sand, water } from "./content/CellValues";
+import { TapValues, brushCells } from "./content/CellGroups";
+import type { Cell } from "./types/cell.type";
 
 import Plausible from "plausible-tracker";
-import { States } from "./types/States";
 const plausible = Plausible({
   domain: "sand.verybadfrags.com",
   apiHost: "/ps",
@@ -39,7 +41,7 @@ function nextState() {
   ) {
     for (let j = Game.getGameHeight() - 2; j >= 0; j--) {
       const cell = Game.getCell(i, j);
-      if (cell === CellType.empty) {
+      if (cell === emptyCell) {
         continue;
       }
 
@@ -59,7 +61,7 @@ function nextState() {
       }
     }
 
-    Game.createCell(i, Game.getGameHeight() - 1, CellType.concrete);
+    Game.createCell(i, Game.getGameHeight() - 1, concrete);
     // Destroy the last row
     // Game.destroyCell(i, Game.getHeight() - 1);
   }
@@ -68,23 +70,23 @@ function nextState() {
   createTaps();
 }
 
-let tap1 = CellType.oil;
-let tap2 = CellType.sand;
-let tap3 = CellType.water;
+let tap1 = oil;
+let tap2 = sand;
+let tap3 = water;
 
 // Tap listeners
 const tapSelect = document.getElementById("select-tap1") as HTMLSelectElement;
 tapSelect.addEventListener("change", function (e) {
-  tap1 = CellType.TapValues[(<HTMLSelectElement>e.target).selectedIndex];
+  tap1 = TapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 const tap2Select = document.getElementById("select-tap2") as HTMLSelectElement;
 tap2Select.addEventListener("change", function (e) {
-  tap2 = CellType.TapValues[(<HTMLSelectElement>e.target).selectedIndex];
+  tap2 = TapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 tap2Select.selectedIndex = 1;
 const tap3Select = document.getElementById("select-tap3") as HTMLSelectElement;
 tap3Select.addEventListener("change", function (e) {
-  tap3 = CellType.TapValues[(<HTMLSelectElement>e.target).selectedIndex];
+  tap3 = TapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 tap3Select.selectedIndex = 2;
 
@@ -176,7 +178,11 @@ function render(deltaTime: number) {
 }
 
 function init() {
-  lightMap = ArrayHelper.initMatrix(Game.getGameWidth(), Game.getGameHeight(), 0);
+  lightMap = ArrayHelper.initMatrix(
+    Game.getGameWidth(),
+    Game.getGameHeight(),
+    0,
+  );
 
   drawFull();
 
@@ -184,8 +190,8 @@ function init() {
   const mainBrush = new Brush();
   mainBrush.init();
 
-  const keyToCell = new Map<string, CellType.Cell>();
-  CellType.brushCells
+  const keyToCell = new Map<string, Cell>();
+  brushCells
     .filter((cell) => cell.key)
     .forEach((cell) => {
       keyToCell.set(cell.key, cell);

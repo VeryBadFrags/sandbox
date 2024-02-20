@@ -1,46 +1,7 @@
-import * as ColorUtils from "../utils/colorUtils";
-import { States } from "./States";
+import type { Cell } from "../types/cell.type";
+import { States } from "../types/States";
 
-interface Vector {
-  x: number;
-  y: number;
-}
-
-// interface flammable {
-//   chance: number;
-//   melt: Cell;
-//   ash?: Cell;
-// }
-
-export interface Cell {
-  color: string;
-  state?: States;
-  density: number;
-
-  name?: string;
-  hsl?: number[];
-  rgb?: number[];
-
-  key?: string; // Shortcut
-  static?: boolean;
-  lifetime?: number;
-  propagation?: number;
-  propTarget?: Cell;
-  spawn?: Cell;
-  nextCell?: Cell;
-  dousing?: boolean;
-  flammable?: number;
-  melt?: Cell;
-  ash?: Cell;
-  drip?: number;
-  disolve?: Cell;
-  disolveInto?: Cell;
-  vector?: Vector;
-  colorSuite?: string[];
-  sticky?: boolean;
-}
-
-export const empty: Cell = {
+export const emptyCell: Cell = {
   name: "✏️ Eraser",
   color: "#000000",
   density: 0,
@@ -53,7 +14,7 @@ export const smoke: Cell = {
   density: 0.1,
   state: States.gas,
   lifetime: 0.98,
-  nextCell: empty,
+  nextCell: emptyCell,
 };
 export const flame3: Cell = {
   color: "#ff8800",
@@ -268,112 +229,4 @@ export const wax: Cell = {
 };
 {
   wax.ash = wax;
-}
-
-/**
- * Cells that can be picked in the UI dropdown
- */
-export const brushCells: Cell[] = [
-  empty,
-  sand,
-  concrete,
-  wood,
-  water,
-  ice,
-  salt,
-  gunPowder,
-  oil,
-  coal,
-  plant,
-  soil,
-  seed,
-  crystals,
-  flame,
-  acid,
-  conveyorLeft,
-  conveyorRight,
-  wax,
-];
-
-// {
-//   CellsMap.sort((a, b) => {
-//     if (a.name < b.name) {
-//       return 1;
-//     } else return -1;
-//   });
-// }
-
-// Must contain all cells
-export const AllCells: Cell[] = [
-  empty,
-  acid,
-  smoke,
-  flame3,
-  flame2,
-  flame,
-  water,
-  saltyWater,
-  oil,
-  concrete,
-  ice,
-  soil,
-  wood,
-  coal,
-  sand,
-  salt,
-  gunPowder,
-  crystals,
-  seed,
-  plant,
-  conveyorLeft,
-  conveyorRight,
-  wax,
-];
-
-/**
- * Choices for picking a tap
- */
-export const TapValues: Cell[] = [
-  oil,
-  sand,
-  water,
-  acid,
-  coal,
-  gunPowder,
-  salt,
-  seed,
-  soil,
-  wax,
-];
-
-function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
-  const opt = document.createElement("option");
-  opt.value = cell.name;
-  opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
-  if (cell === concrete) {
-    opt.selected = true;
-  }
-  select.appendChild(opt);
-}
-
-{
-  // INIT
-
-  // Set Brush selector menu values
-  const brushTypeSelector = document.getElementById(
-    "brush-type",
-  ) as HTMLSelectElement;
-
-  brushCells.forEach((cell) => addElementToSelect(cell, brushTypeSelector));
-
-  for (let i = 1; i <= 3; i++) {
-    const tap1Select = document.getElementById(
-      "select-tap" + i,
-    ) as HTMLSelectElement;
-    TapValues.forEach((cell) => addElementToSelect(cell, tap1Select));
-  }
-
-  // Set RGB values
-  AllCells.forEach((c) => (c.rgb = ColorUtils.hexToRgb(c.color)));
-  AllCells.forEach((c) => (c.hsl = ColorUtils.hexToHSL(c.color)));
 }

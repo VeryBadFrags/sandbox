@@ -1,5 +1,5 @@
-import * as Display from "./display";
-import * as Game from "./game";
+import { drawFull } from "./display";
+import { wipeBoard } from "./game";
 
 export let play = true;
 
@@ -25,6 +25,6 @@ const eraseButton = document.getElementById(
   "erase-button",
 ) as HTMLButtonElement;
 eraseButton.addEventListener("click", () => {
-  Game.wipeBoard();
-  Display.drawFull();
+  wipeBoard();
+  drawFull();
 });

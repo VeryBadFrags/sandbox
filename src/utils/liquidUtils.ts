@@ -1,5 +1,5 @@
-import * as CellType from "../types/Cell";
 import * as Game from "../game";
+import type { Cell } from "../types/cell.type";
 
 /**
  * Used for Pascal's Law
@@ -8,7 +8,7 @@ import * as Game from "../game";
  * @param y
  * @returns
  */
-export function getHigherCell(cell: CellType.Cell, x: number, y: number) {
+export function getHigherCell(cell: Cell, x: number, y: number) {
   const explored = [];
   const coords = hashCoordinates(x, y);
   explored.push(coords);
@@ -16,7 +16,7 @@ export function getHigherCell(cell: CellType.Cell, x: number, y: number) {
 }
 
 function findHigherCell(
-  cell: CellType.Cell,
+  cell: Cell,
   x: number,
   y: number,
   explored: number[],

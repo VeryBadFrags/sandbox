@@ -1,5 +1,5 @@
 import * as Game from "../game";
-import * as CellType from "../types/Cell";
+import type { Cell } from "../types/cell.type";
 
 export function isFuelAround(x: number, y: number) {
   const xMax = Math.min(x + 1, Game.getGameWidth() - 1);
@@ -14,7 +14,7 @@ export function isFuelAround(x: number, y: number) {
   return false;
 }
 
-export function countNeighbors(x: number, y: number, neighType: CellType.Cell) {
+export function countNeighbors(x: number, y: number, neighType: Cell) {
   let count = 0;
   const xMax = Math.min(x + 1, Game.getGameWidth() - 1);
   const yMax = Math.min(y + 1, Game.getGameHeight() - 1);
@@ -33,8 +33,8 @@ export function countNeighbors(x: number, y: number, neighType: CellType.Cell) {
 export function testNeighbors(
   x: number,
   y: number,
-  testFunction: (c: CellType.Cell) => boolean,
-  action?: (c: CellType.Cell, x: number, y: number) => void,
+  testFunction: (c: Cell) => boolean,
+  action?: (c: Cell, x: number, y: number) => void,
 ): number {
   let count = 0;
   const xMin = Math.max(x - 1, 0);
