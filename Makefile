@@ -21,11 +21,11 @@ dev: node_modules
 	pnpm run dev
 
 .PHONY: lint
-lint:
+lint: node_modules
 	pnpm run lint
 
 .PHONY: format
-format:
+format: node_modules
 	pnpm run format
 
 .PHONY: clean
