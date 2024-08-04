@@ -3,7 +3,9 @@ import type { Cell } from "./types/cell.type";
 import { get1DIndex, getCoordsFromIndex } from "./utils/arrayUtils";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
-const context = canvas.getContext("2d", { alpha: false });
+const context = canvas.getContext("2d", {
+  alpha: false,
+}) as CanvasRenderingContext2D;
 
 let imagedata = context.createImageData(canvas.width, canvas.height);
 
@@ -22,7 +24,7 @@ export function drawFull() {
     for (let y = 0; y < canvasHeight; y++) {
       const gameY = Math.min(Math.round(y * ratioY), Game.getGameHeight() - 1);
       const cell = Game.getCell(gameX, gameY);
-      if (cell) {
+      if (cell && cell.rgb) {
         // TODO use lightmap to fix dynamic lights
         const pixelindex = (y * canvasWidth + x) * 4;
         imagedata.data[pixelindex] = cell.rgb[0]; // Red
@@ -45,7 +47,7 @@ export function drawPartial() {
   Game.getDeltaBoard()
     // .filter((cell) => cell)
     .forEach((cell, index) => {
-      if (cell) {
+      if (cell && cell.rgb) {
         // needed to keep index correct
         const coords = getCoordsFromIndex(index, Game.getGameWidth());
         for (let a = 0; a < Math.floor(ratioX); a++) {
@@ -87,8 +89,12 @@ export function drawPartialDynamic(lightMap: number[][]) {
 function getHexColor(cell: Cell, lightValue: number) {
   if (lightValue > 0) {
     const hsl = cell.hsl;
-    const newL = Math.min(hsl[2] + Math.floor(lightValue * 0.4), 100);
-    return `hsl(${hsl[0]}, ${hsl[1]}%, ${newL}%)`;
+    if (hsl) {
+      const newL = Math.min(hsl[2] + Math.floor(lightValue * 0.4), 100);
+      return `hsl(${hsl[0]}, ${hsl[1]}%, ${newL}%)`;
+    } else {
+      return cell.color;
+    }
   } else {
     return cell.color;
   }
