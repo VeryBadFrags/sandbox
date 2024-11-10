@@ -1,7 +1,3 @@
-# Makefile for Node.js project
-
-.DEFAULT_GOAL := help
-
 .PHONY: help
 help:
 	@echo "Available targets:"
