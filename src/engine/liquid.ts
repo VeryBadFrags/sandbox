@@ -1,8 +1,8 @@
-import * as Game from "../game";
-import { getHigherCell } from "../utils/liquidUtils";
-import { States } from "../types/states.enum";
-import { acid, emptyCell, smoke } from "../content/CellValues";
-import type { Cell } from "../types/cell.type";
+import * as Game from "../game.ts";
+import { getHigherCell } from "../utils/liquidUtils.ts";
+import { States } from "../types/states.enum.ts";
+import { acid, emptyCell, smoke } from "../content/CellValues.ts";
+import type { Cell } from "../types/cell.type.ts";
 
 export function process(
   cell: Cell,
@@ -30,12 +30,12 @@ export function process(
   }
 
   if (cellBelow.state === States.liquid) {
-    // Interract with other liquids
+    // Interact with other liquids
     if (cellBelow !== cell) {
       // Settle in less dense liquids
       if (
         Math.random() <=
-        (cell.density - cellBelow.density) / cellBelow.density / 5
+          (cell.density - cellBelow.density) / cellBelow.density / 5
       ) {
         Game.swapCells(i, j, i, j + 1);
         return;
@@ -71,7 +71,7 @@ export function process(
   }
 
   // If above conveyor
-  if (cellBelow.state === States.conveyor) {
+  if (cellBelow.state === States.conveyor && cellBelow.vector) {
     const neighbor = Game.getCell(
       i + cellBelow.vector.x,
       j + cellBelow.vector.y,
@@ -80,7 +80,7 @@ export function process(
       Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y);
     } else if (
       Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y - 1) ===
-      emptyCell
+        emptyCell
     ) {
       Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y - 1);
     }

@@ -1,12 +1,12 @@
-import * as EngineUtils from "../utils/engineUtils";
+import * as EngineUtils from "../utils/engineUtils.ts";
 import {
   createCell,
   getCell,
   getGameHeight,
   getGameWidth,
   swapCells,
-} from "../game";
-import { States } from "../types/states.enum";
+} from "../game.ts";
+import { States } from "../types/states.enum.ts";
 import {
   emptyCell,
   flame,
@@ -16,8 +16,8 @@ import {
   seed,
   soil,
   water,
-} from "../content/CellValues";
-import type { Cell } from "../types/cell.type";
+} from "../content/CellValues.ts";
+import type { Cell } from "../types/cell.type.ts";
 
 export function process(cell: Cell, i: number, j: number) {
   if (cell.static) {
@@ -57,12 +57,12 @@ export function process(cell: Cell, i: number, j: number) {
       break;
   }
 
-  if (cell.disolve) {
+  if (cell.dissolve && cell.dissolveInto) {
     if (
       Math.random() > 0.995 &&
-      EngineUtils.countNeighbors(i, j, cell.disolve) >= 2
+      EngineUtils.countNeighbors(i, j, cell.dissolve) >= 2
     ) {
-      createCell(i, j, cell.disolveInto);
+      createCell(i, j, cell.dissolveInto);
       return;
     }
   }
@@ -77,7 +77,7 @@ export function process(cell: Cell, i: number, j: number) {
   }
 
   // If above conveyor
-  if (cellBelow.state === States.conveyor) {
+  if (cellBelow.state === States.conveyor && cellBelow.vector) {
     const neighbor = getCell(i + cellBelow.vector.x, j + cellBelow.vector.y);
     if (neighbor === emptyCell) {
       swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y);
@@ -93,14 +93,16 @@ export function process(cell: Cell, i: number, j: number) {
   if (cellBelow.state === States.liquid && cell.density > cellBelow.density) {
     if (
       Math.random() <=
-      (cell.density - cellBelow.density) / cellBelow.density / 50
+        (cell.density - cellBelow.density) / cellBelow.density / 50
     ) {
       swapCells(i, j, i, j + 1);
       return;
     }
   }
 
-  if (cellBelow.state === States.fire && Math.random() > 0.9) {
+  if (
+    cellBelow.state === States.fire && cell.flammable && Math.random() > 0.9
+  ) {
     if (Math.random() > cell.flammable) {
       createCell(i, j, flame);
     } else {
@@ -133,7 +135,10 @@ function rollGrainSideways(
       return true;
     }
 
-    if (diagonalCell.state === States.fire && Math.random() > 0.7) {
+    if (
+      cell.flammable && diagonalCell.state === States.fire &&
+      Math.random() > 0.7
+    ) {
       if (Math.random() > cell.flammable) {
         createCell(i, j, flame);
       } else {
@@ -169,49 +174,51 @@ function processPlant(cell: Cell, i: number, j: number) {
     return;
   }
   const direction = Math.floor(Math.random() * 4);
-  switch (direction) {
-    case 0:
-      if (
-        j > 0 &&
-        (getCell(i, j - 1) === water ||
-          (getCell(i, j - 1) === soil &&
-            EngineUtils.countNeighbors(i, j, plant) <= 3)) &&
-        Math.random() > cell.propagation
-      ) {
-        createCell(i, j - 1, plant);
-      }
-      break;
-    case 1:
-      if (
-        i < getGameWidth() - 1 &&
-        (getCell(i + 1, j) === water ||
-          (getCell(i + 1, j) === soil &&
-            EngineUtils.countNeighbors(i, j, plant) <= 2)) &&
-        Math.random() > cell.propagation
-      ) {
-        createCell(i + 1, j, plant);
-      }
-      break;
-    case 2:
-      if (
-        j < getGameHeight() - 1 &&
-        getCell(i, j + 1) === water &&
-        Math.random() > cell.propagation
-      ) {
-        createCell(i, j + 1, plant);
-      }
-      break;
-    case 3:
-      if (
-        i > 0 &&
-        (getCell(i - 1, j) === water ||
-          (getCell(i - 1, j) === soil &&
-            EngineUtils.countNeighbors(i, j, plant) <= 2)) &&
-        Math.random() > cell.propagation
-      ) {
-        createCell(i - 1, j, plant);
-      }
-      break;
+  if (cell.propagation) {
+    switch (direction) {
+      case 0:
+        if (
+          j > 0 &&
+          (getCell(i, j - 1) === water ||
+            (getCell(i, j - 1) === soil &&
+              EngineUtils.countNeighbors(i, j, plant) <= 3)) &&
+          Math.random() > cell.propagation
+        ) {
+          createCell(i, j - 1, plant);
+        }
+        break;
+      case 1:
+        if (
+          i < getGameWidth() - 1 &&
+          (getCell(i + 1, j) === water ||
+            (getCell(i + 1, j) === soil &&
+              EngineUtils.countNeighbors(i, j, plant) <= 2)) &&
+          Math.random() > cell.propagation
+        ) {
+          createCell(i + 1, j, plant);
+        }
+        break;
+      case 2:
+        if (
+          j < getGameHeight() - 1 &&
+          getCell(i, j + 1) === water &&
+          Math.random() > cell.propagation
+        ) {
+          createCell(i, j + 1, plant);
+        }
+        break;
+      case 3:
+        if (
+          i > 0 &&
+          (getCell(i - 1, j) === water ||
+            (getCell(i - 1, j) === soil &&
+              EngineUtils.countNeighbors(i, j, plant) <= 2)) &&
+          Math.random() > cell.propagation
+        ) {
+          createCell(i - 1, j, plant);
+        }
+        break;
+    }
   }
 
   // Spawn seed
@@ -228,6 +235,7 @@ function processIce(cell: Cell, i: number, j: number) {
   const cellBelow = getCell(i, j + 1);
   // Propagate
   if (
+    cell.propagation &&
     j > 0 &&
     EngineUtils.countNeighbors(i, j, water) >= 2 &&
     EngineUtils.countNeighbors(i, j, ice) <= 4
@@ -257,14 +265,14 @@ function processIce(cell: Cell, i: number, j: number) {
 }
 
 function dripAndMeltIce(cellBelow: Cell, cell: Cell, i: number, j: number) {
-  if (cellBelow === emptyCell && Math.random() > cell.drip) {
+  if (cell.drip && cellBelow === emptyCell && Math.random() > cell.drip) {
     createCell(i, j + 1, water);
   }
   // Melt
   if (
-    (Math.random() > cell.lifetime &&
+    cell.melt && ((cell.lifetime && Math.random() > cell.lifetime &&
       EngineUtils.countNeighbors(i, j, ice) < 6) ||
-    EngineUtils.testNeighbors(i, j, (c: Cell) => c.state === States.fire) > 0
+      EngineUtils.testNeighbors(i, j, (c: Cell) => c.state === States.fire) > 0)
   ) {
     createCell(i, j, cell.melt);
   }

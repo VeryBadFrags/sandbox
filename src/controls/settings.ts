@@ -1,5 +1,5 @@
-import { drawFull } from "../display";
-import { wipeBoard } from "../game";
+import { drawFull } from "../display.ts";
+import { wipeBoard } from "../game.ts";
 
 export let play = true;
 

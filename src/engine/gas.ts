@@ -1,10 +1,10 @@
-import * as Game from "../game";
-import { emptyCell } from "../content/CellValues";
-import type { Cell } from "../types/cell.type";
+import * as Game from "../game.ts";
+import { emptyCell } from "../content/CellValues.ts";
+import type { Cell } from "../types/cell.type.ts";
 
 export function process(cell: Cell, i: number, j: number): void {
   // SMOKE
-  if (Math.random() > cell.lifetime) {
+  if (cell.lifetime && Math.random() > cell.lifetime) {
     Game.destroyCell(i, j);
   } else if (
     j > 0 &&

@@ -9,26 +9,21 @@ help:
 	@echo "  make help    - Display this help message"
 
 .PHONY: build
-build: node_modules
-	pnpm run build
+build:
+	deno run build
 
 .PHONY: dev
 dev:
 	deno run dev
 
 .PHONY: format
-format: node_modules
-	pnpm run format
+format:
+	deno fmt
 
 .PHONY: lint
-lint: node_modules
-	pnpm run lint
+lint:
+	deno lint
 
 .PHONY: clean
 clean:
-	pnpm run clean
-
-# Install dependencies if 'node_modules' is missing or outdated
-node_modules: pnpm-lock.yaml package.json
-	pnpm install
-	@touch node_modules
+	rm -rf dist/

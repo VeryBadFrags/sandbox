@@ -1,5 +1,5 @@
-import * as Game from "../game";
-import type { Cell } from "../types/cell.type";
+import * as Game from "../game.ts";
+import type { Cell } from "../types/cell.type.ts";
 
 /**
  * Used for Pascal's Law
@@ -88,7 +88,7 @@ function findHigherCell(
     const newHeight = findHigherCell(cell, x, y + 1, explored, inputHeight);
     if (newHeight) return newHeight;
   }
-  return null;
+  return [];
 }
 
 function hashCoordinates(x: number, y: number) {

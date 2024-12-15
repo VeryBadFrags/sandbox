@@ -1,4 +1,4 @@
-import type { Cell } from "../types/cell.type";
+import type { Cell } from "../types/cell.type.ts";
 
 export function initMatrix(width: number, height: number, cell: Cell | number) {
   const newArray = new Array(width);
@@ -15,20 +15,23 @@ export function initMatrix(width: number, height: number, cell: Cell | number) {
 export function initArray(
   width: number,
   height: number,
-  cell: Cell,
+  cell?: Cell,
 ): Array<Cell> {
   const newArray = new Array(width * height);
   newArray.fill(cell);
   return newArray;
 }
 
-export function wipe1DArray(array: Array<Cell>, value: Cell): void {
+export function wipe1DArray(
+  array: Array<Cell | undefined>,
+  value?: Cell,
+): void {
   array.fill(value);
   // array.forEach((cell) => (cell = value));
 }
 
 export function wipe2DMatrix(
-  matrix: Array<Array<Cell | number>>,
+  matrix: Array<Array<Cell | number | undefined>>,
   value?: Cell | number,
 ) {
   const width = matrix.length;
@@ -41,7 +44,12 @@ export function wipe2DMatrix(
   }
 }
 
-export function getCellFromBoard(board: Cell[], x: number, y: number, gameWidth: number) {
+export function getCellFromBoard(
+  board: Cell[],
+  x: number,
+  y: number,
+  gameWidth: number,
+) {
   const index = get1DIndex(x, y, gameWidth);
   return board[index];
 }
