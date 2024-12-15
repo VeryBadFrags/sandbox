@@ -1,11 +1,11 @@
-import { States } from "./states.enum";
+import { States } from "./states.enum.ts";
 
 export type Cell = {
   color: string;
   state?: States;
   density: number;
 
-  name?: string;
+  name: string;
   hsl?: number[];
   rgb?: number[];
 
@@ -24,8 +24,8 @@ export type Cell = {
   melt?: Cell;
   ash?: Cell;
   drip?: number;
-  disolve?: Cell;
-  disolveInto?: Cell;
+  dissolve?: Cell;
+  dissolveInto?: Cell;
   vector?: Vector;
   /**
    * Some elements like conveyors cycle through multiple colors

@@ -1,6 +1,6 @@
-import type { Cell } from "../types/cell.type";
-import { hexToHSL, hexToRgb } from "../utils/colorUtils";
-import * as CellValue from "./CellValues";
+import type { Cell } from "../types/cell.type.ts";
+import { hexToHSL, hexToRgb } from "../utils/colorUtils.ts";
+import * as CellValue from "./CellValues.ts";
 
 /**
  * Cells that can be picked in the UI dropdown
@@ -79,35 +79,39 @@ export const tapValues: Cell[] = [
 ];
 
 function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
-  const opt = document.createElement("option");
-  opt.value = cell.name;
-  opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
-  if (cell === CellValue.concrete) {
-    opt.selected = true;
+  if (cell.name) {
+    const opt = document.createElement("option");
+    opt.value = cell.name;
+    opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
+    if (cell === CellValue.concrete) {
+      opt.selected = true;
+    }
+    select.appendChild(opt);
   }
-  select.appendChild(opt);
 }
 
-{
-  // INIT
-
+function initBrush() {
   // Set Brush selector menu values
   const brushTypeSelector = document.getElementById(
     "brush-type",
   ) as HTMLSelectElement;
 
   brushCells.forEach((cell) => addElementToSelect(cell, brushTypeSelector));
-
+}
+function initTap() {
   for (let i = 1; i <= 3; i++) {
     const tap1Select = document.getElementById(
-      "select-tap" + i,
+        "select-tap" + i,
     ) as HTMLSelectElement;
     tapValues.forEach((cell) => addElementToSelect(cell, tap1Select));
   }
 }
-
-{
+function initRgbAndHsl(){
   // Set RGB values
   allCells.forEach((c) => (c.rgb = hexToRgb(c.color)));
   allCells.forEach((c) => (c.hsl = hexToHSL(c.color)));
 }
+
+initBrush();
+initTap()
+initRgbAndHsl();

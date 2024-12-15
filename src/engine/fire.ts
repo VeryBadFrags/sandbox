@@ -1,9 +1,9 @@
-import * as Game from "../game";
-import { States } from "../types/states.enum";
-import { emptyCell } from "../content/CellValues";
-import { testNeighbors } from "../utils/engineUtils";
-import type { Cell } from "../types/cell.type";
-import { getPointsDistance } from "../utils/drawUtils";
+import * as Game from "../game.ts";
+import { States } from "../types/states.enum.ts";
+import { emptyCell } from "../content/CellValues.ts";
+import { testNeighbors } from "../utils/engineUtils.ts";
+import type { Cell } from "../types/cell.type.ts";
+import { getPointsDistance } from "../utils/drawUtils.ts";
 
 const maxLightDistance = 6;
 
@@ -19,25 +19,26 @@ export function process(
     testNeighbors(
       i,
       j,
-      (test: Cell) => test.dousing,
+      (test: Cell) => test.dousing || false,
       (current: Cell, x: number, y: number) =>
         current.melt && Math.random() > 0.5
           ? Game.createCell(x, y, current.melt)
           : null,
     ) > 0
   ) {
-    const lastCell =
-      cell.nextCell.state === States.fire
-        ? cell.nextCell.nextCell
-        : cell.nextCell;
-    Game.createCell(i, j, lastCell);
+    const lastCell = (cell.nextCell && cell.nextCell.state === States.fire)
+      ? cell.nextCell.nextCell
+      : cell.nextCell;
+    if (lastCell) {
+      Game.createCell(i, j, lastCell);
+    }
     return;
   }
 
   // Extinguish
   if (
-    Math.random() > cell.lifetime &&
-    testNeighbors(i, j, (test: Cell) => test.flammable > 0) < 1
+    cell.nextCell && cell.lifetime && Math.random() > cell.lifetime &&
+    testNeighbors(i, j, (test: Cell) => (test.flammable || 0) > 0) < 1
   ) {
     Game.createCell(i, j, cell.nextCell);
   } else if (
@@ -47,7 +48,11 @@ export function process(
     // || Game.getCell(i, j - 1).flammable
   ) {
     // Evolve
-    Game.createCell(i, j - 1, Math.random() >= 0.5 ? cell.nextCell : cell);
+    Game.createCell(
+      i,
+      j - 1,
+      (cell.nextCell && Math.random() >= 0.5) ? cell.nextCell : cell,
+    );
   }
 
   propagateFire(i, j);
@@ -74,8 +79,8 @@ function updateFireLightMap(
       ) {
         if ((a !== i || b !== j) && Game.getCell(a, b).state !== States.fire) {
           const distance = getPointsDistance(a, b, i, j);
-          lightMap[a][b] =
-            lightMap[a][b] + Math.max(0, maxLightDistance - distance);
+          lightMap[a][b] = lightMap[a][b] +
+            Math.max(0, maxLightDistance - distance);
         }
       }
     }
@@ -93,7 +98,7 @@ function propagateFire(i: number, j: number) {
   ) {
     const target = Game.getCell(i + a, j + b);
 
-    if (target.flammable && Math.random() > target.flammable) {
+    if (target.melt && target.flammable && Math.random() > target.flammable) {
       Game.createCell(i + a, j + b, target.melt);
       if (
         j + b + 1 < Game.getGameHeight() &&

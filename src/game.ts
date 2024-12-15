@@ -1,12 +1,12 @@
-import { get1DIndex, initArray, wipe1DArray } from "./utils/arrayUtils";
-import { emptyCell } from "./content/CellValues";
-import type { Cell } from "./types/cell.type";
+import { get1DIndex, initArray, wipe1DArray } from "./utils/arrayUtils.ts";
+import { emptyCell } from "./content/CellValues.ts";
+import type { Cell } from "./types/cell.type.ts";
 
 const gameWidth = 400;
 const gameHeight = 400;
 
 const pixelGrid = initArray(gameWidth, gameHeight, emptyCell);
-const delta = initArray(gameWidth, gameHeight, null);
+const delta = initArray(gameWidth, gameHeight, undefined);
 
 export function getCell(x: number, y: number): Cell {
   const index = get1DIndex(x, y, gameWidth);
@@ -68,5 +68,5 @@ export function wipeBoard() {
 }
 
 export function wipeDelta() {
-  wipe1DArray(delta, null);
+  wipe1DArray(delta, undefined);
 }

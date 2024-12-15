@@ -1,11 +1,11 @@
-import { brushCells } from "../content/CellGroups";
-import * as Game from "../game";
-import { concrete } from "../content/CellValues";
+import { brushCells } from "../content/CellGroups.ts";
+import * as Game from "../game.ts";
+import { concrete } from "../content/CellValues.ts";
 import {
   createIntermediatePoints,
   getPointsDistance,
-} from "../utils/drawUtils";
-import type { Cell } from "../types/cell.type";
+} from "../utils/drawUtils.ts";
+import type { Cell } from "../types/cell.type.ts";
 
 const brushTypeSelector = document.getElementById(
   "brush-type",
@@ -96,7 +96,7 @@ export default class Brush {
     };
 
     brushOpacitySlider.addEventListener("click", function (e) {
-      brushOpacity = parseInt((<HTMLInputElement>e.target).value);
+      brushOpacity = parseInt((<HTMLInputElement> e.target).value);
     });
     brushOpacitySlider.value = brushOpacity.toString();
 
@@ -148,15 +148,15 @@ export default class Brush {
     }
 
     brushTypeSelector.addEventListener("change", function (e) {
-      brushType = brushCells[(<HTMLSelectElement>e.target).selectedIndex];
+      brushType = brushCells[(<HTMLSelectElement> e.target).selectedIndex];
     });
 
     brushSizeInput.addEventListener("input", function (e) {
-      brushSize = parseInt((<HTMLInputElement>e.target).value, 10);
+      brushSize = parseInt((<HTMLInputElement> e.target).value, 10);
       brushSizeSlider.value = brushSize.toString();
     });
     brushSizeSlider.addEventListener("input", function (e) {
-      brushSize = parseInt((<HTMLInputElement>e.target).value, 10);
+      brushSize = parseInt((<HTMLInputElement> e.target).value, 10);
       brushSizeInput.value = brushSize.toString();
     });
 

@@ -1,5 +1,5 @@
-import * as Game from "../game";
-import type { Cell } from "../types/cell.type";
+import * as Game from "../game.ts";
+import type { Cell } from "../types/cell.type.ts";
 
 export function isFuelAround(x: number, y: number) {
   const xMax = Math.min(x + 1, Game.getGameWidth() - 1);

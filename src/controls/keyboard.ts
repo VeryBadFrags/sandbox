@@ -1,15 +1,13 @@
-import { brushCells } from "../content/CellGroups";
-import { Cell } from "../types/cell.type";
-import Brush from "./brush";
-import { togglePlay } from "./settings";
+import { brushCells } from "../content/CellGroups.ts";
+import { Cell } from "../types/cell.type.ts";
+import Brush from "./brush.ts";
+import { togglePlay } from "./settings.ts";
 
 export function initKeyboardListeners(mainBrush: Brush) {
   const keyToCell = new Map<string, Cell>();
   brushCells
     .filter((cell) => cell.key)
-    .forEach((cell) => {
-      keyToCell.set(cell.key, cell);
-    });
+    .forEach((cell) => keyToCell.set(cell.key, cell));
 
   document.addEventListener("keydown", (e) => {
     if (keyToCell.has(e.key)) {

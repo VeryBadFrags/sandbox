@@ -1,6 +1,10 @@
-import * as Game from "./game";
-import type { Cell } from "./types/cell.type";
-import {get1DIndex, getCellFromBoard, getCoordsFromIndex} from "./utils/arrayUtils";
+import * as Game from "./game.ts";
+import type { Cell } from "./types/cell.type.ts";
+import {
+  get1DIndex,
+  getCellFromBoard,
+  getCoordsFromIndex,
+} from "./utils/arrayUtils.ts";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 const context = canvas.getContext("2d", {
@@ -24,7 +28,7 @@ export function drawFull() {
     const gameX = Math.min(Math.round(x * ratioX), Game.getGameWidth() - 1);
     for (let y = 0; y < canvasHeight; y++) {
       const gameY = Math.min(Math.round(y * ratioY), Game.getGameHeight() - 1);
-      const cell = getCellFromBoard(board, gameX, gameY, Game.getGameWidth())
+      const cell = getCellFromBoard(board, gameX, gameY, Game.getGameWidth());
       if (cell && cell.rgb) {
         // TODO use LightMap to fix dynamic lights
         const pixelIndex = (y * canvasWidth + x) * 4;
@@ -47,7 +51,7 @@ export function drawPartial(deltaBoard: Cell[]) {
 
   deltaBoard
     // .filter((cell) => cell)
-    .forEach((cell, index) => {
+    .forEach((cell: Cell, index: number) => {
       if (cell && cell.rgb) {
         const rgbColor = cell.rgb;
         // needed to keep index correct

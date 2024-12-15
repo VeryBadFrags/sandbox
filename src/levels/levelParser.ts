@@ -1,5 +1,5 @@
-import * as Game from "../game";
-import type { Cell } from "../types/cell.type";
+import * as Game from "../game.ts";
+import type { Cell } from "../types/cell.type.ts";
 
 interface Level {
   taps: Array<unknown>;

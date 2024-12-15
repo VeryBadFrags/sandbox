@@ -1,21 +1,22 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
-import { drawPartialDynamic, drawPartial, drawFull } from "./display";
-import * as Game from "./game";
-import * as Settings from "./controls/settings";
-import * as Fire from "./engine/fire";
-import * as Liquid from "./engine/liquid";
-import * as Solid from "./engine/solid";
-import * as Gas from "./engine/gas";
-import * as ArrayHelper from "./utils/arrayUtils";
-import Brush from "./controls/brush";
-import { States } from "./types/states.enum";
-import { concrete, emptyCell, oil, salt, sand, water } from "./content/CellValues";
-import { tapValues } from "./content/CellGroups";
+import { drawFull, drawPartial, drawPartialDynamic } from "./display.ts";
+import * as Game from "./game.ts";
+import * as Settings from "./controls/settings.ts";
+import * as Fire from "./engine/fire.ts";
+import * as Liquid from "./engine/liquid.ts";
+import * as Solid from "./engine/solid.ts";
+import * as Gas from "./engine/gas.ts";
+import * as ArrayHelper from "./utils/arrayUtils.ts";
+import Brush from "./controls/brush.ts";
+import { States } from "./types/states.enum.ts";
+import { concrete, emptyCell, oil, sand, water } from "./content/CellValues.ts";
+import { tapValues } from "./content/CellGroups.ts";
 
-import Plausible from "plausible-tracker";
-import { initKeyboardListeners } from "./controls/keyboard";
+import Plausible from "npm:plausible-tracker@^0.3.9";
+import { initKeyboardListeners } from "./controls/keyboard.ts";
+
 const plausible = Plausible({
   domain: "sand.verybadfrags.com",
   apiHost: "/ps",
@@ -26,8 +27,7 @@ plausible.trackPageview();
 const pascalsLaw = false;
 
 const iStart = (ltr: boolean, size: number) => (ltr ? 0 : size - 1);
-const iEnd = (i: number, ltr: boolean, size: number) =>
-  ltr ? i < size : i >= 0;
+const iEnd = (i: number, ltr: boolean, size: number) => ltr ? i < size : i >= 0;
 
 //let mainBrush: Brush;
 
@@ -77,16 +77,16 @@ let tap3 = water;
 // Tap listeners
 const tapSelect = document.getElementById("select-tap1") as HTMLSelectElement;
 tapSelect.addEventListener("change", function (e) {
-  tap1 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
+  tap1 = tapValues[(<HTMLSelectElement> e.target).selectedIndex];
 });
 const tap2Select = document.getElementById("select-tap2") as HTMLSelectElement;
 tap2Select.addEventListener("change", function (e) {
-  tap2 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
+  tap2 = tapValues[(<HTMLSelectElement> e.target).selectedIndex];
 });
 tap2Select.selectedIndex = 1;
 const tap3Select = document.getElementById("select-tap3") as HTMLSelectElement;
 tap3Select.addEventListener("change", function (e) {
-  tap3 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
+  tap3 = tapValues[(<HTMLSelectElement> e.target).selectedIndex];
 });
 tap3Select.selectedIndex = 2;
 
@@ -117,9 +117,9 @@ let lastTime = 0;
 let dynamicLights = false;
 
 let lightMap: number[][];
-const fpsVal = document.getElementById("fps-val");
-const engineVal = document.getElementById("engine-val");
-const renderVal = document.getElementById("render-val");
+const fpsVal = document.getElementById("fps-val") as HTMLElement;
+const engineVal = document.getElementById("engine-val") as HTMLElement;
+const renderVal = document.getElementById("render-val") as HTMLElement;
 let fpsTimer = 0;
 let engineTimer = 0;
 
@@ -196,7 +196,7 @@ function init() {
     "dynamic-lights",
   ) as HTMLInputElement;
   lightsCheck.addEventListener("click", (e) => {
-    dynamicLights = (<HTMLInputElement>e.target).checked;
+    dynamicLights = (<HTMLInputElement> e.target).checked;
     // TODO Full draw when turning off to clear light effects
   });
   lightsCheck.checked = dynamicLights;

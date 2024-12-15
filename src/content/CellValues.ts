@@ -1,5 +1,5 @@
-import type { Cell } from "../types/cell.type";
-import { States } from "../types/states.enum";
+import type { Cell } from "../types/cell.type.ts";
+import { States } from "../types/states.enum.ts";
 
 export const emptyCell: Cell = {
   name: "✏️ Eraser",
@@ -10,6 +10,7 @@ export const emptyCell: Cell = {
 
 // FIRE
 export const smoke: Cell = {
+  name: "Smoke",
   color: "#333333",
   density: 0.1,
   state: States.gas,
@@ -17,6 +18,7 @@ export const smoke: Cell = {
   nextCell: emptyCell,
 };
 export const flame3: Cell = {
+  name: "Fire3",
   color: "#ff8800",
   density: 0.1,
   state: States.fire,
@@ -25,6 +27,7 @@ export const flame3: Cell = {
   nextCell: smoke,
 };
 export const flame2: Cell = {
+  name: "Fire2",
   color: "#ff4400",
   density: 0.1,
   state: States.fire,
@@ -144,8 +147,8 @@ export const salt: Cell = {
   color: "#eeeeee",
   state: States.solid,
   density: 9,
-  disolve: water,
-  disolveInto: saltyWater,
+  dissolve: water,
+  dissolveInto: saltyWater,
 };
 
 {

@@ -9,7 +9,9 @@ A falling sand game.
 
 ---
 
-🛠️ Built with [HTML Canvas](https://www.w3schools.com/html/html5_canvas.asp), [Typescript](https://www.typescriptlang.org), [Bootstrap](https://getbootstrap.com), and [Vite](https://vitejs.dev).
+🛠️ Built with [HTML Canvas](https://www.w3schools.com/html/html5_canvas.asp),
+[Typescript](https://www.typescriptlang.org),
+[Bootstrap](https://getbootstrap.com), and [Vite](https://vitejs.dev).
 
 ## Run locally
 
