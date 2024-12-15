@@ -90,26 +90,28 @@ function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
   }
 }
 
-{
-  // INIT
-
+function initBrush() {
   // Set Brush selector menu values
   const brushTypeSelector = document.getElementById(
     "brush-type",
   ) as HTMLSelectElement;
 
   brushCells.forEach((cell) => addElementToSelect(cell, brushTypeSelector));
-
+}
+function initTap() {
   for (let i = 1; i <= 3; i++) {
     const tap1Select = document.getElementById(
-      "select-tap" + i,
+        "select-tap" + i,
     ) as HTMLSelectElement;
     tapValues.forEach((cell) => addElementToSelect(cell, tap1Select));
   }
 }
-
-{
+function initRgbAndHsl(){
   // Set RGB values
   allCells.forEach((c) => (c.rgb = hexToRgb(c.color)));
   allCells.forEach((c) => (c.hsl = hexToHSL(c.color)));
 }
+
+initBrush();
+initTap()
+initRgbAndHsl();
