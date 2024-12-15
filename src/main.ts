@@ -166,7 +166,7 @@ function render(deltaTime: number) {
   if (dynamicLights) {
     drawPartialDynamic(lightMap);
   } else {
-    drawPartial();
+    drawPartial(Game.getDeltaBoard());
   }
   const renderEnd = performance.now();
 

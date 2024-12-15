@@ -104,7 +104,7 @@ export const ice: Cell = {
 };
 export const soil: Cell = {
   name: "🍂 Soil",
-  key: "l",
+  key: "m",
   color: "#6D4C41",
   density: 20,
   state: States.solid,
@@ -123,7 +123,7 @@ export const wood: Cell = {
 };
 export const coal: Cell = {
   name: "♨️ Coal",
-  key: "h",
+  key: "b",
   color: "#303030",
   density: 30,
   state: States.solid,
@@ -140,7 +140,7 @@ export const sand: Cell = {
 };
 export const salt: Cell = {
   name: "🧂 Salt",
-  key: "m",
+  key: "n",
   color: "#eeeeee",
   state: States.solid,
   density: 9,
@@ -197,7 +197,7 @@ export const plant: Cell = {
 
 export const conveyorLeft: Cell = {
   name: "⚙️⬅️ Conveyor",
-  key: "r",
+  key: "h",
   color: "#00ACC1",
   colorSuite: ["#AFB42B", "#9E9D24", "#827717"],
   density: 100,
@@ -208,7 +208,7 @@ export const conveyorLeft: Cell = {
 
 export const conveyorRight: Cell = {
   name: "⚙️➡️ Conveyor",
-  key: "t",
+  key: "l",
   color: "#006064",
   colorSuite: ["#AFB42B", "#9E9D24", "#827717"],
   density: 100,

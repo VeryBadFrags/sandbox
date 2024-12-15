@@ -41,6 +41,11 @@ export function wipe2DMatrix(
   }
 }
 
+export function getCellFromBoard(board: Cell[], x: number, y: number, gameWidth: number) {
+  const index = get1DIndex(x, y, gameWidth);
+  return board[index];
+}
+
 export function get1DIndex(x: number, y: number, width: number) {
   return y * width + x;
 }
