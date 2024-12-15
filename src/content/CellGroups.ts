@@ -1,6 +1,6 @@
-import type { Cell } from "../types/cell.type";
-import { hexToHSL, hexToRgb } from "../utils/colorUtils";
-import * as CellValue from "./CellValues";
+import type { Cell } from "../types/cell.type.ts";
+import { hexToHSL, hexToRgb } from "../utils/colorUtils.ts";
+import * as CellValue from "./CellValues.ts";
 
 /**
  * Cells that can be picked in the UI dropdown

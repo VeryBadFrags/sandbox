@@ -1,4 +1,4 @@
-import { States } from "./states.enum";
+import { States } from "./states.enum.ts";
 
 export type Cell = {
   color: string;
