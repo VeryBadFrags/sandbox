@@ -17,8 +17,8 @@ build: node_modules
 	pnpm run build
 
 .PHONY: dev
-dev: node_modules
-	pnpm run dev
+dev:
+	deno run dev
 
 .PHONY: format
 format: node_modules

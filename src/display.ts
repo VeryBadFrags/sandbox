@@ -1,6 +1,6 @@
-import * as Game from "./game";
-import type { Cell } from "./types/cell.type";
-import { get1DIndex, getCoordsFromIndex } from "./utils/arrayUtils";
+import * as Game from "./game.ts";
+import type { Cell } from "./types/cell.type.ts";
+import { get1DIndex, getCoordsFromIndex } from "./utils/arrayUtils.ts";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 const context = canvas.getContext("2d", {
@@ -46,7 +46,7 @@ export function drawPartial() {
 
   Game.getDeltaBoard()
     // .filter((cell) => cell)
-    .forEach((cell, index) => {
+    .forEach((cell: Cell, index: number) => {
       if (cell && cell.rgb) {
         // needed to keep index correct
         const coords = getCoordsFromIndex(index, Game.getGameWidth());

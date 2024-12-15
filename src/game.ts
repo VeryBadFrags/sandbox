@@ -1,6 +1,6 @@
-import { get1DIndex, initArray, wipe1DArray } from "./utils/arrayUtils";
-import { emptyCell } from "./content/CellValues";
-import type { Cell } from "./types/cell.type";
+import { get1DIndex, initArray, wipe1DArray } from "./utils/arrayUtils.ts";
+import { emptyCell } from "./content/CellValues.ts";
+import type { Cell } from "./types/cell.type.ts";
 
 const gameWidth = 400;
 const gameHeight = 400;
