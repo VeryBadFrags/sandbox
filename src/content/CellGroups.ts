@@ -79,13 +79,15 @@ export const tapValues: Cell[] = [
 ];
 
 function addElementToSelect(cell: Cell, select: HTMLSelectElement) {
-  const opt = document.createElement("option");
-  opt.value = cell.name;
-  opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
-  if (cell === CellValue.concrete) {
-    opt.selected = true;
+  if (cell.name) {
+    const opt = document.createElement("option");
+    opt.value = cell.name;
+    opt.innerHTML = cell.name + (cell.key ? ` (${cell.key})` : "");
+    if (cell === CellValue.concrete) {
+      opt.selected = true;
+    }
+    select.appendChild(opt);
   }
-  select.appendChild(opt);
 }
 
 {
