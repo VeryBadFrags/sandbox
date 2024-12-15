@@ -11,21 +11,14 @@ A falling sand game.
 
 🛠️ Built with [HTML Canvas](https://www.w3schools.com/html/html5_canvas.asp),
 [Typescript](https://www.typescriptlang.org),
-[Bootstrap](https://getbootstrap.com), and [Vite](https://vitejs.dev).
+[Bootstrap](https://getbootstrap.com), [Deno](https://deno.com), and [Vite](https://vitejs.dev).
 
 ## Run locally
 
-### With [pnpm](https://pnpm.io)
+Get [Deno](https://deno.com)
 
 ```sh
 make dev
 ```
 
 Run `make` to view available commands.
-
-### With [npm](https://www.npmjs.com)
-
-```sh
-npm i
-npm run dev
-```
