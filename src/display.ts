@@ -1,20 +1,21 @@
 import * as Game from "./game";
 import type { Cell } from "./types/cell.type";
-import { get1DIndex, getCoordsFromIndex } from "./utils/arrayUtils";
+import {get1DIndex, getCellFromBoard, getCoordsFromIndex} from "./utils/arrayUtils";
 
 const canvas = document.getElementById("game") as HTMLCanvasElement;
 const context = canvas.getContext("2d", {
   alpha: false,
 }) as CanvasRenderingContext2D;
 
-let imagedata = context.createImageData(canvas.width, canvas.height);
+let imageData = context.createImageData(canvas.width, canvas.height);
 
 export function drawFull() {
-  // lightMap?: number[][] TODO resume usage of Lightmap once performances are fixed
+  const board = Game.getFullBoard();
+  // lightMap?: number[][] TODO resume usage of LightMap once performances are fixed
   // Reset imageData
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
-  imagedata = context.createImageData(canvasWidth, canvasHeight);
+  imageData = context.createImageData(canvasWidth, canvasHeight);
 
   const ratioX = Game.getGameWidth() / canvasWidth;
   const ratioY = Game.getGameHeight() / canvasHeight;
@@ -23,31 +24,32 @@ export function drawFull() {
     const gameX = Math.min(Math.round(x * ratioX), Game.getGameWidth() - 1);
     for (let y = 0; y < canvasHeight; y++) {
       const gameY = Math.min(Math.round(y * ratioY), Game.getGameHeight() - 1);
-      const cell = Game.getCell(gameX, gameY);
+      const cell = getCellFromBoard(board, gameX, gameY, Game.getGameWidth())
       if (cell && cell.rgb) {
-        // TODO use lightmap to fix dynamic lights
-        const pixelindex = (y * canvasWidth + x) * 4;
-        imagedata.data[pixelindex] = cell.rgb[0]; // Red
-        imagedata.data[pixelindex + 1] = cell.rgb[1]; // Green
-        imagedata.data[pixelindex + 2] = cell.rgb[2]; // Blue
-        imagedata.data[pixelindex + 3] = 255; // Alpha
+        // TODO use LightMap to fix dynamic lights
+        const pixelIndex = (y * canvasWidth + x) * 4;
+        imageData.data[pixelIndex] = cell.rgb[0]; // Red
+        imageData.data[pixelIndex + 1] = cell.rgb[1]; // Green
+        imageData.data[pixelIndex + 2] = cell.rgb[2]; // Blue
+        imageData.data[pixelIndex + 3] = 255; // Alpha
       }
     }
   }
 
-  context.putImageData(imagedata, 0, 0);
+  context.putImageData(imageData, 0, 0);
 }
 
-export function drawPartial() {
+export function drawPartial(deltaBoard: Cell[]) {
   const canvasWidth = canvas.width;
   const canvasHeight = canvas.height;
   const ratioX = canvasWidth / Game.getGameWidth();
   const ratioY = canvasHeight / Game.getGameHeight();
 
-  Game.getDeltaBoard()
+  deltaBoard
     // .filter((cell) => cell)
     .forEach((cell, index) => {
       if (cell && cell.rgb) {
+        const rgbColor = cell.rgb;
         // needed to keep index correct
         const coords = getCoordsFromIndex(index, Game.getGameWidth());
         for (let a = 0; a < Math.floor(ratioX); a++) {
@@ -56,16 +58,16 @@ export function drawPartial() {
             const imageY = (coords[1] * ratioY + b) * 4;
             const pixelIndex = get1DIndex(imageX, imageY, canvasWidth);
 
-            imagedata.data[pixelIndex] = cell.rgb[0]; // Red
-            imagedata.data[pixelIndex + 1] = cell.rgb[1]; // Green
-            imagedata.data[pixelIndex + 2] = cell.rgb[2]; // Blue
-            imagedata.data[pixelIndex + 3] = 255; // Alpha
+            imageData.data[pixelIndex] = rgbColor[0]; // Red
+            imageData.data[pixelIndex + 1] = rgbColor[1]; // Green
+            imageData.data[pixelIndex + 2] = rgbColor[2]; // Blue
+            imageData.data[pixelIndex + 3] = 255; // Alpha
           }
         }
       }
     });
 
-  context.putImageData(imagedata, 0, 0);
+  context.putImageData(imageData, 0, 0);
 }
 
 export function drawPartialDynamic(lightMap: number[][]) {

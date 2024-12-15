@@ -11,7 +11,7 @@ import * as Gas from "./engine/gas";
 import * as ArrayHelper from "./utils/arrayUtils";
 import Brush from "./controls/brush";
 import { States } from "./types/states.enum";
-import { concrete, emptyCell, oil, salt, water } from "./content/CellValues";
+import { concrete, emptyCell, oil, salt, sand, water } from "./content/CellValues";
 import { tapValues } from "./content/CellGroups";
 
 import Plausible from "plausible-tracker";
@@ -71,7 +71,7 @@ function nextState() {
 }
 
 let tap1 = oil;
-let tap2 = salt;
+let tap2 = sand;
 let tap3 = water;
 
 // Tap listeners
@@ -166,7 +166,7 @@ function render(deltaTime: number) {
   if (dynamicLights) {
     drawPartialDynamic(lightMap);
   } else {
-    drawPartial();
+    drawPartial(Game.getDeltaBoard());
   }
   const renderEnd = performance.now();
 

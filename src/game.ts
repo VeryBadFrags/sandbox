@@ -22,6 +22,10 @@ export function getDeltaBoard() {
   return delta;
 }
 
+export function getFullBoard() {
+  return pixelGrid;
+}
+
 export function getGameWidth(): number {
   return gameWidth;
 }
