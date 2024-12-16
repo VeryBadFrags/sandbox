@@ -15,10 +15,9 @@ A falling sand game.
 
 ## Run locally
 
-Get [Deno](https://deno.com)
+- Get [Deno](https://deno.com)
+- Run locally:
 
 ```sh
 make dev
 ```
-
-Run `make` to view available commands.
