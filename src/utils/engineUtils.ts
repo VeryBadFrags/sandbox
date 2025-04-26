@@ -47,7 +47,7 @@ export function testNeighbors(
         const neighbor = Game.getCell(i, j);
         if (testFunction(neighbor)) {
           count++;
-          action ? action(neighbor, i, j) : null;
+          if (action) action(neighbor, i, j);
         }
       }
     }
