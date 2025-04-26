@@ -101,17 +101,17 @@ function initBrush() {
 function initTap() {
   for (let i = 1; i <= 3; i++) {
     const tap1Select = document.getElementById(
-        "select-tap" + i,
+      "select-tap" + i,
     ) as HTMLSelectElement;
     tapValues.forEach((cell) => addElementToSelect(cell, tap1Select));
   }
 }
-function initRgbAndHsl(){
+function initRgbAndHsl() {
   // Set RGB values
   allCells.forEach((c) => (c.rgb = hexToRgb(c.color)));
   allCells.forEach((c) => (c.hsl = hexToHSL(c.color)));
 }
 
 initBrush();
-initTap()
+initTap();
 initRgbAndHsl();

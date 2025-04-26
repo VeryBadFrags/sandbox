@@ -27,7 +27,8 @@ plausible.trackPageview();
 const pascalsLaw = false;
 
 const iStart = (ltr: boolean, size: number) => (ltr ? 0 : size - 1);
-const iEnd = (i: number, ltr: boolean, size: number) => ltr ? i < size : i >= 0;
+const iEnd = (i: number, ltr: boolean, size: number) =>
+  ltr ? i < size : i >= 0;
 
 //let mainBrush: Brush;
 
@@ -77,16 +78,16 @@ let tap3 = water;
 // Tap listeners
 const tapSelect = document.getElementById("select-tap1") as HTMLSelectElement;
 tapSelect.addEventListener("change", function (e) {
-  tap1 = tapValues[(<HTMLSelectElement> e.target).selectedIndex];
+  tap1 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 const tap2Select = document.getElementById("select-tap2") as HTMLSelectElement;
 tap2Select.addEventListener("change", function (e) {
-  tap2 = tapValues[(<HTMLSelectElement> e.target).selectedIndex];
+  tap2 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 tap2Select.selectedIndex = 1;
 const tap3Select = document.getElementById("select-tap3") as HTMLSelectElement;
 tap3Select.addEventListener("change", function (e) {
-  tap3 = tapValues[(<HTMLSelectElement> e.target).selectedIndex];
+  tap3 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 tap3Select.selectedIndex = 2;
 
@@ -196,7 +197,7 @@ function init() {
     "dynamic-lights",
   ) as HTMLInputElement;
   lightsCheck.addEventListener("click", (e) => {
-    dynamicLights = (<HTMLInputElement> e.target).checked;
+    dynamicLights = (<HTMLInputElement>e.target).checked;
     // TODO Full draw when turning off to clear light effects
   });
   lightsCheck.checked = dynamicLights;

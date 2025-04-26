@@ -35,7 +35,7 @@ export function process(
       // Settle in less dense liquids
       if (
         Math.random() <=
-          (cell.density - cellBelow.density) / cellBelow.density / 5
+        (cell.density - cellBelow.density) / cellBelow.density / 5
       ) {
         Game.swapCells(i, j, i, j + 1);
         return;
@@ -80,7 +80,7 @@ export function process(
       Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y);
     } else if (
       Game.getCell(i + cellBelow.vector.x, j + cellBelow.vector.y - 1) ===
-        emptyCell
+      emptyCell
     ) {
       Game.swapCells(i, j, i + cellBelow.vector.x, j + cellBelow.vector.y - 1);
     }
