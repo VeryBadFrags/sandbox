@@ -14,7 +14,7 @@ import { States } from "./types/states.enum.ts";
 import { concrete, emptyCell, oil, sand, water } from "./content/CellValues.ts";
 import { tapValues } from "./content/CellGroups.ts";
 
-import Plausible from "npm:plausible-tracker@^0.3.9";
+import Plausible from "plausible-tracker";
 import { initKeyboardListeners } from "./controls/keyboard.ts";
 
 const plausible = Plausible({

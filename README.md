@@ -11,12 +11,18 @@ A falling sand game.
 
 🛠️ Built with [HTML Canvas](https://www.w3schools.com/html/html5_canvas.asp),
 [Typescript](https://www.typescriptlang.org),
-[Bootstrap](https://getbootstrap.com), [Deno](https://deno.com), and [Vite](https://vitejs.dev).
+[Bootstrap](https://getbootstrap.com), [pnpm](https://pnpm.io), and [Vite](https://vitejs.dev).
 
 ## Run locally
 
-- Get [Deno](https://deno.com)
-- Run locally:
+- Get [Node](https://nodejs.org/)
+- Enable corepack
+
+```sh
+corepack enable
+```
+
+- Run locally
 
 ```sh
 make dev
