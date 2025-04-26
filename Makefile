@@ -10,19 +10,19 @@ help:
 
 .PHONY: build
 build:
-	deno run build
+	pnpm run build
 
 .PHONY: dev
 dev:
-	deno run dev
+	pnpm run dev
 
 .PHONY: format
 format:
-	deno fmt
+	pnpm run format
 
 .PHONY: lint
 lint:
-	deno lint
+	pnpm run lint
 
 .PHONY: clean
 clean:

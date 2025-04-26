@@ -26,9 +26,10 @@ export function process(
           : null,
     ) > 0
   ) {
-    const lastCell = (cell.nextCell && cell.nextCell.state === States.fire)
-      ? cell.nextCell.nextCell
-      : cell.nextCell;
+    const lastCell =
+      cell.nextCell && cell.nextCell.state === States.fire
+        ? cell.nextCell.nextCell
+        : cell.nextCell;
     if (lastCell) {
       Game.createCell(i, j, lastCell);
     }
@@ -37,7 +38,9 @@ export function process(
 
   // Extinguish
   if (
-    cell.nextCell && cell.lifetime && Math.random() > cell.lifetime &&
+    cell.nextCell &&
+    cell.lifetime &&
+    Math.random() > cell.lifetime &&
     testNeighbors(i, j, (test: Cell) => (test.flammable || 0) > 0) < 1
   ) {
     Game.createCell(i, j, cell.nextCell);
@@ -51,7 +54,7 @@ export function process(
     Game.createCell(
       i,
       j - 1,
-      (cell.nextCell && Math.random() >= 0.5) ? cell.nextCell : cell,
+      cell.nextCell && Math.random() >= 0.5 ? cell.nextCell : cell,
     );
   }
 
@@ -79,8 +82,8 @@ function updateFireLightMap(
       ) {
         if ((a !== i || b !== j) && Game.getCell(a, b).state !== States.fire) {
           const distance = getPointsDistance(a, b, i, j);
-          lightMap[a][b] = lightMap[a][b] +
-            Math.max(0, maxLightDistance - distance);
+          lightMap[a][b] =
+            lightMap[a][b] + Math.max(0, maxLightDistance - distance);
         }
       }
     }

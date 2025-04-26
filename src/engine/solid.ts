@@ -93,7 +93,7 @@ export function process(cell: Cell, i: number, j: number) {
   if (cellBelow.state === States.liquid && cell.density > cellBelow.density) {
     if (
       Math.random() <=
-        (cell.density - cellBelow.density) / cellBelow.density / 50
+      (cell.density - cellBelow.density) / cellBelow.density / 50
     ) {
       swapCells(i, j, i, j + 1);
       return;
@@ -101,7 +101,9 @@ export function process(cell: Cell, i: number, j: number) {
   }
 
   if (
-    cellBelow.state === States.fire && cell.flammable && Math.random() > 0.9
+    cellBelow.state === States.fire &&
+    cell.flammable &&
+    Math.random() > 0.9
   ) {
     if (Math.random() > cell.flammable) {
       createCell(i, j, flame);
@@ -136,7 +138,8 @@ function rollGrainSideways(
     }
 
     if (
-      cell.flammable && diagonalCell.state === States.fire &&
+      cell.flammable &&
+      diagonalCell.state === States.fire &&
       Math.random() > 0.7
     ) {
       if (Math.random() > cell.flammable) {
@@ -270,7 +273,9 @@ function dripAndMeltIce(cellBelow: Cell, cell: Cell, i: number, j: number) {
   }
   // Melt
   if (
-    cell.melt && ((cell.lifetime && Math.random() > cell.lifetime &&
+    cell.melt &&
+    ((cell.lifetime &&
+      Math.random() > cell.lifetime &&
       EngineUtils.countNeighbors(i, j, ice) < 6) ||
       EngineUtils.testNeighbors(i, j, (c: Cell) => c.state === States.fire) > 0)
   ) {
