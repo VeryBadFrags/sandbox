@@ -6,25 +6,25 @@ import * as CellValue from "./CellValues.ts";
  * Cells that can be picked in the UI dropdown
  */
 export const brushCells: Cell[] = [
-  CellValue.emptyCell,
-  CellValue.sand,
-  CellValue.concrete,
-  CellValue.wood,
-  CellValue.water,
-  CellValue.ice,
-  CellValue.salt,
-  CellValue.gunPowder,
-  CellValue.oil,
-  CellValue.coal,
-  CellValue.plant,
-  CellValue.soil,
-  CellValue.seed,
-  CellValue.crystals,
-  CellValue.flame,
+  CellValue.emptyCell, // Eraser
   CellValue.acid,
+  CellValue.coal,
+  CellValue.concrete,
   CellValue.conveyorLeft,
   CellValue.conveyorRight,
+  CellValue.crystals,
+  CellValue.flame,
+  CellValue.gunPowder,
+  CellValue.ice,
+  CellValue.oil,
+  CellValue.plant,
+  CellValue.salt,
+  CellValue.sand,
+  CellValue.seed,
+  CellValue.soil,
+  CellValue.water,
   CellValue.wax,
+  CellValue.wood,
 ];
 
 // {
