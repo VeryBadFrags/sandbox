@@ -3,11 +3,15 @@ export function initTouchListeners(canvas: HTMLCanvasElement) {
     // Touch
     canvas.addEventListener("touchstart", (e) => {
         const touch = e.touches[0];
-        const mouseEvent = new MouseEvent("mousedown", {
+        // Move to touch position first to avoid connecting to the previous point
+        canvas.dispatchEvent(new MouseEvent("mousemove", {
             clientX: touch.clientX,
             clientY: touch.clientY,
-        });
-        canvas.dispatchEvent(mouseEvent);
+        }));
+        canvas.dispatchEvent(new MouseEvent("mousedown", {
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+        }));
     });
     canvas.addEventListener("touchend", (e) => {
         const touch = e.changedTouches[0];
@@ -34,7 +38,7 @@ export function initTouchListeners(canvas: HTMLCanvasElement) {
                 e.preventDefault();
             }
         },
-        false,
+        { passive: false },
     );
     document.body.addEventListener(
         "touchend",
@@ -43,7 +47,7 @@ export function initTouchListeners(canvas: HTMLCanvasElement) {
                 e.preventDefault();
             }
         },
-        false,
+        { passive: false },
     );
     document.body.addEventListener(
         "touchmove",
@@ -52,6 +56,6 @@ export function initTouchListeners(canvas: HTMLCanvasElement) {
                 e.preventDefault();
             }
         },
-        false,
+        { passive: false },
     );
 }
