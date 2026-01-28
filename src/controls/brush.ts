@@ -6,6 +6,7 @@ import {
   getPointsDistance,
 } from "../utils/drawUtils.ts";
 import type { Cell } from "../types/cell.type.ts";
+import { initTouchListeners } from "./touch.ts";
 
 const brushTypeSelector = document.getElementById(
   "brush-type",
@@ -169,59 +170,6 @@ export default class Brush {
     canvas.addEventListener("mousemove", onMouseMove);
     canvas.addEventListener("mouseout", mouseOff);
 
-    // Touch
-    canvas.addEventListener("touchstart", (e) => {
-      const touch = e.touches[0];
-      const mouseEvent = new MouseEvent("mousemove", {
-        clientX: touch.clientX,
-        clientY: touch.clientY,
-      });
-      canvas.dispatchEvent(mouseEvent);
-    });
-    canvas.addEventListener("touchend", (e) => {
-      const touch = e.touches[0];
-      const mouseEvent = new MouseEvent("mousemove", {
-        clientX: touch.clientX,
-        clientY: touch.clientY,
-      });
-      canvas.dispatchEvent(mouseEvent);
-    });
-    canvas.addEventListener("touchmove", (e) => {
-      const touch = e.touches[0];
-      const mouseEvent = new MouseEvent("mousemove", {
-        clientX: touch.clientX,
-        clientY: touch.clientY,
-      });
-      canvas.dispatchEvent(mouseEvent);
-    });
-
-    // Prevent scrolling when touching the canvas
-    document.body.addEventListener(
-      "touchstart",
-      (e) => {
-        if (e.target == canvas) {
-          e.preventDefault();
-        }
-      },
-      false,
-    );
-    document.body.addEventListener(
-      "touchend",
-      (e) => {
-        if (e.target == canvas) {
-          e.preventDefault();
-        }
-      },
-      false,
-    );
-    document.body.addEventListener(
-      "touchmove",
-      (e) => {
-        if (e.target == canvas) {
-          e.preventDefault();
-        }
-      },
-      false,
-    );
+    initTouchListeners(canvas);
   }
 }
