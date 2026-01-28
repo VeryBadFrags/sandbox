@@ -117,8 +117,8 @@ export default class Brush {
     let prevMouseY = 0;
     let mouseX = 0;
     let mouseY = 0;
-    const rect = canvas.getBoundingClientRect();
     function onMouseMove(e: MouseEvent) {
+      const rect = canvas.getBoundingClientRect();
       mouseX = Math.round(
         ((e.clientX - rect.left) / (rect.right - rect.left)) * canvasWidth,
       );
