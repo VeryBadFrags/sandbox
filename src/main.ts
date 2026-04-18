@@ -14,15 +14,7 @@ import { States } from "./types/states.enum.ts";
 import { concrete, emptyCell, oil, sand, water } from "./content/CellValues.ts";
 import { tapValues } from "./content/CellGroups.ts";
 
-import Plausible from "plausible-tracker";
 import { initKeyboardListeners } from "./controls/keyboard.ts";
-
-const plausible = Plausible({
-  domain: "sand.verybadfrags.com",
-  apiHost: "/ps",
-  hashMode: false,
-});
-plausible.trackPageview();
 
 const pascalsLaw = false;
 
