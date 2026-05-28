@@ -4,7 +4,7 @@ help:
 	@echo "  make build   - Run build"
 	@echo "  make dev     - Run dev"
 	@echo "  make format  - Format code"
-	@echo "  make lint    - Run eslint"
+	@echo "  make lint    - Run linter"
 	@echo "  make clean   - Clean up output folder"
 	@echo "  make help    - Display this help message"
 
