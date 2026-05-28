@@ -1,20 +1,19 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 
-import { drawFull, drawPartial, drawPartialDynamic } from "./display.ts";
-import * as Game from "./game.ts";
+import { tapValues } from "./content/CellGroups.ts";
+import { concrete, emptyCell, oil, sand, water } from "./content/CellValues.ts";
+import Brush from "./controls/brush.ts";
+import { initKeyboardListeners } from "./controls/keyboard.ts";
 import * as Settings from "./controls/settings.ts";
+import { drawFull, drawPartial, drawPartialDynamic } from "./display.ts";
 import * as Fire from "./engine/fire.ts";
+import * as Gas from "./engine/gas.ts";
 import * as Liquid from "./engine/liquid.ts";
 import * as Solid from "./engine/solid.ts";
-import * as Gas from "./engine/gas.ts";
-import * as ArrayHelper from "./utils/arrayUtils.ts";
-import Brush from "./controls/brush.ts";
+import * as Game from "./game.ts";
 import { States } from "./types/states.enum.ts";
-import { concrete, emptyCell, oil, sand, water } from "./content/CellValues.ts";
-import { tapValues } from "./content/CellGroups.ts";
-
-import { initKeyboardListeners } from "./controls/keyboard.ts";
+import * as ArrayHelper from "./utils/arrayUtils.ts";
 
 const pascalsLaw = false;
 

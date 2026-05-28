@@ -1,9 +1,9 @@
-import * as Game from "../game.ts";
-import { States } from "../types/states.enum.ts";
 import { emptyCell } from "../content/CellValues.ts";
-import { testNeighbors } from "../utils/engineUtils.ts";
+import * as Game from "../game.ts";
 import type { Cell } from "../types/cell.type.ts";
+import { States } from "../types/states.enum.ts";
 import { getPointsDistance } from "../utils/drawUtils.ts";
+import { testNeighbors } from "../utils/engineUtils.ts";
 
 const maxLightDistance = 6;
 

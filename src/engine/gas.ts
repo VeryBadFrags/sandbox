@@ -1,5 +1,5 @@
-import * as Game from "../game.ts";
 import { emptyCell } from "../content/CellValues.ts";
+import * as Game from "../game.ts";
 import type { Cell } from "../types/cell.type.ts";
 
 export function process(cell: Cell, i: number, j: number): void {

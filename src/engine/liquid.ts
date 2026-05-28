@@ -1,8 +1,8 @@
-import * as Game from "../game.ts";
-import { getHigherCell } from "../utils/liquidUtils.ts";
-import { States } from "../types/states.enum.ts";
 import { acid, emptyCell, smoke } from "../content/CellValues.ts";
+import * as Game from "../game.ts";
 import type { Cell } from "../types/cell.type.ts";
+import { States } from "../types/states.enum.ts";
+import { getHigherCell } from "../utils/liquidUtils.ts";
 
 export function process(
 	cell: Cell,

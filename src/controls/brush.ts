@@ -1,11 +1,11 @@
 import { brushCells } from "../content/CellGroups.ts";
-import * as Game from "../game.ts";
 import { concrete } from "../content/CellValues.ts";
+import * as Game from "../game.ts";
+import type { Cell } from "../types/cell.type.ts";
 import {
 	createIntermediatePoints,
 	getPointsDistance,
 } from "../utils/drawUtils.ts";
-import type { Cell } from "../types/cell.type.ts";
 import { initTouchListeners } from "./touch.ts";
 
 const brushTypeSelector = document.getElementById(

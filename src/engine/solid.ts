@@ -1,12 +1,3 @@
-import * as EngineUtils from "../utils/engineUtils.ts";
-import {
-	createCell,
-	getCell,
-	getGameHeight,
-	getGameWidth,
-	swapCells,
-} from "../game.ts";
-import { States } from "../types/states.enum.ts";
 import {
 	emptyCell,
 	flame,
@@ -17,7 +8,16 @@ import {
 	soil,
 	water,
 } from "../content/CellValues.ts";
+import {
+	createCell,
+	getCell,
+	getGameHeight,
+	getGameWidth,
+	swapCells,
+} from "../game.ts";
 import type { Cell } from "../types/cell.type.ts";
+import { States } from "../types/states.enum.ts";
+import * as EngineUtils from "../utils/engineUtils.ts";
 
 export function process(cell: Cell, i: number, j: number) {
 	if (cell.static) {
