@@ -96,8 +96,8 @@ export default class Brush {
 			}
 		};
 
-		brushOpacitySlider.addEventListener("click", function (e) {
-			brushOpacity = parseInt((<HTMLInputElement>e.target).value);
+		brushOpacitySlider.addEventListener("click", (e) => {
+			brushOpacity = parseInt((<HTMLInputElement>e.target).value, 10);
 		});
 		brushOpacitySlider.value = brushOpacity.toString();
 
@@ -106,7 +106,7 @@ export default class Brush {
 			isMouseDown = true;
 			spawnCell(mouseX, mouseY);
 			intervalId = setInterval(
-				function () {
+				() => {
 					spawnCell(mouseX, mouseY);
 				},
 				brushType === concrete ? 1 : 20, // TODO is this needed?
@@ -134,7 +134,9 @@ export default class Brush {
 						prevMouseX,
 						prevMouseY,
 					);
-					interpolated.forEach((point) => spawnCell(point[0], point[1]));
+					interpolated.forEach((point) => {
+						spawnCell(point[0], point[1]);
+					});
 				}
 				spawnCell(mouseX, mouseY);
 			}
@@ -148,15 +150,15 @@ export default class Brush {
 			clearInterval(intervalId);
 		}
 
-		brushTypeSelector.addEventListener("change", function (e) {
+		brushTypeSelector.addEventListener("change", (e) => {
 			brushType = brushCells[(<HTMLSelectElement>e.target).selectedIndex];
 		});
 
-		brushSizeInput.addEventListener("input", function (e) {
+		brushSizeInput.addEventListener("input", (e) => {
 			brushSize = parseInt((<HTMLInputElement>e.target).value, 10);
 			brushSizeSlider.value = brushSize.toString();
 		});
-		brushSizeSlider.addEventListener("input", function (e) {
+		brushSizeSlider.addEventListener("input", (e) => {
 			brushSize = parseInt((<HTMLInputElement>e.target).value, 10);
 			brushSizeInput.value = brushSize.toString();
 		});

@@ -69,16 +69,16 @@ let tap3 = water;
 
 // Tap listeners
 const tapSelect = document.getElementById("select-tap1") as HTMLSelectElement;
-tapSelect.addEventListener("change", function (e) {
+tapSelect.addEventListener("change", (e) => {
 	tap1 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 const tap2Select = document.getElementById("select-tap2") as HTMLSelectElement;
-tap2Select.addEventListener("change", function (e) {
+tap2Select.addEventListener("change", (e) => {
 	tap2 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 tap2Select.selectedIndex = 1;
 const tap3Select = document.getElementById("select-tap3") as HTMLSelectElement;
-tap3Select.addEventListener("change", function (e) {
+tap3Select.addEventListener("change", (e) => {
 	tap3 = tapValues[(<HTMLSelectElement>e.target).selectedIndex];
 });
 tap3Select.selectedIndex = 2;

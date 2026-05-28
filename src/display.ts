@@ -29,7 +29,7 @@ export function drawFull() {
 		for (let y = 0; y < canvasHeight; y++) {
 			const gameY = Math.min(Math.round(y * ratioY), Game.getGameHeight() - 1);
 			const cell = getCellFromBoard(board, gameX, gameY, Game.getGameWidth());
-			if (cell && cell.rgb) {
+			if (cell?.rgb) {
 				// TODO use LightMap to fix dynamic lights
 				const pixelIndex = (y * canvasWidth + x) * 4;
 				imageData.data[pixelIndex] = cell.rgb[0]; // Red
@@ -52,7 +52,7 @@ export function drawPartial(deltaBoard: Cell[]) {
 	deltaBoard
 		// .filter((cell) => cell)
 		.forEach((cell: Cell, index: number) => {
-			if (cell && cell.rgb) {
+			if (cell?.rgb) {
 				const rgbColor = cell.rgb;
 				// needed to keep index correct
 				const coords = getCoordsFromIndex(index, Game.getGameWidth());

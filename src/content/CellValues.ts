@@ -151,10 +151,8 @@ export const salt: Cell = {
 	dissolveInto: saltyWater,
 };
 
-{
-	// Reference after salt
-	saltyWater.melt = salt;
-}
+// Reference after salt
+saltyWater.melt = salt;
 
 export const gunPowder: Cell = {
 	name: "💣 Gunpowder",
@@ -230,6 +228,5 @@ export const wax: Cell = {
 	state: States.solid,
 	sticky: true,
 };
-{
-	wax.ash = wax;
-}
+
+wax.ash = wax;

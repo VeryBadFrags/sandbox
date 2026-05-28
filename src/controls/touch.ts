@@ -37,7 +37,7 @@ export function initTouchListeners(canvas: HTMLCanvasElement) {
 	document.body.addEventListener(
 		"touchstart",
 		(e) => {
-			if (e.target == canvas) {
+			if (e.target === canvas) {
 				e.preventDefault();
 			}
 		},
@@ -46,7 +46,7 @@ export function initTouchListeners(canvas: HTMLCanvasElement) {
 	document.body.addEventListener(
 		"touchend",
 		(e) => {
-			if (e.target == canvas) {
+			if (e.target === canvas) {
 				e.preventDefault();
 			}
 		},
@@ -55,7 +55,7 @@ export function initTouchListeners(canvas: HTMLCanvasElement) {
 	document.body.addEventListener(
 		"touchmove",
 		(e) => {
-			if (e.target == canvas) {
+			if (e.target === canvas) {
 				e.preventDefault();
 			}
 		},

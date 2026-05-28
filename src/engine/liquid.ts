@@ -94,7 +94,11 @@ function processAcid(
 	i: number,
 	j: number,
 ): boolean {
-	if (cell == acid && cellBelow.state === States.solid && Math.random() > 0.8) {
+	if (
+		cell === acid &&
+		cellBelow.state === States.solid &&
+		Math.random() > 0.8
+	) {
 		Game.createCell(i, j, smoke);
 		if (Math.random() > 0.999) {
 			Game.createCell(i, j + 1, acid);
