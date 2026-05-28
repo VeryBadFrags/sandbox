@@ -1,2 +1,5 @@
+allowBuilds:
+  esbuild: true
+
 # https://pnpm.io/settings#minimumreleaseage
 minimumReleaseAge: 10080
