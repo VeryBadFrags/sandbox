@@ -1,24 +1,24 @@
 import { brushCells } from "../content/CellGroups.ts";
-import * as Game from "../game.ts";
 import { concrete } from "../content/CellValues.ts";
-import {
-  createIntermediatePoints,
-  getPointsDistance,
-} from "../utils/drawUtils.ts";
+import * as Game from "../game.ts";
 import type { Cell } from "../types/cell.type.ts";
+import {
+	createIntermediatePoints,
+	getPointsDistance,
+} from "../utils/drawUtils.ts";
 import { initTouchListeners } from "./touch.ts";
 
 const brushTypeSelector = document.getElementById(
-  "brush-type",
+	"brush-type",
 ) as HTMLSelectElement;
 const brushSizeInput = document.getElementById(
-  "brush-size",
+	"brush-size",
 ) as HTMLInputElement;
 const brushSizeSlider = document.getElementById(
-  "brush-size-slider",
+	"brush-size-slider",
 ) as HTMLInputElement;
 const brushOpacitySlider = document.getElementById(
-  "brush-opacity",
+	"brush-opacity",
 ) as HTMLInputElement;
 
 let brushType = concrete;
@@ -26,150 +26,152 @@ let brushSize = 2;
 let brushOpacity = 100;
 
 export default class Brush {
-  setBrushType(brush: Cell): void {
-    brushType = brush;
-    brushTypeSelector.value = brush.name;
-  }
+	setBrushType(brush: Cell): void {
+		brushType = brush;
+		brushTypeSelector.value = brush.name;
+	}
 
-  increaseBrushSize(size: number): void {
-    if (size > 0) {
-      brushSize += size + Math.floor(brushSize / 10);
-    } else {
-      const step = Math.floor(brushSize / 10);
-      brushSize += size - Math.floor((brushSize - step) / 10);
-    }
-    brushSize = Math.max(1, Math.min(32, brushSize));
-    brushSizeInput.value = brushSize.toString();
-    brushSizeSlider.value = brushSize.toString();
-  }
+	increaseBrushSize(size: number): void {
+		if (size > 0) {
+			brushSize += size + Math.floor(brushSize / 10);
+		} else {
+			const step = Math.floor(brushSize / 10);
+			brushSize += size - Math.floor((brushSize - step) / 10);
+		}
+		brushSize = Math.max(1, Math.min(32, brushSize));
+		brushSizeInput.value = brushSize.toString();
+		brushSizeSlider.value = brushSize.toString();
+	}
 
-  increaseOpacity(size: number): void {
-    brushOpacity += size;
-    brushOpacity = Math.max(0, Math.min(100, brushOpacity));
-    brushOpacitySlider.value = brushOpacity.toString();
-  }
+	increaseOpacity(size: number): void {
+		brushOpacity += size;
+		brushOpacity = Math.max(0, Math.min(100, brushOpacity));
+		brushOpacitySlider.value = brushOpacity.toString();
+	}
 
-  init(): void {
-    const canvas = document.getElementById("game") as HTMLCanvasElement;
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
+	init(): void {
+		const canvas = document.getElementById("game") as HTMLCanvasElement;
+		const canvasWidth = canvas.width;
+		const canvasHeight = canvas.height;
 
-    const ratioX = Game.getGameWidth() / canvasWidth;
-    const ratioY = Game.getGameHeight() / canvasHeight;
+		const ratioX = Game.getGameWidth() / canvasWidth;
+		const ratioY = Game.getGameHeight() / canvasHeight;
 
-    let intervalId: number;
+		let intervalId: number;
 
-    const spawnCell = (x: number, y: number): void => {
-      const actualBrushSize = brushSize - 1;
-      const minI = Math.max(0, x - actualBrushSize);
-      const maxI = Math.min(x + actualBrushSize, canvasWidth);
-      const minJ = Math.max(0, y - actualBrushSize);
-      const maxJ = Math.min(y + actualBrushSize, canvasHeight);
-      for (let i = minI; i < maxI; i++) {
-        for (let j = minJ; j < maxJ; j++) {
-          if (Math.random() <= brushOpacity / 100) {
-            const boardX = Math.min(
-              Math.ceil(i * ratioX),
-              Game.getGameWidth() - 1,
-            );
-            const boardY = Math.min(
-              Math.ceil(j * ratioY),
-              Game.getGameHeight() - 1,
-            );
-            Game.createCell(boardX, boardY, brushType);
-          }
-        }
-      }
-      if (
-        brushSize > 0 &&
-        x >= 0 &&
-        x < canvasWidth &&
-        y >= 0 &&
-        y < canvasHeight
-      ) {
-        const boardX = Math.min(Math.ceil(x * ratioX), Game.getGameWidth() - 1);
-        const boardY = Math.min(
-          Math.ceil(y * ratioY),
-          Game.getGameHeight() - 1,
-        );
-        Game.createCell(boardX, boardY, brushType);
-      }
-    };
+		const spawnCell = (x: number, y: number): void => {
+			const actualBrushSize = brushSize - 1;
+			const minI = Math.max(0, x - actualBrushSize);
+			const maxI = Math.min(x + actualBrushSize, canvasWidth);
+			const minJ = Math.max(0, y - actualBrushSize);
+			const maxJ = Math.min(y + actualBrushSize, canvasHeight);
+			for (let i = minI; i < maxI; i++) {
+				for (let j = minJ; j < maxJ; j++) {
+					if (Math.random() <= brushOpacity / 100) {
+						const boardX = Math.min(
+							Math.ceil(i * ratioX),
+							Game.getGameWidth() - 1,
+						);
+						const boardY = Math.min(
+							Math.ceil(j * ratioY),
+							Game.getGameHeight() - 1,
+						);
+						Game.createCell(boardX, boardY, brushType);
+					}
+				}
+			}
+			if (
+				brushSize > 0 &&
+				x >= 0 &&
+				x < canvasWidth &&
+				y >= 0 &&
+				y < canvasHeight
+			) {
+				const boardX = Math.min(Math.ceil(x * ratioX), Game.getGameWidth() - 1);
+				const boardY = Math.min(
+					Math.ceil(y * ratioY),
+					Game.getGameHeight() - 1,
+				);
+				Game.createCell(boardX, boardY, brushType);
+			}
+		};
 
-    brushOpacitySlider.addEventListener("click", function (e) {
-      brushOpacity = parseInt((<HTMLInputElement>e.target).value);
-    });
-    brushOpacitySlider.value = brushOpacity.toString();
+		brushOpacitySlider.addEventListener("click", (e) => {
+			brushOpacity = parseInt((<HTMLInputElement>e.target).value, 10);
+		});
+		brushOpacitySlider.value = brushOpacity.toString();
 
-    let isMouseDown = false;
-    function onMouseDown() {
-      isMouseDown = true;
-      spawnCell(mouseX, mouseY);
-      intervalId = setInterval(
-        function () {
-          spawnCell(mouseX, mouseY);
-        },
-        brushType === concrete ? 1 : 20, // TODO is this needed?
-      );
-    }
+		let isMouseDown = false;
+		function onMouseDown() {
+			isMouseDown = true;
+			spawnCell(mouseX, mouseY);
+			intervalId = setInterval(
+				() => {
+					spawnCell(mouseX, mouseY);
+				},
+				brushType === concrete ? 1 : 20, // TODO is this needed?
+			);
+		}
 
-    let prevMouseX = 0;
-    let prevMouseY = 0;
-    let mouseX = 0;
-    let mouseY = 0;
-    function onMouseMove(e: MouseEvent) {
-      const rect = canvas.getBoundingClientRect();
-      mouseX = Math.round(
-        ((e.clientX - rect.left) / (rect.right - rect.left)) * canvasWidth,
-      );
-      mouseY = Math.round(
-        ((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvasHeight,
-      );
+		let prevMouseX = 0;
+		let prevMouseY = 0;
+		let mouseX = 0;
+		let mouseY = 0;
+		function onMouseMove(e: MouseEvent) {
+			const rect = canvas.getBoundingClientRect();
+			mouseX = Math.round(
+				((e.clientX - rect.left) / (rect.right - rect.left)) * canvasWidth,
+			);
+			mouseY = Math.round(
+				((e.clientY - rect.top) / (rect.bottom - rect.top)) * canvasHeight,
+			);
 
-      if (isMouseDown) {
-        if (getPointsDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
-          const interpolated = createIntermediatePoints(
-            mouseX,
-            mouseY,
-            prevMouseX,
-            prevMouseY,
-          );
-          interpolated.forEach((point) => spawnCell(point[0], point[1]));
-        }
-        spawnCell(mouseX, mouseY);
-      }
+			if (isMouseDown) {
+				if (getPointsDistance(mouseX, mouseY, prevMouseX, prevMouseY) > 2) {
+					const interpolated = createIntermediatePoints(
+						mouseX,
+						mouseY,
+						prevMouseX,
+						prevMouseY,
+					);
+					interpolated.forEach((point) => {
+						spawnCell(point[0], point[1]);
+					});
+				}
+				spawnCell(mouseX, mouseY);
+			}
 
-      prevMouseX = mouseX;
-      prevMouseY = mouseY;
-    }
+			prevMouseX = mouseX;
+			prevMouseY = mouseY;
+		}
 
-    function mouseOff() {
-      isMouseDown = false;
-      clearInterval(intervalId);
-    }
+		function mouseOff() {
+			isMouseDown = false;
+			clearInterval(intervalId);
+		}
 
-    brushTypeSelector.addEventListener("change", function (e) {
-      brushType = brushCells[(<HTMLSelectElement>e.target).selectedIndex];
-    });
+		brushTypeSelector.addEventListener("change", (e) => {
+			brushType = brushCells[(<HTMLSelectElement>e.target).selectedIndex];
+		});
 
-    brushSizeInput.addEventListener("input", function (e) {
-      brushSize = parseInt((<HTMLInputElement>e.target).value, 10);
-      brushSizeSlider.value = brushSize.toString();
-    });
-    brushSizeSlider.addEventListener("input", function (e) {
-      brushSize = parseInt((<HTMLInputElement>e.target).value, 10);
-      brushSizeInput.value = brushSize.toString();
-    });
+		brushSizeInput.addEventListener("input", (e) => {
+			brushSize = parseInt((<HTMLInputElement>e.target).value, 10);
+			brushSizeSlider.value = brushSize.toString();
+		});
+		brushSizeSlider.addEventListener("input", (e) => {
+			brushSize = parseInt((<HTMLInputElement>e.target).value, 10);
+			brushSizeInput.value = brushSize.toString();
+		});
 
-    brushSizeInput.value = brushSize.toString();
-    brushSizeSlider.value = brushSize.toString();
+		brushSizeInput.value = brushSize.toString();
+		brushSizeSlider.value = brushSize.toString();
 
-    // Mouse
-    canvas.addEventListener("mousedown", onMouseDown);
-    canvas.addEventListener("mouseup", mouseOff);
-    canvas.addEventListener("mousemove", onMouseMove);
-    canvas.addEventListener("mouseout", mouseOff);
+		// Mouse
+		canvas.addEventListener("mousedown", onMouseDown);
+		canvas.addEventListener("mouseup", mouseOff);
+		canvas.addEventListener("mousemove", onMouseMove);
+		canvas.addEventListener("mouseout", mouseOff);
 
-    initTouchListeners(canvas);
-  }
+		initTouchListeners(canvas);
+	}
 }
