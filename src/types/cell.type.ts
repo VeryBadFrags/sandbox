@@ -1,42 +1,42 @@
 import { States } from "./states.enum.ts";
 
 export type Cell = {
-  color: string;
-  state?: States;
-  density: number;
+	color: string;
+	state?: States;
+	density: number;
 
-  name: string;
-  hsl?: number[];
-  rgb?: number[];
+	name: string;
+	hsl?: number[];
+	rgb?: number[];
 
-  /**
-   * Keyboard shortcut
-   */
-  key?: string;
-  static?: boolean;
-  lifetime?: number;
-  propagation?: number;
-  propTarget?: Cell;
-  spawn?: Cell;
-  nextCell?: Cell;
-  dousing?: boolean;
-  flammable?: number;
-  melt?: Cell;
-  ash?: Cell;
-  drip?: number;
-  dissolve?: Cell;
-  dissolveInto?: Cell;
-  vector?: Vector;
-  /**
-   * Some elements like conveyors cycle through multiple colors
-   */
-  colorSuite?: string[];
-  sticky?: boolean;
+	/**
+	 * Keyboard shortcut
+	 */
+	key?: string;
+	static?: boolean;
+	lifetime?: number;
+	propagation?: number;
+	propTarget?: Cell;
+	spawn?: Cell;
+	nextCell?: Cell;
+	dousing?: boolean;
+	flammable?: number;
+	melt?: Cell;
+	ash?: Cell;
+	drip?: number;
+	dissolve?: Cell;
+	dissolveInto?: Cell;
+	vector?: Vector;
+	/**
+	 * Some elements like conveyors cycle through multiple colors
+	 */
+	colorSuite?: string[];
+	sticky?: boolean;
 };
 
 interface Vector {
-  x: number;
-  y: number;
+	x: number;
+	y: number;
 }
 
 // interface flammable {

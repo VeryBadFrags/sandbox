@@ -1,7 +1,7 @@
 export enum States {
-  liquid,
-  solid,
-  gas,
-  fire,
-  conveyor,
+	liquid,
+	solid,
+	gas,
+	fire,
+	conveyor,
 }
